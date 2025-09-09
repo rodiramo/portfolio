@@ -199,7 +199,7 @@ const About = ({ isDarkMode = false }) => {
     <div
       style={{
         backgroundColor: theme.colors.secondary,
-        minHeight: "100vh",
+
         paddingTop: "clamp(2rem, 8vw, 10rem)",
         maxWidth: 1200,
         width: "100%",

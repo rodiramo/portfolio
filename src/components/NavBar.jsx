@@ -756,7 +756,8 @@ const NavBar = () => {
       padding-left: 12px;
       padding-right: 12px;
     }
-    .sidebar { position: static; top: auto; }
+    .sidebar { position: static; top: auto;        padding-top: 7rem; }
+    #home{display:none}
   }
 `}</style>
     </div>
