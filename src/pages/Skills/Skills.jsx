@@ -1,461 +1,487 @@
-import React, { useState } from "react";
-import {
-  Code,
-  Palette,
-  Server,
-  Smartphone,
-  Globe,
-  Database,
-  Figma,
-  Layers,
-  Terminal,
-  Zap,
-  Monitor,
-  Cpu,
-} from "lucide-react";
+import React, { useState, useMemo } from "react";
 import { useTheme } from "../../theme.js";
 
-const Skills = ({ isDark = false }) => {
-  const theme = useTheme(isDark);
-  const [activeCategory, setActiveCategory] = useState(0);
-  const [hoveredSkill, setHoveredSkill] = useState(null);
+/* --- CDN logo sources (ordered; will try next if one fails) --- */
+const LOGO_SOURCES = {
+  "React.js": [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    "https://cdn.simpleicons.org/react",
+  ],
+  "Vue.js": [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg",
+    "https://cdn.simpleicons.org/vuedotjs",
+  ],
+  "HTML5/CSS3": [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
+    "https://cdn.simpleicons.org/html5",
+  ],
+  JavaScript: [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+    "https://cdn.simpleicons.org/javascript",
+  ],
+  "PWA Development": [
+    "https://cdn.simpleicons.org/pwa",
+    "https://cdn.simpleicons.org/webcomponentsdotorg",
+  ],
+  WordPress: [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-original.svg",
+    "https://cdn.simpleicons.org/wordpress",
+  ],
+  "Node.js": [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+    "https://cdn.simpleicons.org/nodedotjs",
+  ],
+  "PHP Laravel": [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg",
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-plain.svg",
+    "https://cdn.simpleicons.org/laravel",
+  ],
+  MongoDB: [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
+    "https://cdn.simpleicons.org/mongodb",
+  ],
+  MySQL: [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
+    "https://cdn.simpleicons.org/mysql",
+  ],
+  "API Integration": [
+    "https://cdn.simpleicons.org/postman",
+    "https://cdn.simpleicons.org/openapiinitiative",
+  ],
+  Firebase: [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
+    "https://cdn.simpleicons.org/firebase",
+  ],
+  Figma: [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
+    "https://cdn.simpleicons.org/figma",
+  ],
+  "Adobe Photoshop": [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg",
+    "https://cdn.simpleicons.org/adobephotoshop",
+  ],
+  "Adobe Illustrator": [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg",
+    "https://cdn.simpleicons.org/adobeillustrator",
+  ],
+  "Content Creation": [
+    "https://cdn.simpleicons.org/adobecreativecloud",
+    "https://cdn.simpleicons.org/canva",
+  ],
+  Spline: [
+    "https://cdn.simpleicons.org/spline",
+    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg",
+  ],
+  Framer: ["https://cdn.simpleicons.org/framer"],
+};
 
-  const skillCategories = [
-    {
-      id: "frontend",
-      title: "Web Development",
-      icon: Monitor,
-      color: theme.colors.primary,
-      background: theme.colors.surface,
-      textColor: theme.colors.primary,
-      borderColor: theme.colors.primary,
-      skills: [
-        {
-          name: "React.js",
-          icon: Code,
-          level: 85,
-          description: "Component-based development",
-        },
-        {
-          name: "Vue.js",
-          icon: Code,
-          level: 75,
-          description: "Progressive JavaScript framework",
-        },
-        {
-          name: "HTML5/CSS3",
-          icon: Code,
-          level: 90,
-          description: "Responsive web layouts",
-        },
-        {
-          name: "JavaScript",
-          icon: Zap,
-          level: 80,
-          description: "Interactive web experiences",
-        },
-        {
-          name: "PWA Development",
-          icon: Smartphone,
-          level: 80,
-          description: "Progressive Web Applications",
-        },
-        {
-          name: "WordPress",
-          icon: Globe,
-          level: 75,
-          description: "Content management systems",
-        },
-      ],
-    },
-    {
-      id: "backend",
-      title: "Backend & APIs",
-      icon: Server,
-      color: theme.colors.dark,
-      background: theme.colors.surface,
-      textColor: theme.colors.dark,
-      borderColor: theme.colors.dark,
-      skills: [
-        {
-          name: "Node.js",
-          icon: Server,
-          level: 85,
-          description: "Server-side JavaScript",
-        },
-        {
-          name: "PHP Laravel",
-          icon: Terminal,
-          level: 80,
-          description: "Web application framework",
-        },
-        {
-          name: "MongoDB",
-          icon: Database,
-          level: 90,
-          description: "NoSQL database expertise",
-        },
-        {
-          name: "MySQL",
-          icon: Database,
-          level: 75,
-          description: "Relational database",
-        },
-        {
-          name: "API Integration",
-          icon: Globe,
-          level: 85,
-          description: "Third-party services & payments",
-        },
-        {
-          name: "Firebase",
-          icon: Cpu,
-          level: 70,
-          description: "Backend-as-a-service",
-        },
-      ],
-    },
-    {
-      id: "design",
-      title: "Design & Creative",
-      icon: Palette,
-      color: theme.colors.accent1,
-      background: theme.colors.surface,
-      textColor: theme.colors.accent1,
-      borderColor: theme.colors.accent1,
-      skills: [
-        {
-          name: "Figma",
-          icon: Figma,
-          level: 90,
-          description: "UI/UX design & prototyping",
-        },
-        {
-          name: "Adobe Photoshop",
-          icon: Palette,
-          level: 85,
-          description: "Digital graphics & banners",
-        },
-        {
-          name: "Adobe Illustrator",
-          icon: Palette,
-          level: 80,
-          description: "Vector graphics & logos",
-        },
-        {
-          name: "Content Creation",
-          icon: Layers,
-          level: 80,
-          description: "Social media & marketing assets",
-        },
-        {
-          name: "Spline",
-          icon: Monitor,
-          level: 65,
-          description: "3D design & animations",
-        },
-        {
-          name: "Framer",
-          icon: Code,
-          level: 55,
-          description: "Interactive prototyping (learning)",
-        },
-      ],
-    },
-  ];
+function Logo({ name, size = 18, accent }) {
+  const [index, setIndex] = useState(0);
+  const srcs = LOGO_SOURCES[name] || [];
+  const src = srcs[index];
 
-  const SkillBar = ({ skill, isActive, textColor, borderColor }) => (
-    <div
-      className="skill-item"
-      style={{
-        padding: "1rem",
-        borderRadius: "12px",
-        background: isActive ? theme.colors.hover : theme.colors.surface,
-        backdropFilter: "blur(10px)",
-        border: `1px solid ${borderColor}40`,
-        transition: "all 0.3s ease",
-        transform: isActive ? "translateY(-2px)" : "translateY(0)",
-        cursor: "pointer",
-        boxShadow: isActive
-          ? `0 4px 12px ${borderColor}30`
-          : `0 2px 4px ${theme.colors.border}`,
-      }}
-      onMouseEnter={() => setHoveredSkill(skill.name)}
-      onMouseLeave={() => setHoveredSkill(null)}
-    >
-      <div
+  if (!src) {
+    return (
+      <span
+        aria-hidden
+        title={name}
         style={{
-          display: "flex",
-          alignItems: "center",
-          marginBottom: "0.5rem",
+          width: size,
+          height: size,
+          display: "inline-grid",
+          placeItems: "center",
+          borderRadius: "50%",
+          border: `1.5px solid ${accent || "#999"}`,
+          fontSize: size * 0.55,
+          lineHeight: 1,
+          color: accent || "#999",
         }}
       >
-        <skill.icon
-          size={20}
-          style={{ color: textColor, marginRight: "0.75rem" }}
-        />
-        <span
-          style={{
-            color: textColor,
-            fontWeight: "600",
-            fontSize: "0.9rem",
-          }}
-        >
-          {skill.name}
-        </span>
-        <span
-          style={{
-            color: textColor,
-            fontSize: "0.8rem",
-            marginLeft: "auto",
-            opacity: 0.8,
-          }}
-        >
-          {skill.level}%
-        </span>
-      </div>
-
-      {/* Progress bar */}
-      <div
-        style={{
-          width: "100%",
-          height: "4px",
-          backgroundColor: `${borderColor}20`,
-          borderRadius: "2px",
-          overflow: "hidden",
-          marginBottom: "0.5rem",
-        }}
-      >
-        <div
-          style={{
-            width: `${skill.level}%`,
-            height: "100%",
-            backgroundColor: textColor,
-            borderRadius: "2px",
-            transition: "width 1s ease-in-out",
-          }}
-        />
-      </div>
-
-      {/* Description */}
-      <p
-        style={{
-          color: textColor,
-          fontSize: "0.75rem",
-          margin: 0,
-          opacity: hoveredSkill === skill.name ? 0.9 : 0.6,
-          transition: "opacity 0.3s ease",
-        }}
-      >
-        {skill.description}
-      </p>
-    </div>
-  );
+        {name?.[0] || "?"}
+      </span>
+    );
+  }
 
   return (
-    <div
-      style={{
-        maxWidth: "1200px",
-        margin: "0 auto",
-        padding: "2rem 1rem",
-        minHeight: "100vh",
-      }}
-    >
-      {/* Header */}
-      <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-        <h2
-          style={{
-            fontSize: "2.5rem",
-            fontFamily: "Vibur, cursive",
-            fontWeight: "800",
-            margin: "0 0 1rem 0",
-            color: theme.colors.text.primary,
-          }}
-        >
-          Technical Skills
-        </h2>
-        <p
-          style={{
-            fontSize: "1.2rem",
+    <img
+      src={src}
+      alt={`${name} logo`}
+      width={size}
+      height={size}
+      loading="lazy"
+      decoding="async"
+      referrerPolicy="no-referrer"
+      onError={() => setIndex((i) => i + 1)}
+      style={{ width: size, height: size, objectFit: "contain" }}
+    />
+  );
+}
 
-            maxWidth: "600px",
-            margin: "0 auto",
-          }}
-        >
-          Explore my expertise across different technologies and tools
+const Skills = ({ isDarkMode }) => {
+  const theme = useTheme(isDarkMode);
+  const [activeCategory, setActiveCategory] = useState(0);
+  const [hovered, setHovered] = useState(null);
+
+  const categories = useMemo(
+    () => [
+      {
+        id: "frontend",
+        title: "Web Development",
+        accent: theme.colors.primary,
+        skills: [
+          {
+            name: "React.js",
+            level: 85,
+            description: "Component-based development",
+          },
+          {
+            name: "Vue.js",
+            level: 75,
+            description: "Progressive JavaScript framework",
+          },
+          {
+            name: "HTML5/CSS3",
+            level: 90,
+            description: "Responsive web layouts",
+          },
+          {
+            name: "JavaScript",
+            level: 80,
+            description: "Interactive web experiences",
+          },
+          {
+            name: "PWA Development",
+            level: 80,
+            description: "Progressive Web Apps",
+          },
+          {
+            name: "WordPress",
+            level: 75,
+            description: "CMS customization & theming",
+          },
+        ],
+      },
+      {
+        id: "backend",
+        title: "Backend & APIs",
+        accent: theme.colors.dark,
+        skills: [
+          { name: "Node.js", level: 85, description: "Server-side JavaScript" },
+          {
+            name: "PHP Laravel",
+            level: 80,
+            description: "Web application framework",
+          },
+          {
+            name: "MongoDB",
+            level: 90,
+            description: "NoSQL modeling & indexing",
+          },
+          {
+            name: "MySQL",
+            level: 75,
+            description: "Relational schema & queries",
+          },
+          {
+            name: "API Integration",
+            level: 85,
+            description: "OAuth, payments, 3rd-party APIs",
+          },
+          {
+            name: "Firebase",
+            level: 70,
+            description: "Auth, Firestore, Functions",
+          },
+        ],
+      },
+      {
+        id: "design",
+        title: "Design & Creative",
+        accent: theme.colors.accent1,
+        skills: [
+          {
+            name: "Figma",
+            level: 90,
+            description: "UI/UX design & prototyping",
+          },
+          {
+            name: "Adobe Photoshop",
+            level: 85,
+            description: "Digital graphics & banners",
+          },
+          {
+            name: "Adobe Illustrator",
+            level: 80,
+            description: "Vector graphics & logos",
+          },
+          {
+            name: "Content Creation",
+            level: 80,
+            description: "Marketing & social assets",
+          },
+          { name: "Spline", level: 65, description: "3D scenes & animations" },
+          {
+            name: "Framer",
+            level: 55,
+            description: "Interactive prototyping (learning)",
+          },
+        ],
+      },
+    ],
+    [theme]
+  );
+
+  const active = categories[activeCategory];
+
+  const containerStyle = {
+    maxWidth: 1200,
+    width: "100%",
+    margin: "0 auto",
+    padding: "2rem 1rem",
+    color: theme.colors.text.primary,
+  };
+
+  const headerStyle = {
+    marginBottom: "1.5rem",
+    textAlign: "left",
+  };
+
+  const titleStyle = {
+    fontFamily: "Vibur, cursive",
+    fontWeight: 800,
+    fontSize: "clamp(2rem, 4vw, 2.6rem)",
+    margin: 0,
+    color: theme.colors.text.primary,
+  };
+
+  const subtitleStyle = {
+    marginTop: "0.5rem",
+    marginBottom: 0,
+    fontSize: "clamp(1rem, 2vw, 1.1rem)",
+    maxWidth: "52ch",
+    color: theme.colors.text.secondary,
+  };
+
+  const tabsWrapStyle = {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "0.75rem",
+    marginBottom: "1rem",
+    overflowX: "auto",
+  };
+
+  const tabStyle = (isActive, accent) => ({
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    padding: "0.6rem 1rem",
+    borderRadius: 999,
+    border: `1.5px solid ${isActive ? accent : theme.colors.border}`,
+    background: isActive ? accent : theme.colors.surface,
+    color: isActive ? theme.colors.text.inverse : theme.colors.text.primary,
+    fontWeight: 700,
+    fontSize: ".95rem",
+    cursor: "pointer",
+    transition: "transform .15s ease",
+  });
+
+  const panelStyle = {
+    borderRadius: 20,
+    padding: "1rem",
+  };
+
+  const panelHeadStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: ".6rem",
+    paddingBottom: ".75rem",
+    paddingTop: ".75rem",
+    marginBottom: "1rem",
+  };
+
+  const gridStyle = {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+    gap: ".9rem",
+  };
+
+  const cardStyle = {
+    border: `1px solid ${theme.colors.border}`,
+    borderRadius: 14,
+    padding: ".9rem",
+    background: theme.colors.surface,
+    transition:
+      "transform .15s ease, box-shadow .15s ease, background .15s ease",
+  };
+
+  const headRowStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: ".6rem",
+    marginBottom: ".6rem",
+  };
+
+  const progressTrackStyle = {
+    width: "100%",
+    height: 6,
+    background: theme.colors.border,
+    borderRadius: 999,
+    overflow: "hidden",
+    marginBottom: ".55rem",
+  };
+
+  const dotRowStyle = {
+    display: "flex",
+    justifyContent: "center",
+    gap: ".5rem",
+    marginTop: "1rem",
+  };
+
+  const dotStyle = (on) => ({
+    width: 10,
+    height: 10,
+    borderRadius: 999,
+    background: on ? active.accent : theme.colors.border,
+    border: "none",
+    opacity: 0.9,
+    cursor: "pointer",
+  });
+
+  return (
+    <div style={containerStyle}>
+      {/* Header (left aligned) */}
+      <header style={headerStyle}>
+        <h2 style={titleStyle}>Technical Skills</h2>
+        <p style={subtitleStyle}>
+          Explore my expertise across development and design
         </p>
-      </div>
+      </header>
 
-      {/* Category Navigation */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginBottom: "2rem",
-          gap: "1rem",
-          flexWrap: "wrap",
-        }}
-      >
-        {skillCategories.map((category, index) => {
-          const IconComponent = category.icon;
+      {/* Tabs (left aligned) */}
+      <nav style={tabsWrapStyle} aria-label="Skill categories">
+        {categories.map((cat, i) => {
+          const isActive = i === activeCategory;
           return (
             <button
-              key={category.id}
-              onClick={() => setActiveCategory(index)}
-              style={{
-                padding: "0.75rem 1.5rem",
-                borderRadius: "50px",
-                border: `1px solid ${category.borderColor}`,
-                background:
-                  activeCategory === index
-                    ? category.textColor
-                    : theme.colors.surface,
-                color:
-                  activeCategory === index
-                    ? theme.colors.text.inverse
-                    : category.textColor,
-                fontWeight: "600",
-                fontSize: "0.9rem",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                transform:
-                  activeCategory === index
-                    ? "translateY(-2px)"
-                    : "translateY(0)",
-                boxShadow:
-                  activeCategory === index
-                    ? `0 4px 12px ${category.borderColor}40`
-                    : `0 2px 4px ${theme.colors.border}`,
-              }}
+              key={cat.id}
+              type="button"
+              onClick={() => setActiveCategory(i)}
+              style={tabStyle(isActive, cat.accent)}
+              onMouseEnter={(e) =>
+                !isActive &&
+                (e.currentTarget.style.transform = "translateY(-1px)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "translateY(0)")
+              }
             >
-              <IconComponent size={18} />
-              {category.title}
+              {cat.title}
             </button>
           );
         })}
-      </div>
+      </nav>
 
-      {/* Skills Display */}
-      <div
-        style={{
-          background: skillCategories[activeCategory].background,
-          borderRadius: "24px",
-          padding: "2rem",
-          minHeight: "400px",
-          position: "relative",
-          overflow: "hidden",
-          boxShadow: `0 8px 24px ${skillCategories[activeCategory].borderColor}30`,
-          border: `1px solid ${skillCategories[activeCategory].borderColor}`,
-        }}
-      >
-        {/* Background Pattern */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            opacity: 0.05,
-            backgroundImage: `radial-gradient(circle at 20% 80%, ${skillCategories[activeCategory].textColor}20 0%, transparent 50%),
-                           radial-gradient(circle at 80% 20%, ${skillCategories[activeCategory].textColor}20 0%, transparent 50%)`,
-          }}
-        />
-
-        {/* Category Header */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "2rem",
-            position: "relative",
-            zIndex: 2,
-          }}
-        >
-          {React.createElement(skillCategories[activeCategory].icon, {
-            size: 32,
-            style: {
-              color: skillCategories[activeCategory].textColor,
-              marginRight: "1rem",
-            },
-          })}
+      {/* Panel */}
+      <section style={panelStyle}>
+        <header style={panelHeadStyle}>
+          <Logo
+            name={active.skills[0]?.name || "React.js"}
+            size={20}
+            accent={active.accent}
+          />
           <h3
             style={{
-              color: skillCategories[activeCategory].textColor,
-              fontSize: "1.8rem",
-              fontWeight: "700",
               margin: 0,
+              fontSize: "1.2rem",
+              fontWeight: 800,
+              color: theme.colors.text.primary,
             }}
           >
-            {skillCategories[activeCategory].title}
+            {active.title}
           </h3>
-        </div>
+        </header>
 
         {/* Skills Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "1rem",
-            position: "relative",
-            zIndex: 2,
-          }}
-        >
-          {skillCategories[activeCategory].skills.map((skill) => (
-            <SkillBar
-              key={skill.name}
-              skill={skill}
-              isActive={hoveredSkill === skill.name}
-              textColor={skillCategories[activeCategory].textColor}
-              borderColor={skillCategories[activeCategory].borderColor}
-            />
-          ))}
-        </div>
-
-        {/* Progress Indicator */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "2rem",
-            gap: "0.5rem",
-          }}
-        >
-          {skillCategories.map((_, index) => (
+        <div style={gridStyle}>
+          {active.skills.map((s) => (
             <div
-              key={index}
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                backgroundColor: skillCategories[activeCategory].textColor,
-                opacity: activeCategory === index ? 1 : 0.3,
-                transition: "all 0.3s ease",
-                cursor: "pointer",
+              key={s.name}
+              style={cardStyle}
+              onMouseEnter={(e) => {
+                setHovered(s.name);
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = "0 8px 18px rgba(0,0,0,.08)";
+                e.currentTarget.style.background = theme.colors.hover;
               }}
-              onClick={() => setActiveCategory(index)}
+              onMouseLeave={(e) => {
+                setHovered(null);
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.background = theme.colors.surface;
+              }}
+            >
+              <div style={headRowStyle}>
+                <Logo name={s.name} size={18} accent={active.accent} />
+                <span style={{ fontWeight: 800, fontSize: ".95rem" }}>
+                  {s.name}
+                </span>
+                <span
+                  style={{
+                    marginLeft: "auto",
+                    fontSize: ".85rem",
+                    opacity: 0.9,
+                  }}
+                >
+                  {s.level}%
+                </span>
+              </div>
+
+              <div
+                role="progressbar"
+                aria-valuenow={s.level}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={`${s.name} proficiency`}
+                style={progressTrackStyle}
+              >
+                <div
+                  style={{
+                    width: `${s.level}%`,
+                    height: "100%",
+                    background: active.accent,
+                    borderRadius: 999,
+                    transition: "width 800ms ease",
+                  }}
+                />
+              </div>
+
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: ".85rem",
+                  color: theme.colors.text.secondary,
+                  opacity: hovered === s.name ? 0.95 : 0.75,
+                  transition: "opacity .15s ease",
+                }}
+              >
+                {s.description}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Pager Dots */}
+        <div style={dotRowStyle}>
+          {categories.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Go to ${categories[i].title}`}
+              onClick={() => setActiveCategory(i)}
+              style={dotStyle(i === activeCategory)}
             />
           ))}
         </div>
-      </div>
-
-      {/* Responsive Styles */}
-      <style>{`
-        @media (max-width: 768px) {
-          .skill-item {
-            padding: 0.75rem !important;
-          }
-        }
-        
-        @media (max-width: 480px) {
-          .skill-item {
-            padding: 0.5rem !important;
-          }
-        }
-      `}</style>
+      </section>
     </div>
   );
 };

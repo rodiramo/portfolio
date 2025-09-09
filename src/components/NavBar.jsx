@@ -6,6 +6,11 @@ import {
   Code2,
   House,
   FolderOpen,
+  Earth,
+  Github,
+  Linkedin,
+  Figma,
+  Mail,
   Globe,
   ChevronDown,
   Sun,
@@ -19,6 +24,7 @@ import Projects from "../pages/Projects/Projects.jsx";
 import Skills from "../pages/Skills/Skills.jsx";
 import { useTheme } from "../theme.js";
 import Logo from "./Logo.jsx";
+import ProfileSidebar from "../components/ProfileSidebar.jsx"; // adjust path if different
 
 const NavBar = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -39,12 +45,6 @@ const NavBar = () => {
     insights: useRef(null),
     contact: useRef(null),
   };
-
-  const languages = [
-    { code: "EN", name: "English", flag: "🇺🇸" },
-    { code: "ES", name: "Español", flag: "🇪🇸" },
-    { code: "DE", name: "Deutsch", flag: "🇩🇪" },
-  ];
 
   // Toggle dropdown items
   const toggleExpanded = (itemId) => {
@@ -147,7 +147,10 @@ const NavBar = () => {
       style={{ backgroundColor: theme.colors.secondary }}
     >
       {/* Desktop Top Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 hidden lg:flex items-center justify-between">
+      <nav
+        className="fixed top-0 left-0 right-0 z-50 hidden lg:flex items-center justify-between p-1 m-auto"
+        style={{ maxWidth: "1800px" }}
+      >
         <Logo isDarkMode={isDarkMode} />
         {/* Desktop Navigation */}
         <div
@@ -173,7 +176,6 @@ const NavBar = () => {
               <div className="relative">
                 <button
                   onClick={() => scrollToSection("home")}
-                  className="flex items-center px-3 py-2 text-sm transition-colors"
                   style={{
                     backgroundColor: "transparent",
                     color: theme.colors.text.primary,
@@ -197,7 +199,7 @@ const NavBar = () => {
                 </button>
               </div>
             </div>
-            <span className="line mr-4"></span>
+            <span className="line mr-4 ml-1"></span>
             <div className="flex items-baseline space-x-1">
               {navItems.map((item) => (
                 <div key={item.id} className="relative group">
@@ -275,155 +277,85 @@ const NavBar = () => {
                 </div>
               ))}
             </div>
-            <span className="line ml-4"></span>
-            {/* Desktop Config Button */}
-            <div className="flex items-center space-x-1  ">
-              <div className="relative">
-                <button
-                  onClick={() => setIsConfigMenuOpen(!isConfigMenuOpen)}
-                  className="config-menu-toggle flex items-center px-3 py-2 rounded-full text-sm transition-colors focus:outline-none"
-                  style={{
-                    backgroundColor: isConfigMenuOpen
-                      ? theme.colors.light
-                      : "transparent",
-                    color: theme.colors.text.primary,
-                    borderRadius: "50px",
-                    border: isConfigMenuOpen
-                      ? `1.5px solid ${theme.colors.dark}`
-                      : "none",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isConfigMenuOpen) {
-                      e.target.style.backgroundColor = theme.colors.hover;
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isConfigMenuOpen) {
-                      e.target.style.backgroundColor = "transparent";
-                    }
-                  }}
-                >
-                  <Settings size={16} />
-                </button>
-
-                {/* Desktop Config Dropdown */}
-                {isConfigMenuOpen && (
-                  <div
-                    className="absolute top-full right-0 mt-1 min-w-max rounded-lg shadow-lg border config-menu"
-                    style={{
-                      backgroundColor: theme.colors.surface,
-                      borderColor: theme.colors.border,
-                      minWidth: "200px",
-                    }}
-                  >
-                    <div className="px-4 py-3">
-                      <h3
-                        className="text-sm font-semibold mb-3 focus:outline-none"
-                        style={{
-                          color: theme.colors.text.primary,
-                          borderRadius: "50px",
-                        }}
-                      >
-                        Settings
-                      </h3>
-                      <div className="space-y-3">
-                        {/* Dark Mode Toggle */}
-                        <div className="flex items-center justify-between">
-                          <span
-                            className="text-sm"
-                            style={{ color: theme.colors.text.primary }}
-                          >
-                            Dark Mode
-                          </span>
-                          <button
-                            onClick={() => setIsDarkMode(!isDarkMode)}
-                            className="flex items-center px-3 py-1.5 rounded-lg text-sm transition-colors"
-                            style={{
-                              backgroundColor: isDarkMode
-                                ? theme.colors.primary
-                                : theme.colors.border,
-                              color: isDarkMode
-                                ? theme.colors.text.inverse
-                                : theme.colors.text.primary,
-                            }}
-                          >
-                            {isDarkMode ? (
-                              <Moon size={16} />
-                            ) : (
-                              <Sun size={16} />
-                            )}
-                          </button>
-                        </div>
-
-                        {/* Language Selector */}
-                        <div className="flex items-center justify-between">
-                          <span
-                            className="text-sm"
-                            style={{ color: theme.colors.text.primary }}
-                          >
-                            Language
-                          </span>
-                          <div className="flex space-x-1">
-                            {languages.map((lang) => (
-                              <button
-                                key={lang.code}
-                                onClick={() => setSelectedLanguage(lang.code)}
-                                className="flex items-center px-2 py-1 rounded text-xs transition-colors focus:outline-none"
-                                style={{
-                                  backgroundColor:
-                                    selectedLanguage === lang.code
-                                      ? theme.colors.primary
-                                      : "transparent",
-                                  color:
-                                    selectedLanguage === lang.code
-                                      ? theme.colors.text.inverse
-                                      : theme.colors.text.primary,
-                                  border:
-                                    selectedLanguage === lang.code
-                                      ? "none"
-                                      : `1px solid ${theme.colors.border}`,
-                                }}
-                              >
-                                <span className="mr-1">{lang.flag}</span>
-                                {lang.code}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            <span className="line ml-4 mr-1"></span>
+            {/* Language Toggle */}
+            <div className="flex items-center justify-between mr-1">
+              <button
+                onClick={() =>
+                  setSelectedLanguage(selectedLanguage === "en" ? "de" : "en")
+                }
+                className="flex items-center  transition-colors"
+                style={{
+                  borderRadius: "50px",
+                  color: theme.colors.primary,
+                  padding: "5px 10px",
+                  backgroundColor: `${theme.colors.surface}40`,
+                  border: "none",
+                  outline: "none",
+                }}
+                onFocus={(e) => {
+                  e.target.style.outline = "none";
+                  e.target.style.boxShadow = "none";
+                }}
+              >
+                {selectedLanguage === "en" ? (
+                  <span className="flex items-center">
+                    <span>EN</span>
+                  </span>
+                ) : (
+                  <span className="flex items-center">
+                    <span>DE</span>
+                  </span>
                 )}
-              </div>
-            </div>
+              </button>
+            </div>{" "}
           </div>
         </div>
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className="flex items-center rounded-full transition-colors  backdrop-blur-md "
+            style={{
+              outline: "none",
+              border: "none",
+              padding: "8px",
+              borderRadius: "50px",
+              marginRight: "1rem",
+              backgroundColor: isDarkMode
+                ? theme.colors.primary
+                : `${theme.colors.surface}50`,
+              color: isDarkMode
+                ? theme.colors.text.inverse
+                : theme.colors.text.primary,
+            }}
+          >
+            {isDarkMode ? <Moon size={16} /> : <Sun size={16} />}
+          </button>
 
-        {/* CV Download */}
-        <button
-          className="flex items-center rounded-full transition-all duration-200 m-4"
-          style={{
-            background: theme.colors.light,
-            height: "fit-content",
-            padding: "10px",
-            fontSize: "0.7rem",
-            marginLeft: "1rem",
-            border: `1.5px solid ${theme.colors.dark}`,
-            borderRadius: "50px",
-            color: theme.colors.text.primary,
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.transform = "translateY(-1px)";
-            e.target.style.boxShadow = "0 4px 12px rgba(139, 92, 246, 0.4)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.transform = "translateY(0)";
-            e.target.style.boxShadow = "none";
-          }}
-        >
-          <Download size={16} className="mr-2" />
-          Curriculum
-        </button>
+          <button
+            className="flex items-center rounded-full transition-all duration-200 "
+            style={{
+              background: theme.colors.light,
+              height: "fit-content",
+              padding: "8px",
+              fontSize: "0.7rem",
+              border: `1.5px solid ${theme.colors.dark}`,
+              borderRadius: "50px",
+              color: theme.colors.text.primary,
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-1px)";
+              e.target.style.boxShadow = "0 4px 12px rgba(139, 92, 246, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "none";
+            }}
+          >
+            <Download size={16} className="mr-2" />
+            Curriculum
+          </button>
+        </div>
       </nav>
 
       {/* Mobile/Tablet Top Bar */}
@@ -668,7 +600,7 @@ const NavBar = () => {
                   </button>
                 </div>
 
-                {/* Language Selector */}
+                {/* Language Toggle */}
                 <div className="flex items-center justify-between">
                   <span
                     className="text-sm"
@@ -676,85 +608,157 @@ const NavBar = () => {
                   >
                     Language
                   </span>
-                  <div className="flex space-x-1">
-                    {languages.map((lang) => (
-                      <button
-                        key={lang.code}
-                        onClick={() => setSelectedLanguage(lang.code)}
-                        className="flex items-center px-2 py-1 rounded text-xs transition-colors"
-                        style={{
-                          backgroundColor:
-                            selectedLanguage === lang.code
-                              ? theme.colors.primary
-                              : "transparent",
-                          color:
-                            selectedLanguage === lang.code
-                              ? theme.colors.text.inverse
-                              : theme.colors.text.primary,
-                          border:
-                            selectedLanguage === lang.code
-                              ? "none"
-                              : `1px solid ${theme.colors.border}`,
-                          outline: "none",
-                        }}
-                        onFocus={(e) => {
-                          e.target.style.outline = "none";
-                          e.target.style.boxShadow = "none";
-                        }}
-                      >
-                        <span className="mr-1">{lang.flag}</span>
-                        {lang.code}
-                      </button>
-                    ))}
-                  </div>
+                  <button
+                    onClick={() =>
+                      setSelectedLanguage(
+                        selectedLanguage === "en" ? "de" : "en"
+                      )
+                    }
+                    className="flex items-center px-3 py-1.5 rounded-lg text-sm transition-colors"
+                    style={{
+                      backgroundColor: theme.colors.border,
+                      color: theme.colors.text.primary,
+                      border: "none",
+                      outline: "none",
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.outline = "none";
+                      e.target.style.boxShadow = "none";
+                    }}
+                  >
+                    {selectedLanguage === "en" ? (
+                      <span className="flex items-center">
+                        <span className="ml-1">EN</span>
+                      </span>
+                    ) : (
+                      <span className="flex items-center">
+                        <span className="ml-1">DE</span>
+                      </span>
+                    )}
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         )}
       </nav>
+      {/* Main Content — sticky on desktop, sidebar-first on mobile */}
+      <main
+        className="page-grid stack-sidebar-first"
+        style={{
+          ["--nav-h"]: "72px",
+          maxWidth: "1500px",
+          margin: "0 auto",
+          padding: "0 16px",
+          display: "grid",
+          gap: "2rem",
+        }}
+      >
+        <aside
+          className="sidebar"
+          style={{
+            gridArea: "sidebar",
+            alignSelf: "start",
+            height: "fit-content",
+          }}
+        >
+          <ProfileSidebar
+            isDarkMode={isDarkMode}
+            name="Rocio Diaz Ramos"
+            locationText="Europe/Hamburg"
+            avatarSrc="/assets/pfp.jpeg"
+            languages={[
+              { name: "Español", proficiency: 100, level: "Native" },
+              { name: "English", proficiency: 90, level: "Fluent" },
+              { name: "Deutsch", proficiency: 75, level: "Advanced" },
+            ]}
+            socialLinks={[
+              {
+                icon: Github,
+                label: "GitHub",
+                href: "https://github.com/youruser",
+              },
+              {
+                icon: Linkedin,
+                label: "LinkedIn",
+                href: "https://linkedin.com/in/youruser",
+              },
+              {
+                icon: Figma,
+                label: "Figma",
+                href: "https://figma.com/@youruser",
+              },
+              { icon: Mail, label: "Email", href: "mailto:you@example.com" },
+            ]}
+          />
+        </aside>
 
-      {/* Main Content - Updated to pass isDarkMode prop to all components */}
-      <div style={{ width: "100%" }}>
-        <div className="min-h-screen">
-          {/* Home Section */}
+        <div className="content" style={{ gridArea: "content", minWidth: 0 }}>
           <section ref={sectionRefs.home} id="home" className="py-10">
             <HomePage isDarkMode={isDarkMode} />
           </section>
 
-          {/* About Section */}
           <section ref={sectionRefs.about} id="about" className="py-10">
             <About isDarkMode={isDarkMode} />
           </section>
 
-          {/* Skills Section */}
           <section
             ref={sectionRefs.skills}
             id="skills"
-            className="py-8 lg:py-16 px-4 lg:px-8"
+            className="py-8 lg:py-16 px-0"
           >
             <Skills isDarkMode={isDarkMode} />
           </section>
 
-          {/* Projects Section */}
           <section
             ref={sectionRefs.projects}
             id="projects"
-            className="py-8 lg:py-16 px-4 lg:px-8"
+            className="py-8 lg:py-16 px-0"
           >
             <Projects isDarkMode={isDarkMode} />
           </section>
 
-          {/* Contact Section */}
           <section
             ref={sectionRefs.contact}
             id="contact"
-            className="py-8 lg:py-16 px-4 lg:px-8"
+            className="py-8 lg:py-16 px-0"
           >
             <Contact isDarkMode={isDarkMode} />
           </section>
         </div>
-      </div>
+      </main>
+
+      <style>{`
+  /* Desktop: 2 columns */
+  .page-grid {
+    display: grid;
+    grid-template-columns: minmax(260px, 340px) 1fr;
+    grid-template-areas: "sidebar content";
+    gap: 2rem;
+  }
+  /* make sidebar sticky only on wider screens */
+  @media (min-width: 1025px) {
+    .sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 2.5rem);
+      align-self: start;
+    }
+  }
+
+  /* Mobile/tablet: stack with SIDEBAR FIRST, and sticky OFF */
+  @media (max-width: 1024px) {
+    .page-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "sidebar"
+        "content";
+      gap: 1.25rem;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+    .sidebar { position: static; top: auto; }
+  }
+`}</style>
     </div>
   );
 };

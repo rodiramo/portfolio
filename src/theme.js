@@ -10,6 +10,7 @@ export const useTheme = (isDark = false) => ({
     accent: isDark ? "#374151" : "#E5E7EB",
     surface: isDark ? "#111827" : "#FFFFFF",
     background: isDark ? "#0F172A" : "#FAFBFC",
+    custom: isDark ? "#7C3AED" : "#0F172A",
     black: isDark ? "#fff" : "#000",
     text: {
       primary: isDark ? "#F9FAFB" : "#1F2937",

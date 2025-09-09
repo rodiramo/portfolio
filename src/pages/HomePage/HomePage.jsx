@@ -15,7 +15,7 @@ const HomePage = ({ isDarkMode }) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <Header theme={theme} />
+      <Header theme={theme} isDarkMode={isDarkMode} />
       {/* Pass theme to other components as needed */}
     </motion.div>
   );
