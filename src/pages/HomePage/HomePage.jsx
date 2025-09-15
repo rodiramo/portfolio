@@ -1,24 +1,335 @@
 import React from "react";
-import Yo from "./content/yo";
-import { useTheme } from "../../theme.js"; // Import the same theme hook
-import { motion } from "framer-motion";
-import Header from "./content/Header.jsx";
+import { useTheme } from "../../theme.js";
+import { MdOutlineWavingHand } from "react-icons/md";
+import Me from "../../components/Me.jsx";
+import { BriefcaseBusiness, MapPinHouse } from "lucide-react";
 
-const HomePage = ({ isDarkMode }) => {
-  // Receive isDarkMode as prop
-  const theme = useTheme(isDarkMode); // Use the same theme system
+/* Small chip + button helpers (inline styled) */
+const Chip = ({ theme, children }) => (
+  <span
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 6,
+      padding: "6px 10px",
+      borderRadius: 999,
+      fontSize: "0.85rem",
+      lineHeight: 1,
+      background: theme.isDark
+        ? "rgba(255,255,255,0.06)"
+        : "rgba(15,23,42,0.06)",
+      border: theme.isDark
+        ? "1px solid rgba(255,255,255,0.14)"
+        : "1px solid rgba(15,23,42,0.12)",
+      color: theme.colors.text.primary,
+      whiteSpace: "nowrap",
+    }}
+  >
+    {children}
+  </span>
+);
 
+const ActionBtn = ({ theme, kind = "primary", onClick, children }) => {
+  const base = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 8,
+    padding: "8px 12px",
+    borderRadius: 10,
+    fontSize: "0.95rem",
+    lineHeight: 1,
+    fontWeight: 700,
+    cursor: "pointer",
+    userSelect: "none",
+    transition: "transform .15s ease, box-shadow .15s ease, opacity .2s",
+    textDecoration: "none",
+  };
+  const styles =
+    kind === "primary"
+      ? {
+          ...base,
+          background: theme.colors.primary,
+          color: theme.colors.text.inverse,
+          border: "1px solid transparent",
+        }
+      : {
+          ...base,
+          background: "transparent",
+          color: theme.colors.text.primary,
+          border: `1px solid ${theme.colors.border}`,
+        };
   return (
-    <motion.div
-      className="font-sans transition-all duration-500"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
+    <button
+      onClick={onClick}
+      style={styles}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-1px)";
+        e.currentTarget.style.boxShadow = "0 8px 18px rgba(0,0,0,.10)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = "none";
+      }}
     >
-      <Header theme={theme} isDarkMode={isDarkMode} />
-      {/* Pass theme to other components as needed */}
-    </motion.div>
+      {children}
+    </button>
   );
 };
 
-export default HomePage;
+/* -------- Refined Glass Header -------- */
+const Header = ({
+  name = "Rocio Diaz Ramos",
+  title = "Web Designer & Developer",
+  description = "",
+  headerHeight = "70vh",
+  isDarkMode,
+  overflowHeight = "120px",
+  blurPx = 1,
+  onPrimary = null, // optional: e.g., () => scrollToSection('projects')
+  onSecondary = null, // optional: e.g., () => scrollToSection('contact')
+}) => {
+  const theme = useTheme(isDarkMode);
+
+  // Very translucent glass colors (so it never looks like a solid block)
+  const glassBg = theme.isDark
+    ? "rgba(17, 24, 39, 0.18)" // dark glass
+    : "rgba(255, 255, 255, 0.12)"; // light glass
+
+  // Subtle border for glass panel
+  const glassBorder = theme.isDark
+    ? "1px solid rgba(255,255,255,0.14)"
+    : "1px solid rgba(15,23,42,0.12)";
+
+  // Soft radial glow behind the card (kept *very* subtle)
+  const glow = theme.isDark
+    ? "radial-gradient(600px 280px at 50% 40%, rgba(124,58,237,0.18), transparent 60%)"
+    : "radial-gradient(600px 280px at 50% 40%, rgba(139,92,246,0.15), transparent 60%)";
+
+  return (
+    <div
+      className="responsive-container"
+      style={{
+        position: "relative",
+        maxWidth: 1500,
+        width: "100%",
+        height: headerHeight,
+        margin: "0 auto",
+        padding: "0 12px",
+        borderRadius: 12,
+        overflow: "visible",
+        marginBottom: `-${overflowHeight}`,
+      }}
+    >
+      {/* Background glow */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: 16,
+          background: glow,
+          filter: "blur(6px)",
+          zIndex: 0,
+        }}
+      />
+
+      {/* Glass panel */}
+      <header
+        style={{
+          position: "relative",
+          height: "50vh",
+          minHeight: 360,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 16,
+          background: glassBg,
+          border: glassBorder,
+          backdropFilter: `blur(${blurPx}px) saturate(120%)`,
+          WebkitBackdropFilter: `blur(${blurPx}px) saturate(120%)`, // <- fixed extra parenthesis
+          boxShadow: theme.isDark
+            ? "inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 24px rgba(0,0,0,0.20)"
+            : "inset 0 1px 0 rgba(255,255,255,0.35), 0 8px 20px rgba(0,0,0,0.06)",
+          zIndex: 1,
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            maxWidth: 920,
+            padding: "16px",
+            display: "grid",
+            gap: 12,
+            justifyItems: "center",
+            textAlign: "center",
+          }}
+        >
+          {/* Chips */}
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Chip theme={theme}>
+              <MapPinHouse /> Hamburg, DE
+            </Chip>
+            <Chip theme={theme}>
+              <BriefcaseBusiness /> Available
+            </Chip>
+          </div>
+
+          {/* Heading */}
+          <h1
+            style={{
+              fontSize: "clamp(2rem, 5vw, 3.25rem)",
+              fontWeight: 800,
+              lineHeight: 1.1,
+              margin: "6px 0 6px 0",
+              color: theme.colors.text.primary,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Hello{" "}
+            <span style={{ display: "inline-block" }}>
+              <span className="wave span-title">
+                <MdOutlineWavingHand size={42} color={theme.colors.custom} />
+              </span>
+            </span>
+            <br />
+            I&apos;m {name}{" "}
+            <span style={{ display: "inline-block" }}>
+              <span className="span-title-me">
+                <Me />
+              </span>
+            </span>
+          </h1>
+
+          {/* Role */}
+          <h2 style={{ color: theme.colors.text.primary }}>{title}</h2>
+
+          {/* Scroll indicator */}
+          <div
+            style={{
+              marginTop: 6,
+              background: "transparent",
+              border: "none",
+              display: "grid",
+              placeItems: "center",
+              gap: 6,
+            }}
+          >
+            {/* Mouse outline */}
+            <div
+              style={{
+                width: 26,
+                height: 40,
+                borderRadius: 13,
+                border: `2px solid ${theme.colors.primary}50`,
+                display: "grid",
+                placeItems: "center",
+                position: "relative",
+                backdropFilter: "blur(2px)",
+              }}
+            >
+              {/* Down chevron */}
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                style={{ animation: "floatDown 1.6s ease-in-out infinite" }}
+              >
+                <polyline
+                  points="6 9 12 15 18 9"
+                  stroke={theme.colors.primary}
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  opacity="0.9"
+                />
+              </svg>
+            </div>
+          </div>
+
+          {/* Description */}
+          <p
+            style={{
+              fontSize: "clamp(0.95rem, 1.6vw, 1.1rem)",
+              lineHeight: 1.6,
+              color: theme.colors.text.primary,
+              maxWidth: "72ch",
+              margin: 0,
+              opacity: 0.9,
+              paddingInline: 8,
+            }}
+          >
+            {description}
+          </p>
+
+          {/* Actions (optional) */}
+          {(onPrimary || onSecondary) && (
+            <div
+              style={{
+                display: "flex",
+                gap: 10,
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 8,
+              }}
+            >
+              {onPrimary && (
+                <ActionBtn theme={theme} kind="primary" onClick={onPrimary}>
+                  View Projects
+                </ActionBtn>
+              )}
+              {onSecondary && (
+                <ActionBtn theme={theme} kind="ghost" onClick={onSecondary}>
+                  Contact Me
+                </ActionBtn>
+              )}
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* Micro CSS (animations + small responsive tweak) */}
+      <style>{`
+        @keyframes wave {
+          0%, 100% { transform: rotate(0deg); }
+          10%, 30% { transform: rotate(14deg); }
+          20% { transform: rotate(-8deg); }
+          40% { transform: rotate(14deg); }
+          50% { transform: rotate(-4deg); }
+          60% { transform: rotate(10deg); }
+        }
+        .wave {
+          animation: wave 2s ease-in-out infinite;
+          transform-origin: 70% 70%;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }@keyframes wheel {
+  0%   { transform: translateY(-6px); opacity: .85; }
+  60%  { transform: translateY(6px);  opacity: .25; }
+  100% { transform: translateY(-6px); opacity: .85; }
+}
+@keyframes floatDown {
+  0%   { transform: translateY(-6px); opacity: .85; }
+  60%  { transform: translateY(6px);  opacity: .25; }
+  100% { transform: translateY(-6px); opacity: .85; }
+}
+
+        .responsive-container { width: 100%; margin-inline: auto; }
+        @media (max-width: 768px) { .responsive-container { margin-bottom: -54px !important; } }
+        @media (max-width: 480px) { .responsive-container { margin-bottom: -34px !important; } }
+      `}</style>
+    </div>
+  );
+};
+
+export default Header;

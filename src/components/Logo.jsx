@@ -1,14 +1,14 @@
 import { useTheme } from "../theme.js";
 const Logo = ({ isDarkMode }) => {
-  const theme = useTheme();
+  const theme = useTheme(isDarkMode);
   return (
     <div>
       {" "}
       {/* Logo */}
       <div
-        className="flex items-center backdrop-blur-md rounded-full p-2"
+        className="flex items-center backdrop-blur-md rounded-full p-2 mt-2"
         style={{
-          backgroundColor: `${theme.colors.surface}50`,
+          backgroundColor: `${theme.colors.surface}60`,
         }}
       >
         <div className="w-15 h-15 flex items-center justify-center ">

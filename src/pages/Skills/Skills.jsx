@@ -1,5 +1,7 @@
+// src/pages/Skills/Skills.jsx
 import React, { useState, useMemo } from "react";
 import { useTheme } from "../../theme.js";
+import { Code2 } from "lucide-react";
 
 /* --- CDN logo sources (ordered; will try next if one fails) --- */
 const LOGO_SOURCES = {
@@ -117,7 +119,7 @@ function Logo({ name, size = 18, accent }) {
   );
 }
 
-const Skills = ({ isDarkMode }) => {
+const Skills = ({ isDarkMode = false }) => {
   const theme = useTheme(isDarkMode);
   const [activeCategory, setActiveCategory] = useState(0);
   const [hovered, setHovered] = useState(null);
@@ -233,39 +235,75 @@ const Skills = ({ isDarkMode }) => {
 
   const active = categories[activeCategory];
 
+  // frosted section wrapper (to match Home/About)
+  const glassBg = isDarkMode ? "rgba(17,24,39,0.28)" : "rgba(255,255,255,0.42)";
+  const borderCol = isDarkMode ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.08)";
+  const cardGlass = isDarkMode
+    ? "rgba(17,24,39,0.32)"
+    : "rgba(255,255,255,0.56)";
+  const cardShadow = isDarkMode
+    ? "0 12px 28px rgba(0,0,0,0.28)"
+    : "0 14px 28px rgba(0,0,0,0.10)";
+
   const containerStyle = {
     maxWidth: 1200,
     width: "100%",
     margin: "0 auto",
-    padding: "2rem 1rem",
     color: theme.colors.text.primary,
   };
 
-  const headerStyle = {
-    marginBottom: "1.5rem",
-    textAlign: "left",
+  const sectionWrapStyle = {
+    background: glassBg,
+    border: `1px solid ${borderCol}`,
+    borderRadius: 16,
+    backdropFilter: "blur(1px) saturate(120%)",
+    WebkitBackdropFilter: "blur(1px) saturate(120%)",
+    boxShadow: cardShadow,
+    padding: "clamp(16px, 2.2vw, 22px)",
+  };
+
+  const chipStyle = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 8,
+    padding: "6px 12px",
+    borderRadius: 9999,
+    background: `${theme.colors.primary}10`,
+    border: `1px solid ${theme.colors.primary}33`,
+    color: theme.colors.text.primary,
+    marginBottom: "0.75rem",
+  };
+
+  const chipIconStyle = {
+    display: "inline-grid",
+    placeItems: "center",
+    width: 22,
+    height: 22,
+    borderRadius: 9999,
+    backgroundColor: `${theme.colors.primary}22`,
+    border: `1px solid ${theme.colors.primary}55`,
   };
 
   const titleStyle = {
     fontFamily: "Vibur, cursive",
     fontWeight: 800,
-    fontSize: "clamp(2rem, 4vw, 2.6rem)",
+    fontSize: "clamp(1.6rem, 3.6vw, 2.2rem)",
     margin: 0,
     color: theme.colors.text.primary,
   };
 
   const subtitleStyle = {
-    marginTop: "0.5rem",
-    marginBottom: 0,
-    fontSize: "clamp(1rem, 2vw, 1.1rem)",
-    maxWidth: "52ch",
+    marginTop: ".35rem",
+    marginBottom: "1rem",
+    fontSize: "clamp(.95rem, 1.8vw, 1.05rem)",
+    maxWidth: "60ch",
     color: theme.colors.text.secondary,
   };
 
   const tabsWrapStyle = {
     display: "flex",
     flexWrap: "wrap",
-    gap: "0.75rem",
+    gap: "0.6rem",
     marginBottom: "1rem",
     overflowX: "auto",
   };
@@ -274,30 +312,18 @@ const Skills = ({ isDarkMode }) => {
     display: "inline-flex",
     alignItems: "center",
     gap: "0.5rem",
-    padding: "0.6rem 1rem",
+    padding: ".55rem .9rem",
     borderRadius: 999,
-    border: `1.5px solid ${isActive ? accent : theme.colors.border}`,
-    background: isActive ? accent : theme.colors.surface,
+    border: `1.5px solid ${isActive ? `${accent}` : borderCol}`,
+    background: isActive ? `${accent}` : cardGlass,
     color: isActive ? theme.colors.text.inverse : theme.colors.text.primary,
-    fontWeight: 700,
-    fontSize: ".95rem",
+    fontWeight: 800,
+    fontSize: ".92rem",
     cursor: "pointer",
-    transition: "transform .15s ease",
+    transition:
+      "transform .15s ease, box-shadow .15s ease, background .2s ease",
+    boxShadow: isActive ? "0 6px 14px rgba(0,0,0,0.12)" : "none",
   });
-
-  const panelStyle = {
-    borderRadius: 20,
-    padding: "1rem",
-  };
-
-  const panelHeadStyle = {
-    display: "flex",
-    alignItems: "center",
-    gap: ".6rem",
-    paddingBottom: ".75rem",
-    paddingTop: ".75rem",
-    marginBottom: "1rem",
-  };
 
   const gridStyle = {
     display: "grid",
@@ -306,10 +332,12 @@ const Skills = ({ isDarkMode }) => {
   };
 
   const cardStyle = {
-    border: `1px solid ${theme.colors.border}`,
+    border: `1px solid ${borderCol}`,
     borderRadius: 14,
     padding: ".9rem",
-    background: theme.colors.surface,
+    background: cardGlass,
+    backdropFilter: "blur(8px) saturate(120%)",
+    WebkitBackdropFilter: "blur(8px) saturate(120%)",
     transition:
       "transform .15s ease, box-shadow .15s ease, background .15s ease",
   };
@@ -324,7 +352,7 @@ const Skills = ({ isDarkMode }) => {
   const progressTrackStyle = {
     width: "100%",
     height: 6,
-    background: theme.colors.border,
+    background: isDarkMode ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)",
     borderRadius: 999,
     overflow: "hidden",
     marginBottom: ".55rem",
@@ -341,7 +369,7 @@ const Skills = ({ isDarkMode }) => {
     width: 10,
     height: 10,
     borderRadius: 999,
-    background: on ? active.accent : theme.colors.border,
+    background: on ? active.accent : borderCol,
     border: "none",
     opacity: 0.9,
     cursor: "pointer",
@@ -349,41 +377,63 @@ const Skills = ({ isDarkMode }) => {
 
   return (
     <div style={containerStyle}>
-      {/* Header (left aligned) */}
-      <header style={headerStyle}>
+      <section style={sectionWrapStyle}>
+        {/* Chip */}
+        <div style={chipStyle}>
+          <span style={chipIconStyle}>
+            <Code2 size={14} color={theme.colors.primary} />
+          </span>
+          <span
+            style={{
+              fontSize: ".9rem",
+              fontWeight: 800,
+              letterSpacing: ".02em",
+            }}
+          >
+            Skills
+          </span>
+        </div>
+
+        {/* Title + subtitle */}
         <h2 style={titleStyle}>Technical Skills</h2>
         <p style={subtitleStyle}>
           Explore my expertise across development and design
         </p>
-      </header>
 
-      {/* Tabs (left aligned) */}
-      <nav style={tabsWrapStyle} aria-label="Skill categories">
-        {categories.map((cat, i) => {
-          const isActive = i === activeCategory;
-          return (
-            <button
-              key={cat.id}
-              type="button"
-              onClick={() => setActiveCategory(i)}
-              style={tabStyle(isActive, cat.accent)}
-              onMouseEnter={(e) =>
-                !isActive &&
-                (e.currentTarget.style.transform = "translateY(-1px)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "translateY(0)")
-              }
-            >
-              {cat.title}
-            </button>
-          );
-        })}
-      </nav>
+        {/* Tabs */}
+        <nav style={tabsWrapStyle} aria-label="Skill categories">
+          {categories.map((cat, i) => {
+            const isActive = i === activeCategory;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setActiveCategory(i)}
+                style={tabStyle(isActive, cat.accent)}
+                onMouseEnter={(e) =>
+                  !isActive &&
+                  (e.currentTarget.style.transform = "translateY(-1px)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "translateY(0)")
+                }
+              >
+                {cat.title}
+              </button>
+            );
+          })}
+        </nav>
 
-      {/* Panel */}
-      <section style={panelStyle}>
-        <header style={panelHeadStyle}>
+        {/* Panel header (mini icon + title) */}
+        <header
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: ".6rem",
+            paddingBottom: ".6rem",
+            marginBottom: ".6rem",
+          }}
+        >
           <Logo
             name={active.skills[0]?.name || "React.js"}
             size={20}
@@ -392,7 +442,7 @@ const Skills = ({ isDarkMode }) => {
           <h3
             style={{
               margin: 0,
-              fontSize: "1.2rem",
+              fontSize: "1.12rem",
               fontWeight: 800,
               color: theme.colors.text.primary,
             }}
@@ -410,14 +460,16 @@ const Skills = ({ isDarkMode }) => {
               onMouseEnter={(e) => {
                 setHovered(s.name);
                 e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = "0 8px 18px rgba(0,0,0,.08)";
-                e.currentTarget.style.background = theme.colors.hover;
+                e.currentTarget.style.boxShadow = "0 10px 20px rgba(0,0,0,.12)";
+                e.currentTarget.style.background = isDarkMode
+                  ? "rgba(17,24,39,0.38)"
+                  : "rgba(255,255,255,0.72)";
               }}
               onMouseLeave={(e) => {
                 setHovered(null);
                 e.currentTarget.style.transform = "translateY(0)";
                 e.currentTarget.style.boxShadow = "none";
-                e.currentTarget.style.background = theme.colors.surface;
+                e.currentTarget.style.background = cardGlass;
               }}
             >
               <div style={headRowStyle}>
@@ -448,7 +500,7 @@ const Skills = ({ isDarkMode }) => {
                   style={{
                     width: `${s.level}%`,
                     height: "100%",
-                    background: active.accent,
+                    background: `linear-gradient(90deg, ${active.accent}, ${active.accent} 60%)`,
                     borderRadius: 999,
                     transition: "width 800ms ease",
                   }}
@@ -460,7 +512,7 @@ const Skills = ({ isDarkMode }) => {
                   margin: 0,
                   fontSize: ".85rem",
                   color: theme.colors.text.secondary,
-                  opacity: hovered === s.name ? 0.95 : 0.75,
+                  opacity: hovered === s.name ? 0.95 : 0.78,
                   transition: "opacity .15s ease",
                 }}
               >
@@ -482,6 +534,14 @@ const Skills = ({ isDarkMode }) => {
           ))}
         </div>
       </section>
+
+      {/* micro CSS */}
+      <style>{`
+        @media (max-width: 560px) {
+          /* tighten grid on phones */
+          section > div[style*="grid"] { gap: .75rem !important; }
+        }
+      `}</style>
     </div>
   );
 };

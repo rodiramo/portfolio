@@ -5,12 +5,12 @@ import { useTheme } from "../theme.js";
 /** Small, self-contained progress ring */
 const CircleProgress = ({
   percentage,
-  size = 35,
+  size = 20,
   stroke = 2,
   color,
   track,
 }) => {
-  const radius = (size - stroke * 4) / 2;
+  const radius = (size - stroke * 5) / 2;
   const C = 2 * Math.PI * radius;
   const offset = C - (percentage / 100) * C;
 
@@ -38,18 +38,6 @@ const CircleProgress = ({
           style={{ transition: "stroke-dashoffset 1s ease-in-out" }}
         />
       </svg>
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "grid",
-          placeItems: "center",
-          fontSize: size * 0.19,
-          fontWeight: 700,
-        }}
-      >
-        {percentage}%
-      </div>
     </div>
   );
 };
@@ -74,7 +62,7 @@ const ProfileSidebar = ({
     <div
       className="left-column"
       style={{
-        background: theme.colors.surface,
+        background: `${theme.colors.surface}80`,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -91,7 +79,7 @@ const ProfileSidebar = ({
           width: 150,
           height: 150,
           borderRadius: "50%",
-          border: `4px solid ${theme.colors.accent1}`,
+          border: `4px solid ${theme.colors.dark}`,
           backgroundColor: theme.colors.primary,
           backgroundImage: `url('${avatarSrc}')`,
           backgroundSize: "cover",
@@ -110,6 +98,13 @@ const ProfileSidebar = ({
           }}
         >
           {name}
+        </div>{" "}
+        <div
+          style={{
+            color: theme.colors.text.secondary,
+          }}
+        >
+          Web Designer and Developer
         </div>
       </div>
 
@@ -119,7 +114,6 @@ const ProfileSidebar = ({
           style={{
             display: "flex",
             alignItems: "center",
-            marginBottom: "1rem",
             justifyContent: "center",
             gap: "0.5rem",
           }}
@@ -136,9 +130,7 @@ const ProfileSidebar = ({
         className="languages-section"
         style={{
           textAlign: "center",
-          borderTop: `1px solid ${theme.colors.border}`,
-          paddingTop: "1rem",
-          maxWidth: 300,
+          maxWidth: 500,
           width: "100%",
           display: "flex",
           flexDirection: "column",
@@ -148,9 +140,9 @@ const ProfileSidebar = ({
         <div
           className="languages-list"
           style={{
-            marginTop: "0.75rem",
+            marginTop: "0.5rem",
             display: "flex",
-            gap: "0.7rem",
+            gap: "0.5rem",
             flexDirection: "row-reverse",
             flexWrap: "wrap",
             justifyContent: "center",
@@ -161,16 +153,16 @@ const ProfileSidebar = ({
               key={idx}
               className="language-item"
               style={{
-                backgroundColor: `${theme.colors.primary}20`,
+                backgroundColor: `${theme.colors.primary}15`,
                 display: "flex",
                 alignItems: "center",
                 borderRadius: 30,
-                padding: "0.5rem 1rem 0.5rem 0.5rem",
+                padding: "0.25rem 0.5rem 0.25rem 0.5rem",
               }}
             >
               <CircleProgress
                 percentage={lang.proficiency}
-                size={35}
+                size={20}
                 color={theme.colors.primary}
                 track={theme.colors.border}
               />

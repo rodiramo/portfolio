@@ -17,13 +17,13 @@ const Header = ({
   // Use fixed, very transparent RGBA colors so it can’t look opaque
   const glassBg = isDarkMode
     ? "rgba(17, 24, 39, 0.28)" // slate-900 @ 28%
-    : "rgba(214, 205, 215, 0.42)"; // white @ 12%
+    : "rgba(121, 42, 134, 0.42)"; // white @ 12%
 
   return (
     <div
       className="responsive-container"
       style={{
-        maxWidth: "1500px",
+        maxWidth: "1400px",
         width: "100%",
         height: headerHeight,
         margin: "0 auto",

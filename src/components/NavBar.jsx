@@ -1,22 +1,21 @@
+// src/components/NavBar.jsx
 import React, { useEffect, useRef, useState } from "react";
-
 import {
   Download,
   User,
   Code2,
   House,
   FolderOpen,
-  Earth,
   Github,
   Linkedin,
   Figma,
   Mail,
-  Globe,
   ChevronDown,
   Sun,
   Moon,
   Settings,
 } from "lucide-react";
+
 import HomePage from "../pages/HomePage/HomePage.jsx";
 import About from "../pages/About/About.jsx";
 import Contact from "../pages/Contact/Contact.jsx";
@@ -24,16 +23,28 @@ import Projects from "../pages/Projects/Projects.jsx";
 import Skills from "../pages/Skills/Skills.jsx";
 import { useTheme } from "../theme.js";
 import Logo from "./Logo.jsx";
-import ProfileSidebar from "../components/ProfileSidebar.jsx"; // adjust path if different
+import ProfileSidebar from "../components/ProfileSidebar.jsx";
 
-const NavBar = () => {
+// ✅ accept props correctly; add controlled/uncontrolled support
+const NavBar = (props) => {
+  const controlled =
+    typeof props.isDarkMode === "boolean" &&
+    typeof props.setIsDarkMode === "function";
+
+  const [internalDark, setInternalDark] = useState(false);
+  const dark = controlled ? props.isDarkMode : internalDark;
+  const toggleDark = () => {
+    if (controlled) props.setIsDarkMode(!props.isDarkMode);
+    else setInternalDark((v) => !v);
+  };
+
+  const theme = useTheme(dark);
+
   const [activeSection, setActiveSection] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isConfigMenuOpen, setIsConfigMenuOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState(new Set());
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("EN");
-  const theme = useTheme(isDarkMode);
 
   const sectionRefs = {
     home: useRef(null),
@@ -42,84 +53,60 @@ const NavBar = () => {
     projects: useRef(null),
     navippon: useRef(null),
     jumping: useRef(null),
-    insights: useRef(null),
     contact: useRef(null),
   };
 
-  // Toggle dropdown items
   const toggleExpanded = (itemId) => {
-    const newExpanded = new Set(expandedItems);
-    if (newExpanded.has(itemId)) {
-      newExpanded.delete(itemId);
-    } else {
-      newExpanded.add(itemId);
-    }
-    setExpandedItems(newExpanded);
+    const next = new Set(expandedItems);
+    next.has(itemId) ? next.delete(itemId) : next.add(itemId);
+    setExpandedItems(next);
   };
 
-  // Function to scroll to a section when a nav item is clicked
   const scrollToSection = (sectionId) => {
-    const section = sectionRefs[sectionId].current;
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-      // Close mobile menu after clicking
-      setIsMobileMenuOpen(false);
-      setIsConfigMenuOpen(false);
-      setExpandedItems(new Set()); // Close all dropdowns
-    }
+    const section = sectionRefs[sectionId]?.current;
+    if (!section) return;
+    section.scrollIntoView({ behavior: "smooth" });
+    setIsMobileMenuOpen(false);
+    setIsConfigMenuOpen(false);
+    setExpandedItems(new Set());
   };
 
-  // Update active section based on scroll position
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 100;
-
-      Object.keys(sectionRefs).forEach((section) => {
-        const element = sectionRefs[section].current;
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (
-            scrollPosition >= offsetTop &&
-            scrollPosition < offsetTop + offsetHeight
-          ) {
-            setActiveSection(section);
-          }
-        }
+      const y = window.scrollY + 100;
+      Object.keys(sectionRefs).forEach((key) => {
+        const el = sectionRefs[key].current;
+        if (!el) return;
+        const { offsetTop, offsetHeight } = el;
+        if (y >= offsetTop && y < offsetTop + offsetHeight)
+          setActiveSection(key);
       });
     };
-
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu and dropdowns when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isMobileMenuOpen) {
-        if (
-          !event.target.closest(".mobile-menu") &&
-          !event.target.closest(".mobile-menu-toggle")
-        ) {
-          setIsMobileMenuOpen(false);
-        }
+    const handleClickOutside = (e) => {
+      if (
+        isMobileMenuOpen &&
+        !e.target.closest(".mobile-menu") &&
+        !e.target.closest(".mobile-menu-toggle")
+      ) {
+        setIsMobileMenuOpen(false);
       }
-      if (isConfigMenuOpen) {
-        if (
-          !event.target.closest(".config-menu") &&
-          !event.target.closest(".config-menu-toggle")
-        ) {
-          setIsConfigMenuOpen(false);
-        }
+      if (
+        isConfigMenuOpen &&
+        !e.target.closest(".config-menu") &&
+        !e.target.closest(".config-menu-toggle")
+      ) {
+        setIsConfigMenuOpen(false);
       }
     };
-
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isMobileMenuOpen, isConfigMenuOpen]);
 
-  // Navigation items structure
   const navItems = [
     { title: "About Me", icon: User, id: "about" },
     { title: "Skills", icon: Code2, id: "skills" },
@@ -130,7 +117,6 @@ const NavBar = () => {
     },
   ];
 
-  // Mobile navigation items (includes home and config)
   const mobileNavItems = [
     { title: "Home", icon: House, id: "home" },
     { title: "About", icon: User, id: "about" },
@@ -142,37 +128,29 @@ const NavBar = () => {
   const isActive = (id) => activeSection === id;
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: theme.colors.secondary }}
-    >
+    <div className="min-h-screen">
       {/* Desktop Top Navbar */}
       <nav
         className="fixed top-0 left-0 right-0 z-50 hidden lg:flex items-center justify-between p-1 m-auto"
         style={{ maxWidth: "1800px" }}
       >
-        <Logo isDarkMode={isDarkMode} />
-        {/* Desktop Navigation */}
+        <Logo isDarkMode={dark} />
+
+        {/* Desktop Nav Pills */}
         <div
           className="backdrop-blur-md"
           style={{
             backgroundColor: `${theme.colors.surface}95`,
             border: `1.5px solid ${theme.colors.primary}30`,
-            height: "fit-content",
             borderRadius: "30rem",
-            width: "fit-content",
             display: "flex",
             fontSize: "0.7rem",
-            alignContent: "center",
-            alignItems: "center",
-            justifyContent: "space-between",
             boxShadow:
-              "0 1px 3px 0 rgba(83, 36, 103, 0.02), 0 1px 2px 0 rgba(54, 16, 75, 0.06)",
+              "0 1px 3px 0 rgba(83,36,103,0.02), 0 1px 2px 0 rgba(54,16,75,0.06)",
           }}
         >
           <div className="flex items-center justify-between p-1">
-            {/* Desktop Config Button */}
-            <div className="flex items-center space-x-1 ">
+            <div className="flex items-center space-x-1">
               <div className="relative">
                 <button
                   onClick={() => scrollToSection("home")}
@@ -184,34 +162,29 @@ const NavBar = () => {
                     outline: "none",
                     boxShadow: "none",
                   }}
-                  onFocus={(e) => {
-                    e.target.style.outline = "none";
-                    e.target.style.boxShadow = "none";
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = theme.colors.hover;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "transparent";
-                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.backgroundColor = theme.colors.hover)
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.backgroundColor = "transparent")
+                  }
                 >
                   <House size={16} />
                 </button>
               </div>
             </div>
-            <span className="line mr-4 ml-1"></span>
+
+            <span className="line mr-4 ml-1" />
+
             <div className="flex items-baseline space-x-1">
               {navItems.map((item) => (
                 <div key={item.id} className="relative group">
                   <button
                     onClick={() => {
-                      if (item.subItems) {
-                        toggleExpanded(item.id);
-                      } else {
-                        scrollToSection(item.id);
-                      }
+                      if (item.subItems) toggleExpanded(item.id);
+                      else scrollToSection(item.id);
                     }}
-                    className={`button-style flex items-center px-4 py-2 rounded-full transition-all duration-200`}
+                    className="button-style flex items-center px-4 py-2 rounded-full transition-all duration-200"
                     style={{
                       background: isActive(item.id)
                         ? theme.colors.light
@@ -235,7 +208,6 @@ const NavBar = () => {
                     )}
                   </button>
 
-                  {/* Dropdown for desktop */}
                   {item.subItems && expandedItems.has(item.id) && (
                     <div
                       className="absolute top-full left-0 mt-1 min-w-max rounded-lg shadow-lg border"
@@ -244,32 +216,32 @@ const NavBar = () => {
                         borderColor: theme.colors.border,
                       }}
                     >
-                      {item.subItems.map((subItem) => (
+                      {item.subItems.map((sub) => (
                         <button
-                          key={subItem.id}
-                          onClick={() => scrollToSection(subItem.id)}
-                          className={`block w-full text-left px-4 py-2 text-sm transition-colors first:rounded-t-lg last:rounded-b-lg`}
+                          key={sub.id}
+                          onClick={() => scrollToSection(sub.id)}
+                          className="block w-full text-left px-4 py-2 text-sm transition-colors first:rounded-t-lg last:rounded-b-lg"
                           style={{
-                            backgroundColor: isActive(subItem.id)
+                            backgroundColor: isActive(sub.id)
                               ? theme.colors.primary
                               : "transparent",
-                            color: isActive(subItem.id)
+                            color: isActive(sub.id)
                               ? theme.colors.text.inverse
                               : theme.colors.text.primary,
+                            border: "none",
                           }}
                           onMouseEnter={(e) => {
-                            if (!isActive(subItem.id)) {
-                              e.target.style.backgroundColor =
+                            if (!isActive(sub.id))
+                              e.currentTarget.style.backgroundColor =
                                 theme.colors.hover;
-                            }
                           }}
                           onMouseLeave={(e) => {
-                            if (!isActive(subItem.id)) {
-                              e.target.style.backgroundColor = "transparent";
-                            }
+                            if (!isActive(sub.id))
+                              e.currentTarget.style.backgroundColor =
+                                "transparent";
                           }}
                         >
-                          {subItem.title}
+                          {sub.title}
                         </button>
                       ))}
                     </div>
@@ -277,14 +249,16 @@ const NavBar = () => {
                 </div>
               ))}
             </div>
-            <span className="line ml-4 mr-1"></span>
+
+            <span className="line ml-4 mr-1" />
+
             {/* Language Toggle */}
             <div className="flex items-center justify-between mr-1">
               <button
                 onClick={() =>
-                  setSelectedLanguage(selectedLanguage === "en" ? "de" : "en")
+                  setSelectedLanguage((l) => (l === "en" ? "de" : "en"))
                 }
-                className="flex items-center  transition-colors"
+                className="flex items-center transition-colors"
                 style={{
                   borderRadius: "50px",
                   color: theme.colors.primary,
@@ -293,47 +267,37 @@ const NavBar = () => {
                   border: "none",
                   outline: "none",
                 }}
-                onFocus={(e) => {
-                  e.target.style.outline = "none";
-                  e.target.style.boxShadow = "none";
-                }}
               >
-                {selectedLanguage === "en" ? (
-                  <span className="flex items-center">
-                    <span>EN</span>
-                  </span>
-                ) : (
-                  <span className="flex items-center">
-                    <span>DE</span>
-                  </span>
-                )}
+                {selectedLanguage === "en" ? <span>EN</span> : <span>DE</span>}
               </button>
-            </div>{" "}
+            </div>
           </div>
         </div>
+
+        {/* Right: Dark mode + CV */}
         <div className="flex items-center justify-between">
           <button
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className="flex items-center rounded-full transition-colors  backdrop-blur-md "
+            onClick={toggleDark} // ✅ use the safe toggle
+            className="flex items-center rounded-full transition-colors backdrop-blur-md"
             style={{
               outline: "none",
               border: "none",
               padding: "8px",
               borderRadius: "50px",
               marginRight: "1rem",
-              backgroundColor: isDarkMode
+              backgroundColor: dark
                 ? theme.colors.primary
                 : `${theme.colors.surface}50`,
-              color: isDarkMode
+              color: dark
                 ? theme.colors.text.inverse
                 : theme.colors.text.primary,
             }}
           >
-            {isDarkMode ? <Moon size={16} /> : <Sun size={16} />}
+            {dark ? <Moon size={16} /> : <Sun size={16} />}
           </button>
 
           <button
-            className="flex items-center rounded-full transition-all duration-200 "
+            className="flex items-center rounded-full transition-all duration-200"
             style={{
               background: theme.colors.light,
               height: "fit-content",
@@ -344,12 +308,13 @@ const NavBar = () => {
               color: theme.colors.text.primary,
             }}
             onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-1px)";
-              e.target.style.boxShadow = "0 4px 12px rgba(139, 92, 246, 0.4)";
+              e.currentTarget.style.transform = "translateY(-1px)";
+              e.currentTarget.style.boxShadow =
+                "0 4px 12px rgba(139,92,246,0.4)";
             }}
             onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0)";
-              e.target.style.boxShadow = "none";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
             }}
           >
             <Download size={16} className="mr-2" />
@@ -358,50 +323,16 @@ const NavBar = () => {
         </div>
       </nav>
 
-      {/* Mobile/Tablet Top Bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4">
-        {/* Logo */}
-        <div className="flex items-center">
-          <Logo isDarkMode={isDarkMode} />
-        </div>
-
-        {/* CV Download */}
-        <button
-          className="flex items-center rounded-full transition-all duration-200 m-4"
-          style={{
-            background: theme.colors.light,
-            height: "fit-content",
-            padding: "10px",
-            fontSize: "0.7rem",
-            marginLeft: "1rem",
-            border: `1.5px solid ${theme.colors.dark}`,
-            borderRadius: "50px",
-            color: theme.colors.text.primary,
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.transform = "translateY(-1px)";
-            e.target.style.boxShadow = "0 4px 12px rgba(139, 92, 246, 0.4)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.transform = "translateY(0)";
-            e.target.style.boxShadow = "none";
-          }}
-        >
-          <Download size={16} className="mr-2" />
-          Curriculum
-        </button>
-      </div>
       {/* Mobile/Tablet Bottom Navigation */}
       <nav
         className="lg:hidden fixed bottom-5 left-2 right-2 z-50 m-auto backdrop-blur-md"
         style={{
           backgroundColor: `${theme.colors.surface}95`,
           border: `1.5px solid ${theme.colors.primary}30`,
-          height: "fit-content",
-          width: "fit-content",
           borderRadius: "30rem",
           boxShadow:
-            "0 1px 3px 0 rgba(83, 36, 103, 0.02), 0 1px 2px 0 rgba(54, 16, 75, 0.06)",
+            "0 1px 3px 0 rgba(83,36,103,0.02), 0 1px 2px 0 rgba(54,16,75,0.06)",
+          width: "fit-content",
         }}
       >
         <div
@@ -445,52 +376,19 @@ const NavBar = () => {
                       : "transparent",
                   color: theme.colors.text.primary,
                 }}
-                onFocus={(e) => {
-                  e.target.style.outline = "none";
-                  e.target.style.boxShadow = "none";
-                }}
-                onMouseEnter={(e) => {
-                  if (
-                    !isActive(item.id) &&
-                    !(item.isConfig && isConfigMenuOpen)
-                  ) {
-                    e.target.style.backgroundColor = theme.colors.hover;
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (
-                    !isActive(item.id) &&
-                    !(item.isConfig && isConfigMenuOpen)
-                  ) {
-                    e.target.style.backgroundColor = "transparent";
-                  }
-                }}
               >
                 <item.icon
                   size={16}
                   className="mb-1"
-                  style={{
-                    color: theme.colors.text.primary,
-                  }}
+                  style={{ color: theme.colors.text.primary }}
                 />
                 <span
                   className="text-xs"
-                  style={{
-                    color: theme.colors.text.primary,
-                  }}
+                  style={{ color: theme.colors.text.primary }}
                 >
                   {item.title}
                 </span>
               </button>
-
-              {/* Projects indicator */}
-              {(item.subItems && isActive("navippon")) ||
-                (isActive("jumping") && (
-                  <div
-                    className="absolute -top-1 -right-1 w-2 h-2 rounded-full"
-                    style={{ backgroundColor: theme.colors.primary }}
-                  />
-                ))}
             </div>
           ))}
         </div>
@@ -513,7 +411,7 @@ const NavBar = () => {
               </h3>
               <div className="space-y-1">
                 {navItems
-                  .find((item) => item.id === "projects")
+                  .find((it) => it.id === "projects")
                   ?.subItems?.map((subItem) => (
                     <button
                       key={subItem.id}
@@ -529,19 +427,14 @@ const NavBar = () => {
                         border: "none",
                         outline: "none",
                       }}
-                      onFocus={(e) => {
-                        e.target.style.outline = "none";
-                        e.target.style.boxShadow = "none";
-                      }}
                       onMouseEnter={(e) => {
-                        if (!isActive(subItem.id)) {
-                          e.target.style.backgroundColor = theme.colors.hover;
-                        }
+                        if (!isActive(subItem.id))
+                          e.currentTarget.style.backgroundColor =
+                            theme.colors.hover;
                       }}
                       onMouseLeave={(e) => {
-                        if (!isActive(subItem.id)) {
-                          e.target.style.backgroundColor = "transparent";
-                        }
+                        if (!isActive(subItem.id))
+                          e.currentTarget.style.backgroundColor = "transparent";
                       }}
                     >
                       {subItem.title}
@@ -570,7 +463,6 @@ const NavBar = () => {
                 Settings
               </h3>
               <div className="space-y-3">
-                {/* Dark Mode Toggle */}
                 <div className="flex items-center justify-between">
                   <span
                     className="text-sm"
@@ -579,28 +471,23 @@ const NavBar = () => {
                     Dark Mode
                   </span>
                   <button
-                    onClick={() => setIsDarkMode(!isDarkMode)}
+                    onClick={toggleDark}
                     className="flex items-center px-3 py-1.5 rounded-lg text-sm transition-colors"
                     style={{
-                      backgroundColor: isDarkMode
+                      backgroundColor: dark
                         ? theme.colors.primary
                         : theme.colors.border,
-                      color: isDarkMode
+                      color: dark
                         ? theme.colors.text.inverse
                         : theme.colors.text.primary,
                       border: "none",
                       outline: "none",
                     }}
-                    onFocus={(e) => {
-                      e.target.style.outline = "none";
-                      e.target.style.boxShadow = "none";
-                    }}
                   >
-                    {isDarkMode ? <Moon size={16} /> : <Sun size={16} />}
+                    {dark ? <Moon size={16} /> : <Sun size={16} />}
                   </button>
                 </div>
 
-                {/* Language Toggle */}
                 <div className="flex items-center justify-between">
                   <span
                     className="text-sm"
@@ -621,19 +508,11 @@ const NavBar = () => {
                       border: "none",
                       outline: "none",
                     }}
-                    onFocus={(e) => {
-                      e.target.style.outline = "none";
-                      e.target.style.boxShadow = "none";
-                    }}
                   >
                     {selectedLanguage === "en" ? (
-                      <span className="flex items-center">
-                        <span className="ml-1">EN</span>
-                      </span>
+                      <span>EN</span>
                     ) : (
-                      <span className="flex items-center">
-                        <span className="ml-1">DE</span>
-                      </span>
+                      <span>DE</span>
                     )}
                   </button>
                 </div>
@@ -642,14 +521,18 @@ const NavBar = () => {
           </div>
         )}
       </nav>
-      {/* Main Content — sticky on desktop, sidebar-first on mobile */}
+
+      {/* ==== Main Content ==== */}
+      <section ref={sectionRefs.home} id="home" style={{ paddingTop: "5rem" }}>
+        <HomePage isDarkMode={dark} />
+      </section>
+
       <main
         className="page-grid stack-sidebar-first"
         style={{
           ["--nav-h"]: "72px",
           maxWidth: "1500px",
           margin: "0 auto",
-          padding: "0 16px",
           display: "grid",
           gap: "2rem",
         }}
@@ -658,12 +541,13 @@ const NavBar = () => {
           className="sidebar"
           style={{
             gridArea: "sidebar",
+
             alignSelf: "start",
             height: "fit-content",
           }}
         >
           <ProfileSidebar
-            isDarkMode={isDarkMode}
+            isDarkMode={dark}
             name="Rocio Diaz Ramos"
             locationText="Europe/Hamburg"
             avatarSrc="/assets/pfp.jpeg"
@@ -693,73 +577,79 @@ const NavBar = () => {
           />
         </aside>
 
-        <div className="content" style={{ gridArea: "content", minWidth: 0 }}>
-          <section ref={sectionRefs.home} id="home" className="py-10">
-            <HomePage isDarkMode={isDarkMode} />
-          </section>
-
-          <section ref={sectionRefs.about} id="about" className="py-10">
-            <About isDarkMode={isDarkMode} />
+        <div
+          className="content"
+          style={{
+            gridArea: "content",
+            minWidth: 0,
+          }}
+        >
+          <section
+            ref={sectionRefs.about}
+            id="about"
+            style={{
+              borderRadius: 14,
+              marginBottom: "2rem",
+            }}
+          >
+            <About isDarkMode={dark} />
           </section>
 
           <section
             ref={sectionRefs.skills}
             id="skills"
-            className="py-8 lg:py-16 px-0"
+            style={{
+              marginBottom: "2rem",
+            }}
           >
-            <Skills isDarkMode={isDarkMode} />
+            <Skills isDarkMode={dark} />
           </section>
 
           <section
             ref={sectionRefs.projects}
             id="projects"
-            className="py-8 lg:py-16 px-0"
+            style={{
+              marginBottom: "2rem",
+            }}
           >
-            <Projects isDarkMode={isDarkMode} />
-          </section>
-
-          <section
-            ref={sectionRefs.contact}
-            id="contact"
-            className="py-8 lg:py-16 px-0"
-          >
-            <Contact isDarkMode={isDarkMode} />
+            <Projects isDarkMode={dark} />
           </section>
         </div>
       </main>
 
+      {/* Layout CSS */}
       <style>{`
-  /* Desktop: 2 columns */
-  .page-grid {
-    display: grid;
-    grid-template-columns: minmax(260px, 340px) 1fr;
-    grid-template-areas: "sidebar content";
-    gap: 2rem;
-  }
-  /* make sidebar sticky only on wider screens */
-  @media (min-width: 1025px) {
-    .sidebar {
-      position: sticky;
-      top: calc(var(--nav-h) + 2.5rem);
-      align-self: start;
-    }
-  }
+        /* Desktop: two columns */
+        .page-grid {
+          display: grid;
+          grid-template-columns: minmax(260px, 340px) 1fr;
+          grid-template-areas: "sidebar content";
+          gap: 2rem;
+        }
 
-  /* Mobile/tablet: stack with SIDEBAR FIRST, and sticky OFF */
-  @media (max-width: 1024px) {
-    .page-grid {
-      grid-template-columns: 1fr;
-      grid-template-areas:
-        "sidebar"
-        "content";
-      gap: 1.25rem;
-      padding-left: 12px;
-      padding-right: 12px;
-    }
-    .sidebar { position: static; top: auto;        padding-top: 7rem; }
-    #home{display:none}
-  }
-`}</style>
+        /* Sticky sidebar only on desktop/wide screens */
+        @media (min-width: 1025px) {
+          .sidebar {
+            position: sticky;
+            top: calc(var(--nav-h) + 2rem);
+            align-self: start;
+          }
+        }
+
+        /* Mobile/tablet: stack with SIDEBAR FIRST after Home; sticky OFF */
+        @media (max-width: 1024px) {
+          .page-grid {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+              "sidebar"
+              "content";
+            gap: 1.25rem;
+            padding-left: 12px;
+            padding-right: 12px;
+          }
+          .sidebar { position: static; top: auto; }
+        }
+      `}</style>
     </div>
   );
 };
