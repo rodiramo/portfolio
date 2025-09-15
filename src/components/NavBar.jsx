@@ -322,6 +322,43 @@ const NavBar = (props) => {
           </button>
         </div>
       </nav>
+      {/* Mobile/Tablet Top Bar (restored) */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3">
+        {/* Logo */}
+        <div className="flex items-center">
+          <Logo isDarkMode={dark} />
+        </div>
+
+        {/* Right controls */}
+        <div className="flex items-center gap-2">
+          {/* Curriculum */}
+          <a
+            href="/cv.pdf" /* <- point this to your actual CV file */
+            className="flex items-center rounded-full transition-all duration-200"
+            style={{
+              background: theme.colors.light,
+              height: "fit-content",
+              padding: 10,
+              fontSize: "0.7rem",
+              border: `1.5px solid ${theme.colors.dark}`,
+              borderRadius: 50,
+              color: theme.colors.text.primary,
+              textDecoration: "none",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-1px)";
+              e.currentTarget.style.boxShadow =
+                "0 4px 12px rgba(139,92,246,0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
+            <Download size={16} />
+          </a>
+        </div>
+      </div>
 
       {/* Mobile/Tablet Bottom Navigation */}
       <nav
