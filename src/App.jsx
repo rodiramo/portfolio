@@ -37,7 +37,7 @@ const App = () => {
   // colors for the dotted bg
   const dotBase = isDark ? "#080b0062" : "#e0e2c7ff";
   const dotDark = isDark ? "#e8eaf2" : "#000000ff";
-  const bgColor = theme.colors.bg;
+  const bgColor = theme.colors.surface;
 
   return (
     <BrowserRouter>
