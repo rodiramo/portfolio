@@ -5,12 +5,7 @@ const Me = ({ isDarkMode }) => {
     <div>
       {" "}
       {/* Me */}
-      <div
-        className="w-17 h-17 flex items-center justify-center"
-        style={{
-          animation: " wave 3s ease-in-out infinite",
-        }}
-      >
+      <div className="w-17 h-17 flex items-center justify-center">
         <svg
           width="80"
           height="80"

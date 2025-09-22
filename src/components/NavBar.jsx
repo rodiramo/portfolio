@@ -597,19 +597,23 @@ const NavBar = (props) => {
               {
                 icon: Github,
                 label: "GitHub",
-                href: "https://github.com/youruser",
+                href: "https://github.com/rodiramo",
               },
               {
                 icon: Linkedin,
                 label: "LinkedIn",
-                href: "https://linkedin.com/in/youruser",
+                href: "www.linkedin.com/in/rocio-diaz-ramos",
               },
               {
                 icon: Figma,
                 label: "Figma",
-                href: "https://figma.com/@youruser",
+                href: "https://figma.com/@rodira",
               },
-              { icon: Mail, label: "Email", href: "mailto:you@example.com" },
+              {
+                icon: Mail,
+                label: "Email",
+                href: "mailto:ivemeyerrocio@gmail.com",
+              },
             ]}
           />
         </aside>

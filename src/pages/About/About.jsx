@@ -156,6 +156,20 @@ const About = ({ isDarkMode = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hover, setHover] = useState(false);
   const timelineRef = useRef(null);
+  // Very translucent glass colors (so it never looks like a solid block)
+  const glassBg = theme.isDark
+    ? "rgba(17, 24, 39, 0.18)" // dark glass
+    : "rgba(255, 255, 255, 0.12)"; // light glass
+
+  // Subtle border for glass panel
+  const glassBorder = theme.isDark
+    ? "1px solid rgba(255,255,255,0.14)"
+    : "1px solid rgba(15,23,42,0.12)";
+
+  // Soft radial glow behind the card (kept *very* subtle)
+  const glow = theme.isDark
+    ? "radial-gradient(600px 280px at 50% 40%, rgba(192, 237, 58, 0.2), transparent 60%)"
+    : "radial-gradient(600px 280px at 50% 40%, rgba(172, 232, 135, 0.26), transparent 60%)";
 
   // data
   const studies = [
@@ -219,14 +233,6 @@ const About = ({ isDarkMode = false }) => {
     return () => obs.disconnect();
   }, []);
 
-  // frosted wrapper to match Home
-  const sectionGlass = isDarkMode
-    ? "rgba(17,24,39,0.28)"
-    : "rgba(255,255,255,0.42)";
-  const sectionBorder = isDarkMode
-    ? "rgba(255,255,255,0.10)"
-    : "rgba(0,0,0,0.08)";
-
   return (
     <div
       style={{
@@ -235,12 +241,24 @@ const About = ({ isDarkMode = false }) => {
         margin: "0 auto",
       }}
     >
+      {" "}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: 16,
+          background: glow,
+          filter: "blur(6px)",
+          zIndex: -10,
+        }}
+      />
       <section
         style={{
-          background: sectionGlass,
-          border: `1px solid ${sectionBorder}`,
+          background: glassBg,
+          border: glassBorder,
+          backdropFilter: "blur(1.7px)",
           borderRadius: 16,
-          backdropFilter: "blur(1px) saturate(120%)",
           WebkitBackdropFilter: "blur(1px) saturate(120%)",
           boxShadow: isDarkMode
             ? "0 20px 44px rgba(0,0,0,0.28)"
@@ -329,7 +347,7 @@ const About = ({ isDarkMode = false }) => {
             gap: ".65rem",
             marginTop: ".2rem",
             marginBottom: isOpen ? "1.2rem" : 0,
-            padding: ".5rem .9rem",
+            padding: ".25rem .9rem",
             borderRadius: 999,
             cursor: "pointer",
             userSelect: "none",
@@ -345,7 +363,7 @@ const About = ({ isDarkMode = false }) => {
           <span
             style={{
               margin: 0,
-              fontSize: "1.05rem",
+              fontSize: "0.85rem",
               fontWeight: 700,
               color: theme.colors.text.primary,
               letterSpacing: ".01em",
@@ -432,7 +450,6 @@ const About = ({ isDarkMode = false }) => {
           </div>
         </div>
       </section>
-
       {/* micro CSS */}
       <style>{`
         @media (max-width: 560px) {

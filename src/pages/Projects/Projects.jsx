@@ -79,9 +79,12 @@ const ProjectCard = ({
   description,
   tech,
   coverText,
+  coverSrc,
+  coverAlt,
   slug,
   repoLink,
   liveLink,
+  grayscale = true,
   cardGlass,
   borderCol,
   isDarkMode,
@@ -124,18 +127,35 @@ const ProjectCard = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          overflow: "hidden",
           border: `1px solid ${theme.colors.border}`,
         }}
       >
-        <p
-          style={{
-            color: theme.colors.text.secondary,
-            fontSize: "0.85rem",
-            margin: 0,
-          }}
-        >
-          {coverText || "Preview"}
-        </p>
+        {coverSrc ? (
+          <img
+            src={coverSrc}
+            alt={coverAlt || title}
+            loading="lazy"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              filter: grayscale ? "grayscale(100%)" : "none",
+
+              display: "block",
+            }}
+          />
+        ) : (
+          <p
+            style={{
+              color: theme.colors.text.secondary,
+              fontSize: "0.85rem",
+              margin: 0,
+            }}
+          >
+            {coverText || "Preview"}
+          </p>
+        )}
       </div>
 
       {/* Title */}
@@ -301,8 +321,10 @@ const Projects = ({ isDarkMode = false }) => {
             tech={["React", "Node.js", "MongoDB", "Google Maps API"]}
             coverText="Navippon preview"
             slug="navippon"
-            liveLink="#"
-            repoLink="#"
+            coverSrc="/assets/navippon.jpg"
+            coverAlt="Navippon app preview"
+            liveLink="https://navippon.com/"
+            repoLink="https://github.com/rodiramo/NavipponWeb-"
             cardGlass={cardGlass}
             borderCol={borderCol}
             isDarkMode={isDarkMode}
@@ -311,13 +333,21 @@ const Projects = ({ isDarkMode = false }) => {
           <ProjectCard
             theme={theme}
             id="jumping"
-            title="Jumping"
-            description="Jump-rope fitness tracker with session logs, calorie estimates, and adaptive training plans."
-            tech={["React Native", "Firebase", "UI/UX", "HealthKit"]}
-            coverText="Workout session / stats"
-            slug="jumping"
-            liveLink="#"
-            // no repoLink for this one
+            title="Jumping (Ushuaia)"
+            description="Designed website sections and a brand-aligned booking page for a local rental company. UI in Figma/Photoshop; responsive styling in CSS; close collaboration with client and developer."
+            tech={[
+              "Figma",
+              "Photoshop",
+              "CSS",
+              "UI/UX",
+              "Branding",
+              "Responsive Web",
+            ]}
+            coverSrc="/assets/jumping-cover.jpg"
+            coverAlt="Jumping Ushuaia booking page"
+            coverText="Booking page • brand-aligned UI"
+            slug="jumping-ushuaia"
+            liveLink="https://jumpingushuaia.com/"
             cardGlass={cardGlass}
             borderCol={borderCol}
             isDarkMode={isDarkMode}
@@ -330,8 +360,10 @@ const Projects = ({ isDarkMode = false }) => {
             description="Marketing site design in Figma and dev handoff—responsive layouts, token-based design system."
             tech={["Figma", "Design System", "Responsive", "Dev Handoff"]}
             coverText="Robol Solutions landing"
+            coverSrc="/assets/robolr.jpg"
+            coverAlt="Robol Preview Page"
             slug="robol"
-            liveLink="#"
+            liveLink="https://robol-landing-rama-marco.vercel.app/"
             cardGlass={cardGlass}
             borderCol={borderCol}
             isDarkMode={isDarkMode}
@@ -345,7 +377,9 @@ const Projects = ({ isDarkMode = false }) => {
             tech={["Figma", "E-commerce UX", "Design System", "Checkout Flow"]}
             coverText="Top Carteras storefront"
             slug="topcarteras"
-            liveLink="#"
+            coverSrc="/assets/top-carteras.png"
+            coverAlt="Top Carteras Preview Page"
+            liveLink="https://top-carteras-mock.vercel.app/"
             cardGlass={cardGlass}
             borderCol={borderCol}
             isDarkMode={isDarkMode}

@@ -58,20 +58,38 @@ const ProfileSidebar = ({
     {
       icon: Linkedin,
       label: "LinkedIn",
-      href: "https://www.figma.com/@rodira",
+      href: "www.linkedin.com/in/rocio-diaz-ramos",
     },
-    { icon: Figma, label: "Figma", href: "#" },
+    { icon: Figma, label: "Figma", href: "https://www.figma.com/@rodira" },
     { icon: Mail, label: "Email", href: "mailto:ivemeyerrocio@example.com" },
   ],
 }) => {
   const theme = useTheme(isDarkMode);
 
+  // Very translucent glass colors (so it never looks like a solid block)
+  const glassBg = theme.isDark
+    ? "rgba(17, 24, 39, 0.18)" // dark glass
+    : "rgba(255, 255, 255, 0.12)"; // light glass
+
+  // Subtle border for glass panel
+  const glassBorder = theme.isDark
+    ? "1px solid rgba(255,255,255,0.14)"
+    : "1px solid rgba(15,23,42,0.12)";
+
+  // Soft radial glow behind the card (kept *very* subtle)
+  const glow = theme.isDark
+    ? "radial-gradient(600px 280px at 50% 40%, rgba(192, 237, 58, 0.2), transparent 60%)"
+    : "radial-gradient(600px 280px at 50% 40%, rgba(172, 232, 135, 0.26), transparent 60%)";
+
   return (
     <div
       className="left-column"
       style={{
-        background: `${theme.colors.surface}80`,
         display: "flex",
+        background: glassBg,
+        border: glassBorder,
+        backdropFilter: "blur(1.7px)",
+        glow,
         flexDirection: "column",
         alignItems: "center",
         gap: "0.75rem",
@@ -80,6 +98,19 @@ const ProfileSidebar = ({
         flexShrink: 0,
       }}
     >
+      {" "}
+      {/* Background glow */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: 16,
+          background: glow,
+          filter: "blur(6px)",
+          zIndex: -10,
+        }}
+      />
       {/* Profile Image */}
       <div
         className="profile-image"
@@ -94,7 +125,6 @@ const ProfileSidebar = ({
           backgroundPosition: "left",
         }}
       />
-
       {/* Name */}
       <div style={{ textAlign: "center" }}>
         <div
@@ -115,7 +145,6 @@ const ProfileSidebar = ({
           Web Designer and Developer
         </div>
       </div>
-
       {/* Location */}
       <div style={{ textAlign: "center" }}>
         <div
@@ -132,7 +161,6 @@ const ProfileSidebar = ({
           </span>
         </div>
       </div>
-
       {/* Languages */}
       <div
         className="languages-section"
@@ -189,7 +217,6 @@ const ProfileSidebar = ({
           ))}
         </div>
       </div>
-
       {/* Social icons */}
       <div
         className="socials"
@@ -246,7 +273,6 @@ const ProfileSidebar = ({
           </a>
         ))}
       </div>
-
       {/* Responsive tweaks */}
       <style>{`
         @media (max-width: 480px) {

@@ -5,7 +5,7 @@ import Me from "../../components/Me.jsx";
 import { BriefcaseBusiness, MapPinHouse } from "lucide-react";
 
 /* Small chip + button helpers (inline styled) */
-const Chip = ({ theme, children }) => (
+const Chip = ({ theme, children, style }) => (
   <span
     style={{
       display: "inline-flex",
@@ -23,6 +23,7 @@ const Chip = ({ theme, children }) => (
         : "1px solid rgba(15,23,42,0.12)",
       color: theme.colors.text.primary,
       whiteSpace: "nowrap",
+      ...style, // <— merge custom styles
     }}
   >
     {children}
@@ -160,6 +161,7 @@ const Header = ({
             padding: "16px",
             display: "grid",
             gap: 12,
+
             justifyItems: "center",
             textAlign: "center",
           }}
@@ -169,16 +171,17 @@ const Header = ({
             style={{
               display: "flex",
               gap: 8,
+              marginBottom: 8,
               flexWrap: "wrap",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <Chip theme={theme}>
-              <MapPinHouse /> Hamburg, DE
+            <Chip theme={theme} style={{ background: "#875bff22" }}>
+              <MapPinHouse size={16} /> Hamburg, DE
             </Chip>
-            <Chip theme={theme}>
-              <BriefcaseBusiness /> Available
+            <Chip theme={theme} style={{ background: "#bbff5b22" }}>
+              <BriefcaseBusiness size={16} /> Available
             </Chip>
           </div>
 
@@ -202,8 +205,11 @@ const Header = ({
             <br />
             I&apos;m {name}{" "}
             <span style={{ display: "inline-block" }}>
-              <span className="span-title-me">
-                <Me />
+              <span
+                className="span-title-me"
+                style={{ background: theme.colors.light }}
+              >
+                <Me isDarkMode={isDarkMode} />
               </span>
             </span>
           </h1>
@@ -214,34 +220,43 @@ const Header = ({
           {/* Scroll indicator */}
           <div
             style={{
-              marginTop: 6,
+              position: "absolute",
+              zIndex: 4, // <-- was "index"
+              bottom: -28,
+              left: "50%",
+              transform: "translateX(-50%)",
               background: "transparent",
               border: "none",
               display: "grid",
               placeItems: "center",
               gap: 6,
+              cursor: "pointer",
             }}
+            className="scroll-indicator"
           >
-            {/* Mouse outline */}
             <div
               style={{
                 width: 26,
                 height: 40,
                 borderRadius: 13,
-                border: `2px solid ${theme.colors.primary}50`,
+                // use rgba so it's always valid
+                background: isDarkMode
+                  ? "rgba(255,255,255,0.07)"
+                  : "rgba(15,23,42,0.07)",
+                border: `2px solid ${theme.colors.primary}50`, // or convert this to rgba too
                 display: "grid",
                 placeItems: "center",
                 position: "relative",
-                backdropFilter: "blur(2px)",
+                backdropFilter: "blur(2px)", // subtle is better than 100px
+                WebkitBackdropFilter: "blur(2px)",
               }}
             >
-              {/* Down chevron */}
               <svg
                 width="15"
                 height="15"
                 viewBox="0 0 24 24"
                 fill="none"
-                style={{ animation: "floatDown 1.6s ease-in-out infinite" }}
+                className="scroll-chevron"
               >
                 <polyline
                   points="6 9 12 15 18 9"
@@ -298,7 +313,74 @@ const Header = ({
       </header>
 
       {/* Micro CSS (animations + small responsive tweak) */}
-      <style>{`
+      <style>{`.scroll-chevron {z-index: 2; 
+  animation: floatDown 1.6s ease-in-out 1; 
+  cursor: inherit;
+}
+
+.scroll-indicator:hover .scroll-chevron {
+  animation: floatDown 1.6s ease-in-out 3; /* play 3 times on hover */
+}
+
+@keyframes floatDown {
+  0%   { transform: translateY(-6px); opacity: .85; }
+  60%  { transform: translateY(6px);  opacity: .25; }
+  100% { transform: translateY(-6px); opacity: .85; }
+}
+
+
+.span-title {
+  background-color: #bbff5b;
+  animation: floatDown 4s ease-in-out 1; 
+   transform-origin: 50% 10%;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  height: 3rem;
+  border-radius: 30rem;
+  rotate: -10deg;
+  display: inline-block;
+  width: 6rem;
+}
+
+
+
+.span-title-me {
+  margin-left: 10px;
+  animation: me 3s ease-in-out infinite;
+  transform-origin: 20% 20%;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  align-content: center;
+  border-radius: 30rem;
+  rotate: 10deg;
+  display: inline-block;
+  width: 6rem;
+}
+@keyframes me {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10%,
+  30% {
+    transform: rotate(2deg);
+  }
+  20% {
+    transform: rotate(10deg);
+  }
+  40% {
+    transform: rotate(14deg);
+  }
+  50% {
+    transform: rotate(12deg);
+  }
+  60% {
+    transform: rotate(10deg);
+  }
+}
         @keyframes wave {
           0%, 100% { transform: rotate(0deg); }
           10%, 30% { transform: rotate(14deg); }
@@ -313,16 +395,7 @@ const Header = ({
           display: inline-flex;
           align-items: center;
           justify-content: center;
-        }@keyframes wheel {
-  0%   { transform: translateY(-6px); opacity: .85; }
-  60%  { transform: translateY(6px);  opacity: .25; }
-  100% { transform: translateY(-6px); opacity: .85; }
-}
-@keyframes floatDown {
-  0%   { transform: translateY(-6px); opacity: .85; }
-  60%  { transform: translateY(6px);  opacity: .25; }
-  100% { transform: translateY(-6px); opacity: .85; }
-}
+        }
 
         .responsive-container { width: 100%; margin-inline: auto; }
         @media (max-width: 768px) { .responsive-container { margin-bottom: -54px !important; } }

@@ -284,14 +284,6 @@ const Skills = ({ isDarkMode = false }) => {
     border: `1px solid ${theme.colors.primary}55`,
   };
 
-  const titleStyle = {
-    fontFamily: "Vibur, cursive",
-    fontWeight: 800,
-    fontSize: "clamp(1.6rem, 3.6vw, 2.2rem)",
-    margin: 0,
-    color: theme.colors.text.primary,
-  };
-
   const subtitleStyle = {
     marginTop: ".35rem",
     marginBottom: "1rem",
@@ -395,7 +387,6 @@ const Skills = ({ isDarkMode = false }) => {
         </div>
 
         {/* Title + subtitle */}
-        <h2 style={titleStyle}>Technical Skills</h2>
         <p style={subtitleStyle}>
           Explore my expertise across development and design
         </p>
