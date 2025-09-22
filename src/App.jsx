@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DottedBg from "./components/DottedBg.jsx";
 import { useTheme } from "./theme.js";
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import NavBar from "./components/NavBar.jsx";
 import Projects from "./pages/Projects/Projects.jsx";
 import ProjectDetail from "./pages/Projects/ProjectDetails.jsx";
