@@ -321,7 +321,7 @@ const Projects = ({ isDarkMode = false }) => {
             tech={["React", "Node.js", "MongoDB", "Google Maps API"]}
             coverText="Navippon preview"
             slug="navippon"
-            coverSrc="/assets/navippon.jpg"
+            coverSrc="/assets/navippon.png"
             coverAlt="Navippon app preview"
             liveLink="https://navippon.com/"
             repoLink="https://github.com/rodiramo/NavipponWeb-"
@@ -343,7 +343,7 @@ const Projects = ({ isDarkMode = false }) => {
               "Branding",
               "Responsive Web",
             ]}
-            coverSrc="/assets/jumping-cover.jpg"
+            coverSrc="/assets/jumping.png"
             coverAlt="Jumping Ushuaia booking page"
             coverText="Booking page • brand-aligned UI"
             slug="jumping-ushuaia"
@@ -360,7 +360,7 @@ const Projects = ({ isDarkMode = false }) => {
             description="Marketing site design in Figma and dev handoff—responsive layouts, token-based design system."
             tech={["Figma", "Design System", "Responsive", "Dev Handoff"]}
             coverText="Robol Solutions landing"
-            coverSrc="/assets/robolr.jpg"
+            coverSrc="/assets/robol.png"
             coverAlt="Robol Preview Page"
             slug="robol"
             liveLink="https://robol-landing-rama-marco.vercel.app/"

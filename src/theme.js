@@ -17,6 +17,7 @@ function buildTheme(isDark = false) {
       dark: isDark ? "#7C3AED" : "#ae97e2ff",
       accent1: " #bbff5b",
       secondary: isDark ? "#1F2937" : "#F3F4F6",
+      grey: isDark ? "#F3F4F6" : " #1F2937",
       accent: isDark ? "#374151" : "#E5E7EB",
       surface: isDark ? "#111827" : "#FFFFFF",
       background: isDark ? "#0F172A" : "#FAFBFC",

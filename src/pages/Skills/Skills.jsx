@@ -199,7 +199,8 @@ const Skills = ({ isDarkMode = false }) => {
       {
         id: "design",
         title: "Design & Creative",
-        accent: theme.colors.accent1,
+        accent: theme.colors.grey,
+        titleColor: "#000",
         skills: [
           {
             name: "Figma",
@@ -315,6 +316,7 @@ const Skills = ({ isDarkMode = false }) => {
     transition:
       "transform .15s ease, box-shadow .15s ease, background .2s ease",
     boxShadow: isActive ? "0 6px 14px rgba(0,0,0,0.12)" : "none",
+    outline: "none",
   });
 
   const gridStyle = {
@@ -365,6 +367,7 @@ const Skills = ({ isDarkMode = false }) => {
     border: "none",
     opacity: 0.9,
     cursor: "pointer",
+    outline: "none",
   });
 
   return (
@@ -392,7 +395,11 @@ const Skills = ({ isDarkMode = false }) => {
         </p>
 
         {/* Tabs */}
-        <nav style={tabsWrapStyle} aria-label="Skill categories">
+        <nav
+          className="skills-tabs"
+          style={tabsWrapStyle}
+          aria-label="Skill categories"
+        >
           {categories.map((cat, i) => {
             const isActive = i === activeCategory;
             return (
@@ -408,6 +415,11 @@ const Skills = ({ isDarkMode = false }) => {
                 onMouseLeave={(e) =>
                   (e.currentTarget.style.transform = "translateY(0)")
                 }
+                onMouseDown={(e) => {
+                  // kill press effects
+                  e.currentTarget.style.transform = "none";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
               >
                 {cat.title}
               </button>
@@ -435,7 +447,7 @@ const Skills = ({ isDarkMode = false }) => {
               margin: 0,
               fontSize: "1.12rem",
               fontWeight: 800,
-              color: theme.colors.text.primary,
+              color: active.titleColor || theme.colors.text.primary,
             }}
           >
             {active.title}
@@ -514,13 +526,17 @@ const Skills = ({ isDarkMode = false }) => {
         </div>
 
         {/* Pager Dots */}
-        <div style={dotRowStyle}>
+        <div className="skills-dots" style={dotRowStyle}>
           {categories.map((_, i) => (
             <button
               key={i}
               aria-label={`Go to ${categories[i].title}`}
               onClick={() => setActiveCategory(i)}
               style={dotStyle(i === activeCategory)}
+              onMouseDown={(e) => {
+                e.currentTarget.style.transform = "none";
+                e.currentTarget.style.boxShadow = "none";
+              }}
             />
           ))}
         </div>
@@ -528,6 +544,24 @@ const Skills = ({ isDarkMode = false }) => {
 
       {/* micro CSS */}
       <style>{`
+        /* Remove focus rings and press effects on tabs & dots */
+        .skills-tabs button,
+        .skills-dots button {
+          outline: none;
+        }
+        .skills-tabs button:focus,
+        .skills-tabs button:focus-visible,
+        .skills-dots button:focus,
+        .skills-dots button:focus-visible {
+          outline: none !important;
+          box-shadow: none !important;
+        }
+        .skills-tabs button:active,
+        .skills-dots button:active {
+          transform: none !important;
+          box-shadow: none !important;
+        }
+
         @media (max-width: 560px) {
           /* tighten grid on phones */
           section > div[style*="grid"] { gap: .75rem !important; }

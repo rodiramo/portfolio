@@ -113,7 +113,7 @@ const ProjectDetail = ({ isDarkMode = false }) => {
     return (
       <div style={{ maxWidth: 960, margin: "0 auto", padding: "24px 16px" }}>
         <Link
-          to="/projects"
+          to="/"
           style={{
             display: "inline-block",
             marginBottom: 12,
@@ -124,7 +124,7 @@ const ProjectDetail = ({ isDarkMode = false }) => {
             textDecoration: "none",
           }}
         >
-          ← Back to Projects
+          ← Back to home
         </Link>
         <h1 style={{ margin: 0, color: theme.colors.text.primary }}>
           Not found
@@ -139,7 +139,7 @@ const ProjectDetail = ({ isDarkMode = false }) => {
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "24px 16px" }}>
       <Link
-        to="/projects"
+        to="/"
         style={{
           display: "inline-block",
           marginBottom: 12,
@@ -150,7 +150,7 @@ const ProjectDetail = ({ isDarkMode = false }) => {
           textDecoration: "none",
         }}
       >
-        ← Back to Projects
+        ← Back to home
       </Link>
 
       <h1
