@@ -50,10 +50,18 @@ const ProfileSidebar = ({
   avatarSrc = "/assets/pfp.jpeg",
   languages = [],
   socialLinks = [
-    { icon: Github, label: "GitHub", href: "#" },
-    { icon: Linkedin, label: "LinkedIn", href: "#" },
+    {
+      icon: Github,
+      label: "GitHub",
+      href: "https://github.com/rodiramo",
+    },
+    {
+      icon: Linkedin,
+      label: "LinkedIn",
+      href: "https://www.figma.com/@rodira",
+    },
     { icon: Figma, label: "Figma", href: "#" },
-    { icon: Mail, label: "Email", href: "mailto:your.email@example.com" },
+    { icon: Mail, label: "Email", href: "mailto:ivemeyerrocio@example.com" },
   ],
 }) => {
   const theme = useTheme(isDarkMode);
