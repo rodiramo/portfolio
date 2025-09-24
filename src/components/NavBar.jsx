@@ -25,11 +25,18 @@ import { useTheme } from "../theme.js";
 import Logo from "./Logo.jsx";
 import ProfileSidebar from "../components/ProfileSidebar.jsx";
 
-// ✅ accept props correctly; add controlled/uncontrolled support
+// i18n
+import { useTranslation } from "react-i18next";
+
+const LANGS = ["en", "de"];
+
+// ✅ NavBar with compact mode
 const NavBar = (props) => {
+  const compact = props.mode === "compact";
+
+  // robust controlled detection
   const controlled =
-    typeof props.isDarkMode === "boolean" &&
-    typeof props.setIsDarkMode === "function";
+    props.isDarkMode != null && typeof props.setIsDarkMode === "function";
 
   const [internalDark, setInternalDark] = useState(false);
   const dark = controlled ? props.isDarkMode : internalDark;
@@ -39,12 +46,32 @@ const NavBar = (props) => {
   };
 
   const theme = useTheme(dark);
+  const { t, i18n } = useTranslation(["common"]);
 
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    i18n.language?.slice(0, 2) || "en"
+  );
+  useEffect(() => {
+    const handler = (lng) => setSelectedLanguage(lng.slice(0, 2));
+    i18n.on("languageChanged", handler);
+    return () => i18n.off("languageChanged", handler);
+  }, [i18n]);
+
+  const changeLanguage = (next) => {
+    setSelectedLanguage(next);
+    i18n.changeLanguage(next);
+  };
+  const cycleLanguage = () => {
+    const idx = LANGS.indexOf(selectedLanguage);
+    const next = LANGS[(idx + 1) % LANGS.length];
+    changeLanguage(next);
+  };
+
+  // State used only for full mode
   const [activeSection, setActiveSection] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isConfigMenuOpen, setIsConfigMenuOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState(new Set());
-  const [selectedLanguage, setSelectedLanguage] = useState("EN");
 
   const sectionRefs = {
     home: useRef(null),
@@ -71,7 +98,9 @@ const NavBar = (props) => {
     setExpandedItems(new Set());
   };
 
+  // Only attach scroll and click-outside handlers in full mode
   useEffect(() => {
+    if (compact) return;
     const handleScroll = () => {
       const y = window.scrollY + 100;
       Object.keys(sectionRefs).forEach((key) => {
@@ -84,9 +113,11 @@ const NavBar = (props) => {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [compact]);
 
   useEffect(() => {
+    if (compact) return;
     const handleClickOutside = (e) => {
       if (
         isMobileMenuOpen &&
@@ -105,28 +136,211 @@ const NavBar = (props) => {
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
-  }, [isMobileMenuOpen, isConfigMenuOpen]);
+  }, [isMobileMenuOpen, isConfigMenuOpen, compact]);
 
   const navItems = [
-    { title: "About Me", icon: User, id: "about" },
-    { title: "Skills", icon: Code2, id: "skills" },
-    {
-      title: "Projects",
-      icon: FolderOpen,
-      id: "projects",
-    },
+    { title: t("nav.about"), icon: User, id: "about" },
+    { title: t("nav.skills"), icon: Code2, id: "skills" },
+    { title: t("nav.projects"), icon: FolderOpen, id: "projects" },
   ];
 
   const mobileNavItems = [
-    { title: "Home", icon: House, id: "home" },
-    { title: "About", icon: User, id: "about" },
-    { title: "Skills", icon: Code2, id: "skills" },
-    { title: "Projects", icon: FolderOpen, id: "projects" },
-    { title: "Config", icon: Settings, id: "config", isConfig: true },
+    { title: t("nav.home"), icon: House, id: "home" },
+    { title: t("nav.about"), icon: User, id: "about" },
+    { title: t("nav.skills"), icon: Code2, id: "skills" },
+    { title: t("nav.projects"), icon: FolderOpen, id: "projects" },
+    { title: t("nav.settings"), icon: Settings, id: "config", isConfig: true },
   ];
 
   const isActive = (id) => activeSection === id;
 
+  /* ---------- COMPACT MODE: only top bars (desktop + mobile) ---------- */
+  if (compact) {
+    return (
+      <div>
+        {/* Desktop Top Bar (compact) */}
+        <nav
+          className="fixed top-0 left-0 right-0 z-50 hidden lg:flex items-center justify-between p-1 m-auto"
+          style={{ maxWidth: "1800px" }}
+        >
+          <Logo isDarkMode={dark} />
+
+          {/* Language pill (no section pills) */}
+          <div
+            className="backdrop-blur-md"
+            style={{
+              backgroundColor: `${theme.colors.surface}95`,
+              border: `1.5px solid ${theme.colors.primary}30`,
+              borderRadius: "30rem",
+              display: "flex",
+              fontSize: "0.7rem",
+              boxShadow:
+                "0 1px 3px 0 rgba(83,36,103,0.02), 0 1px 2px 0 rgba(54,16,75,0.06)",
+            }}
+          >
+            <div className="flex items-center justify-between p-1">
+              <div className="flex items-center space-x-1">
+                <button
+                  onClick={cycleLanguage}
+                  className="flex items-center transition-colors"
+                  style={{
+                    borderRadius: "50px",
+                    color: theme.colors.primary,
+                    padding: "6px 12px",
+                    backgroundColor: `${theme.colors.surface}40`,
+                    border: "none",
+                    outline: "none",
+                    fontWeight: 800,
+                  }}
+                  aria-label={t("nav.language")}
+                  title={t("nav.language")}
+                >
+                  {selectedLanguage.toUpperCase()}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Dark mode + CV */}
+          <div className="flex items-center justify-between">
+            <button
+              onClick={toggleDark}
+              className="flex items-center rounded-full transition-colors backdrop-blur-md"
+              style={{
+                outline: "none",
+                border: "none",
+                padding: "8px",
+                borderRadius: "50px",
+                marginRight: "1rem",
+                backgroundColor: dark
+                  ? theme.colors.primary
+                  : `${theme.colors.surface}50`,
+                color: dark
+                  ? theme.colors.text.inverse
+                  : theme.colors.text.primary,
+              }}
+              aria-label={t("nav.darkMode")}
+              title={t("nav.darkMode")}
+            >
+              {dark ? <Moon size={16} /> : <Sun size={16} />}
+            </button>
+
+            <a
+              href="/cv.pdf"
+              className="flex items-center rounded-full transition-all duration-200"
+              style={{
+                background: theme.colors.light,
+                height: "fit-content",
+                padding: "8px",
+                fontSize: "0.7rem",
+                border: `1.5px solid ${theme.colors.dark}`,
+                borderRadius: "50px",
+                color: theme.colors.text.primary,
+                textDecoration: "none",
+                fontWeight: 700,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-1px)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 12px rgba(139,92,246,0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+              aria-label={t("nav.curriculum")}
+              title={t("nav.curriculum")}
+            >
+              <Download size={16} className="mr-2" />
+              {t("nav.curriculum")}
+            </a>
+          </div>
+        </nav>
+
+        {/* Mobile/Tablet Top Bar (compact) */}
+        <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3">
+          <div className="flex items-center">
+            <Logo isDarkMode={dark} />
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* Language toggle */}
+            <button
+              onClick={cycleLanguage}
+              className="flex items-center rounded-full transition-all duration-200"
+              style={{
+                background: `${theme.colors.surface}60`,
+                height: "fit-content",
+                padding: 10,
+                fontSize: "0.7rem",
+                border: `1.5px solid ${theme.colors.dark}`,
+                borderRadius: 50,
+                color: theme.colors.text.primary,
+                fontWeight: 800,
+              }}
+              aria-label={t("nav.language")}
+              title={t("nav.language")}
+            >
+              {selectedLanguage.toUpperCase()}
+            </button>
+
+            {/* Dark toggle */}
+            <button
+              onClick={toggleDark}
+              aria-label={t("nav.darkMode")}
+              title={t("nav.darkMode")}
+              className="flex items-center rounded-full transition-colors backdrop-blur-md"
+              style={{
+                outline: "none",
+                border: "none",
+                padding: 10,
+                borderRadius: 50,
+                backgroundColor: dark
+                  ? theme.colors.primary
+                  : `${theme.colors.surface}50`,
+                color: dark
+                  ? theme.colors.text.inverse
+                  : theme.colors.text.primary,
+              }}
+            >
+              {dark ? <Moon size={16} /> : <Sun size={16} />}
+            </button>
+
+            {/* CV */}
+            <a
+              href="/cv.pdf"
+              className="flex items-center rounded-full transition-all duration-200"
+              style={{
+                background: theme.colors.light,
+                height: "fit-content",
+                padding: 10,
+                fontSize: "0.7rem",
+                border: `1.5px solid ${theme.colors.dark}`,
+                borderRadius: 50,
+                color: theme.colors.text.primary,
+                textDecoration: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-1px)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 12px rgba(139,92,246,0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+              aria-label={t("nav.curriculum")}
+              title={t("nav.curriculum")}
+            >
+              <Download size={16} />
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ---------- FULL MODE: original homepage layout ---------- */
   return (
     <div className="min-h-screen">
       {/* Desktop Top Navbar */}
@@ -168,6 +382,8 @@ const NavBar = (props) => {
                   onMouseLeave={(e) =>
                     (e.currentTarget.style.backgroundColor = "transparent")
                   }
+                  aria-label={t("nav.home")}
+                  title={t("nav.home")}
                 >
                   <House size={16} />
                 </button>
@@ -186,13 +402,15 @@ const NavBar = (props) => {
                     }}
                     className="button-style flex items-center px-4 py-2 rounded-full transition-all duration-200"
                     style={{
-                      background: isActive(item.id)
-                        ? theme.colors.light
-                        : "transparent",
+                      background:
+                        activeSection === item.id
+                          ? theme.colors.light
+                          : "transparent",
                       borderRadius: "50px",
-                      border: isActive(item.id)
-                        ? `1.5px solid ${theme.colors.dark}`
-                        : "none",
+                      border:
+                        activeSection === item.id
+                          ? `1.5px solid ${theme.colors.dark}`
+                          : "none",
                       color: theme.colors.text.primary,
                     }}
                   >
@@ -222,21 +440,23 @@ const NavBar = (props) => {
                           onClick={() => scrollToSection(sub.id)}
                           className="block w-full text-left px-4 py-2 text-sm transition-colors first:rounded-t-lg last:rounded-b-lg"
                           style={{
-                            backgroundColor: isActive(sub.id)
-                              ? theme.colors.primary
-                              : "transparent",
-                            color: isActive(sub.id)
-                              ? theme.colors.text.inverse
-                              : theme.colors.text.primary,
+                            backgroundColor:
+                              activeSection === sub.id
+                                ? theme.colors.primary
+                                : "transparent",
+                            color:
+                              activeSection === sub.id
+                                ? theme.colors.text.inverse
+                                : theme.colors.text.primary,
                             border: "none",
                           }}
                           onMouseEnter={(e) => {
-                            if (!isActive(sub.id))
+                            if (activeSection !== sub.id)
                               e.currentTarget.style.backgroundColor =
                                 theme.colors.hover;
                           }}
                           onMouseLeave={(e) => {
-                            if (!isActive(sub.id))
+                            if (activeSection !== sub.id)
                               e.currentTarget.style.backgroundColor =
                                 "transparent";
                           }}
@@ -255,9 +475,7 @@ const NavBar = (props) => {
             {/* Language Toggle */}
             <div className="flex items-center justify-between mr-1">
               <button
-                onClick={() =>
-                  setSelectedLanguage((l) => (l === "en" ? "de" : "en"))
-                }
+                onClick={cycleLanguage}
                 className="flex items-center transition-colors"
                 style={{
                   borderRadius: "50px",
@@ -266,9 +484,12 @@ const NavBar = (props) => {
                   backgroundColor: `${theme.colors.surface}40`,
                   border: "none",
                   outline: "none",
+                  fontWeight: 800,
                 }}
+                aria-label={t("nav.language")}
+                title={t("nav.language")}
               >
-                {selectedLanguage === "en" ? <span>EN</span> : <span>DE</span>}
+                {selectedLanguage.toUpperCase()}
               </button>
             </div>
           </div>
@@ -277,7 +498,7 @@ const NavBar = (props) => {
         {/* Right: Dark mode + CV */}
         <div className="flex items-center justify-between">
           <button
-            onClick={toggleDark} // ✅ use the safe toggle
+            onClick={toggleDark}
             className="flex items-center rounded-full transition-colors backdrop-blur-md"
             style={{
               outline: "none",
@@ -292,6 +513,8 @@ const NavBar = (props) => {
                 ? theme.colors.text.inverse
                 : theme.colors.text.primary,
             }}
+            aria-label={t("nav.darkMode")}
+            title={t("nav.darkMode")}
           >
             {dark ? <Moon size={16} /> : <Sun size={16} />}
           </button>
@@ -306,6 +529,7 @@ const NavBar = (props) => {
               border: `1.5px solid ${theme.colors.dark}`,
               borderRadius: "50px",
               color: theme.colors.text.primary,
+              fontWeight: 700,
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-1px)";
@@ -318,22 +542,63 @@ const NavBar = (props) => {
             }}
           >
             <Download size={16} className="mr-2" />
-            Curriculum
+            {t("nav.curriculum")}
           </button>
         </div>
       </nav>
-      {/* Mobile/Tablet Top Bar (restored) */}
+
+      {/* Mobile/Tablet Top Bar */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3">
-        {/* Logo */}
         <div className="flex items-center">
           <Logo isDarkMode={dark} />
         </div>
 
-        {/* Right controls */}
         <div className="flex items-center gap-2">
+          {/* Language quick toggle */}
+          <button
+            onClick={cycleLanguage}
+            className="flex items-center rounded-full transition-all duration-200"
+            style={{
+              background: `${theme.colors.surface}60`,
+              height: "fit-content",
+              padding: 10,
+              fontSize: "0.7rem",
+              border: `1.5px solid ${theme.colors.dark}`,
+              borderRadius: 50,
+              color: theme.colors.text.primary,
+              fontWeight: 800,
+            }}
+            aria-label={t("nav.language")}
+            title={t("nav.language")}
+          >
+            {selectedLanguage.toUpperCase()}
+          </button>
+
+          {/* Dark toggle (mobile) */}
+          <button
+            onClick={toggleDark}
+            aria-label={t("nav.darkMode")}
+            title={t("nav.darkMode")}
+            className="flex items-center rounded-full transition-colors backdrop-blur-md"
+            style={{
+              outline: "none",
+              border: "none",
+              padding: 10,
+              borderRadius: 50,
+              backgroundColor: dark
+                ? theme.colors.primary
+                : `${theme.colors.surface}50`,
+              color: dark
+                ? theme.colors.text.inverse
+                : theme.colors.text.primary,
+            }}
+          >
+            {dark ? <Moon size={16} /> : <Sun size={16} />}
+          </button>
+
           {/* Curriculum */}
           <a
-            href="/cv.pdf" /* <- point this to your actual CV file */
+            href="/cv.pdf"
             className="flex items-center rounded-full transition-all duration-200"
             style={{
               background: theme.colors.light,
@@ -354,6 +619,8 @@ const NavBar = (props) => {
               e.currentTarget.style.transform = "translateY(0)";
               e.currentTarget.style.boxShadow = "none";
             }}
+            aria-label={t("nav.curriculum")}
+            title={t("nav.curriculum")}
           >
             <Download size={16} />
           </a>
@@ -444,7 +711,7 @@ const NavBar = (props) => {
                 className="text-sm font-semibold mb-2"
                 style={{ color: theme.colors.text.primary }}
               >
-                Projects
+                {t("nav.projects")}
               </h3>
               <div className="space-y-1">
                 {navItems
@@ -489,7 +756,7 @@ const NavBar = (props) => {
             style={{
               backgroundColor: theme.colors.surface,
               border: `1px solid ${theme.colors.border}`,
-              minWidth: "200px",
+              minWidth: "220px",
             }}
           >
             <div className="px-4 py-3">
@@ -497,15 +764,16 @@ const NavBar = (props) => {
                 className="text-sm font-semibold mb-3"
                 style={{ color: theme.colors.text.primary }}
               >
-                Settings
+                {t("nav.settings")}
               </h3>
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span
                     className="text-sm"
                     style={{ color: theme.colors.text.primary }}
                   >
-                    Dark Mode
+                    {t("nav.darkMode")}
                   </span>
                   <button
                     onClick={toggleDark}
@@ -520,6 +788,8 @@ const NavBar = (props) => {
                       border: "none",
                       outline: "none",
                     }}
+                    aria-label={t("nav.darkMode")}
+                    title={t("nav.darkMode")}
                   >
                     {dark ? <Moon size={16} /> : <Sun size={16} />}
                   </button>
@@ -530,28 +800,23 @@ const NavBar = (props) => {
                     className="text-sm"
                     style={{ color: theme.colors.text.primary }}
                   >
-                    Language
+                    {t("nav.language")}
                   </span>
-                  <button
-                    onClick={() =>
-                      setSelectedLanguage(
-                        selectedLanguage === "en" ? "de" : "en"
-                      )
-                    }
-                    className="flex items-center px-3 py-1.5 rounded-lg text-sm transition-colors"
+                  <select
+                    value={selectedLanguage}
+                    onChange={(e) => changeLanguage(e.target.value)}
+                    className="text-sm rounded-lg px-3 py-1.5"
                     style={{
                       backgroundColor: theme.colors.border,
                       color: theme.colors.text.primary,
                       border: "none",
                       outline: "none",
                     }}
+                    aria-label={t("nav.language")}
                   >
-                    {selectedLanguage === "en" ? (
-                      <span>EN</span>
-                    ) : (
-                      <span>DE</span>
-                    )}
-                  </button>
+                    <option value="en">EN</option>
+                    <option value="de">DE</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -559,7 +824,7 @@ const NavBar = (props) => {
         )}
       </nav>
 
-      {/* ==== Main Content ==== */}
+      {/* ==== Main Content (full mode only) ==== */}
       <section ref={sectionRefs.home} id="home" style={{ paddingTop: "5rem" }}>
         <HomePage isDarkMode={dark} />
       </section>
@@ -578,20 +843,31 @@ const NavBar = (props) => {
           className="sidebar"
           style={{
             gridArea: "sidebar",
-
             alignSelf: "start",
             height: "fit-content",
           }}
         >
           <ProfileSidebar
             isDarkMode={dark}
-            name="Rocio Diaz Ramos"
-            locationText="Europe/Hamburg"
+            name={t("profile.name")}
+            locationText={t("profile.location")}
             avatarSrc="/assets/pfp.jpeg"
             languages={[
-              { name: "Español", proficiency: 100, level: "Native" },
-              { name: "English", proficiency: 90, level: "Fluent" },
-              { name: "Deutsch", proficiency: 75, level: "Advanced" },
+              {
+                name: t("profile.spanish"),
+                proficiency: 100,
+                level: t("profile.native"),
+              },
+              {
+                name: t("profile.english"),
+                proficiency: 90,
+                level: t("profile.fluent"),
+              },
+              {
+                name: t("profile.german"),
+                proficiency: 75,
+                level: t("profile.advanced"),
+              },
             ]}
             socialLinks={[
               {
@@ -650,7 +926,7 @@ const NavBar = (props) => {
             ref={sectionRefs.projects}
             id="projects"
             style={{
-              marginBottom: "2rem",
+              marginBottom: "10rem",
             }}
           >
             <Projects isDarkMode={dark} />

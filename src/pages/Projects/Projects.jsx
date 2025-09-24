@@ -2,42 +2,53 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../theme.js";
-import { FileText, ExternalLink, Github, FolderOpen } from "lucide-react";
+import { FolderOpen, BookOpen, ArrowUpRight, GitBranch } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 /* --- tiny chip/tag --- */
 const Tag = ({ theme, children }) => (
   <span
     style={{
-      padding: "4px 10px",
+      padding: "6px 12px",
       borderRadius: 999,
-      fontSize: "0.75rem",
+      fontSize: "0.78rem",
       backgroundColor: theme.colors.secondary,
       color: theme.colors.primary,
       border: `1px solid ${theme.colors.border}`,
       lineHeight: 1,
+      fontWeight: 700,
     }}
   >
     {children}
   </span>
 );
 
-/* --- buttons/links with icon --- */
+/* --- buttons/links with icon (pill) --- */
 const PrimaryLink = ({ theme, to, icon, children, ariaLabel }) => (
   <Link
     to={to}
-    aria-label={ariaLabel || "View details"}
+    aria-label={ariaLabel}
     style={{
-      padding: "6px 10px",
-      borderRadius: 10,
-      fontSize: "0.85rem",
+      padding: "10px 14px",
+      borderRadius: 999,
+      fontSize: "0.9rem",
       backgroundColor: theme.colors.primary,
       color: theme.colors.text.inverse,
       textDecoration: "none",
-      fontWeight: 700,
+      fontWeight: 800,
       lineHeight: 1,
       display: "inline-flex",
       alignItems: "center",
-      gap: 6,
+      gap: 8,
+      transition: "transform .12s ease, box-shadow .12s ease, opacity .2s",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.transform = "translateY(-1px)";
+      e.currentTarget.style.boxShadow = "0 8px 18px rgba(0,0,0,.12)";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.transform = "translateY(0)";
+      e.currentTarget.style.boxShadow = "none";
     }}
   >
     {icon}
@@ -52,18 +63,27 @@ const OutlineA = ({ theme, href, icon, children, ariaLabel }) => (
     rel="noreferrer"
     aria-label={ariaLabel}
     style={{
-      padding: "6px 10px",
-      borderRadius: 10,
-      fontSize: "0.85rem",
+      padding: "10px 14px",
+      borderRadius: 999,
+      fontSize: "0.9rem",
       background: "transparent",
       color: theme.colors.text.primary,
-      border: `1px solid ${theme.colors.border}`,
+      border: `1.5px solid ${theme.colors.border}`,
       textDecoration: "none",
-      fontWeight: 600,
+      fontWeight: 800,
       lineHeight: 1,
       display: "inline-flex",
       alignItems: "center",
-      gap: 6,
+      gap: 8,
+      transition: "transform .12s ease, box-shadow .12s ease, opacity .2s",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.transform = "translateY(-1px)";
+      e.currentTarget.style.boxShadow = "0 8px 18px rgba(0,0,0,.10)";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.transform = "translateY(0)";
+      e.currentTarget.style.boxShadow = "none";
     }}
   >
     {icon}
@@ -74,74 +94,71 @@ const OutlineA = ({ theme, href, icon, children, ariaLabel }) => (
 /* --- compact glass card --- */
 const ProjectCard = ({
   theme,
-  id,
-  title,
-  description,
-  tech,
-  coverText,
-  coverSrc,
-  coverAlt,
-  slug,
-  repoLink,
-  liveLink,
-  grayscale = true,
+  card,
   cardGlass,
   borderCol,
   isDarkMode,
+  labels,
 }) => (
-  <div id={id}>
+  <div id={card.id} className="proj-card" style={{ height: "100%" }}>
     <div
       style={{
-        padding: 12,
-        borderRadius: 14,
+        padding: 14,
+        borderRadius: 16,
         background: cardGlass,
         border: `1px solid ${borderCol}`,
         display: "flex",
         flexDirection: "column",
-        gap: 10,
+        gap: 12,
+        height: "100%",
         transition:
-          "transform .18s ease, box-shadow .18s ease, background .18s ease",
-        backdropFilter: "blur(8px) saturate(120%)",
-        WebkitBackdropFilter: "blur(8px) saturate(120%)",
+          "transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease",
+        backdropFilter: "blur(10px) saturate(120%)",
+        WebkitBackdropFilter: "blur(10px) saturate(120%)",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "translateY(-3px)";
-        e.currentTarget.style.boxShadow = "0 10px 22px rgba(0,0,0,.12)";
+        e.currentTarget.style.boxShadow = "0 12px 26px rgba(0,0,0,.12)";
         e.currentTarget.style.background = isDarkMode
           ? "rgba(17,24,39,0.38)"
           : "rgba(255,255,255,0.72)";
+        e.currentTarget.style.borderColor = `${theme.colors.primary}55`;
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = "translateY(0)";
         e.currentTarget.style.boxShadow = "none";
         e.currentTarget.style.background = cardGlass;
+        e.currentTarget.style.borderColor = borderCol;
       }}
     >
       {/* Thumb */}
       <div
+        className="proj-thumb"
         style={{
           width: "100%",
           aspectRatio: "4 / 3",
-          borderRadius: 10,
+          borderRadius: 12,
           backgroundColor: theme.colors.secondary,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           overflow: "hidden",
           border: `1px solid ${theme.colors.border}`,
+          flexShrink: 0, // keep fixed height
         }}
       >
-        {coverSrc ? (
+        {card.coverSrc ? (
           <img
-            src={coverSrc}
-            alt={coverAlt || title}
+            src={card.coverSrc}
+            alt={card.coverAlt || card.title}
             loading="lazy"
             style={{
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              filter: grayscale ? "grayscale(100%)" : "none",
-
+              filter: "grayscale(100%)",
+              transform: "scale(1)",
+              transition: "filter .35s ease, transform .35s ease",
               display: "block",
             }}
           />
@@ -149,79 +166,99 @@ const ProjectCard = ({
           <p
             style={{
               color: theme.colors.text.secondary,
-              fontSize: "0.85rem",
+              fontSize: "0.9rem",
               margin: 0,
+              fontWeight: 600,
             }}
           >
-            {coverText || "Preview"}
+            {card.coverText || labels.preview}
           </p>
         )}
       </div>
 
       {/* Title */}
       <h3
+        className="proj-title"
         style={{
           margin: 0,
-          fontSize: "1rem",
-          fontWeight: 800,
+          fontSize: "1.05rem",
+          fontWeight: 900,
           color: theme.colors.primary,
           lineHeight: 1.2,
+          letterSpacing: ".01em",
+          overflow: "hidden",
+          display: "-webkit-box",
+          WebkitLineClamp: 1,
+          WebkitBoxOrient: "vertical",
         }}
+        title={card.title}
       >
-        {title}
+        {card.title}
       </h3>
 
       {/* Description */}
       <p
+        className="proj-desc"
         style={{
           margin: 0,
           color: theme.colors.text.primary,
-          lineHeight: 1.45,
-          fontSize: "0.9rem",
+          lineHeight: 1.5,
+          fontSize: "0.95rem",
+          opacity: 0.95,
+          overflow: "hidden",
+          display: "-webkit-box",
+          WebkitLineClamp: 3, // keep heights consistent
+          WebkitBoxOrient: "vertical",
         }}
+        title={card.description}
       >
-        {description}
+        {card.description}
       </p>
 
       {/* Tech tags */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-        {tech.map((t) => (
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        {(card.tech || []).map((t) => (
           <Tag key={t} theme={theme}>
             {t}
           </Tag>
         ))}
       </div>
 
-      {/* Actions */}
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 2 }}>
-        <PrimaryLink
-          theme={theme}
-          to={`/projects/${slug}`}
-          icon={<FileText size={16} />}
-          ariaLabel={`View details for ${title}`}
-        >
-          Details
-        </PrimaryLink>
+      {/* Spacer pushes actions to the bottom */}
+      <div style={{ marginTop: "auto" }} />
 
-        {liveLink && (
+      {/* Actions */}
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        {card.slug && (
+          <PrimaryLink
+            theme={theme}
+            to={`/projects/${card.slug}`}
+            icon={<BookOpen size={16} />}
+            ariaLabel={`${labels.viewDetailsAria} ${card.title}`}
+          >
+            {labels.details}
+          </PrimaryLink>
+        )}
+
+        {card.liveLink && (
           <OutlineA
             theme={theme}
-            href={liveLink}
-            icon={<ExternalLink size={16} />}
-            ariaLabel={`Open live site for ${title}`}
+            href={card.liveLink}
+            icon={<ArrowUpRight size={16} />}
+            ariaLabel={`${labels.openLiveAria} ${card.title}`}
           >
-            Live
+            {labels.live}
           </OutlineA>
         )}
 
-        {repoLink && (
+        {card.repoLink && (
           <OutlineA
             theme={theme}
-            href={repoLink}
-            icon={<Github size={16} />}
-            ariaLabel={`Open GitHub repo for ${title}`}
+            href={card.repoLink}
+            icon={<GitBranch size={16} />}
+            ariaLabel={`${labels.openRepoAria} ${card.title}`}
           >
-            GitHub
+            Repo
           </OutlineA>
         )}
       </div>
@@ -231,6 +268,7 @@ const ProjectCard = ({
 
 const Projects = ({ isDarkMode = false }) => {
   const theme = useTheme(isDarkMode);
+  const { t } = useTranslation("projects");
 
   // Glass look to match Home/About
   const glassBg = isDarkMode ? "rgba(17,24,39,0.28)" : "rgba(255,255,255,0.42)";
@@ -245,8 +283,29 @@ const Projects = ({ isDarkMode = false }) => {
   const gridStyle = {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-    gap: 16,
+    gap: 18,
+    alignItems: "stretch", // ensure equal-height cards
   };
+
+  // Localized labels and cards
+  const labels = {
+    sectionTitle: t("sectionTitle", { defaultValue: "Projects" }),
+    subtitle: t("subtitle", {
+      defaultValue: "A quick look at selected design & development work",
+    }),
+    details: t("buttons.details", { defaultValue: "Details" }),
+    live: t("buttons.live", { defaultValue: "Live" }),
+    preview: t("labels.preview", { defaultValue: "Preview" }),
+    viewDetailsAria: t("aria.viewDetailsFor", {
+      defaultValue: "View details for",
+    }),
+    openLiveAria: t("aria.openLiveFor", { defaultValue: "Open live site for" }),
+    openRepoAria: t("aria.openRepoFor", {
+      defaultValue: "Open GitHub repo for",
+    }),
+  };
+
+  const cards = t("cards", { returnObjects: true }) || [];
 
   return (
     <div style={{ maxWidth: 1200, margin: "0 auto" }}>
@@ -259,7 +318,7 @@ const Projects = ({ isDarkMode = false }) => {
           backdropFilter: "blur(1px) saturate(120%)",
           WebkitBackdropFilter: "blur(1px) saturate(120%)",
           boxShadow: cardShadow,
-          padding: "clamp(16px, 2.2vw, 22px)",
+          padding: "clamp(16px, 2.2vw, 24px)",
         }}
       >
         {/* Chip header */}
@@ -273,7 +332,7 @@ const Projects = ({ isDarkMode = false }) => {
             background: `${theme.colors.primary}10`,
             border: `1px solid ${theme.colors.primary}33`,
             color: theme.colors.text.primary,
-            marginBottom: "0.75rem",
+            marginBottom: "0.85rem",
           }}
         >
           <span
@@ -291,101 +350,50 @@ const Projects = ({ isDarkMode = false }) => {
           </span>
           <span
             style={{
-              fontSize: ".9rem",
-              fontWeight: 800,
+              fontSize: ".92rem",
+              fontWeight: 900,
               letterSpacing: ".02em",
             }}
           >
-            Projects
+            {labels.sectionTitle}
           </span>
         </div>
 
-        {/* Subtitle (optional) */}
+        {/* Subtitle */}
         <p
           style={{
-            margin: "0 0 12px 0",
-            fontSize: "clamp(.95rem, 1.8vw, 1.05rem)",
+            margin: "0 0 14px 0",
+            fontSize: "clamp(.98rem, 1.8vw, 1.08rem)",
             color: theme.colors.text.secondary,
+            maxWidth: "65ch",
           }}
         >
-          A quick look at selected design & development work
+          {labels.subtitle}
         </p>
 
         {/* Grid */}
         <div style={gridStyle}>
-          <ProjectCard
-            theme={theme}
-            id="navippon"
-            title="Navippon"
-            description="Travel guide app for Japan—discover attractions, plan itineraries, and explore with interactive maps."
-            tech={["React", "Node.js", "MongoDB", "Google Maps API"]}
-            coverText="Navippon preview"
-            slug="navippon"
-            coverSrc="/assets/navippon.png"
-            coverAlt="Navippon app preview"
-            liveLink="https://navippon.com/"
-            repoLink="https://github.com/rodiramo/NavipponWeb-"
-            cardGlass={cardGlass}
-            borderCol={borderCol}
-            isDarkMode={isDarkMode}
-          />
-
-          <ProjectCard
-            theme={theme}
-            id="jumping"
-            title="Jumping (Ushuaia)"
-            description="Designed website sections and a brand-aligned booking page for a local rental company. UI in Figma/Photoshop; responsive styling in CSS; close collaboration with client and developer."
-            tech={[
-              "Figma",
-              "Photoshop",
-              "CSS",
-              "UI/UX",
-              "Branding",
-              "Responsive Web",
-            ]}
-            coverSrc="/assets/jumping.png"
-            coverAlt="Jumping Ushuaia booking page"
-            coverText="Booking page • brand-aligned UI"
-            slug="jumping-ushuaia"
-            liveLink="https://jumpingushuaia.com/"
-            cardGlass={cardGlass}
-            borderCol={borderCol}
-            isDarkMode={isDarkMode}
-          />
-
-          <ProjectCard
-            theme={theme}
-            id="robol"
-            title="Robol Solutions"
-            description="Marketing site design in Figma and dev handoff—responsive layouts, token-based design system."
-            tech={["Figma", "Design System", "Responsive", "Dev Handoff"]}
-            coverText="Robol Solutions landing"
-            coverSrc="/assets/robol.png"
-            coverAlt="Robol Preview Page"
-            slug="robol"
-            liveLink="https://robol-landing-rama-marco.vercel.app/"
-            cardGlass={cardGlass}
-            borderCol={borderCol}
-            isDarkMode={isDarkMode}
-          />
-
-          <ProjectCard
-            theme={theme}
-            id="topcarteras"
-            title="Top Carteras"
-            description="E-commerce UI for Argentinian handbags—PLP, PDP, cart, and checkout optimized for conversion."
-            tech={["Figma", "E-commerce UX", "Design System", "Checkout Flow"]}
-            coverText="Top Carteras storefront"
-            slug="topcarteras"
-            coverSrc="/assets/top-carteras.png"
-            coverAlt="Top Carteras Preview Page"
-            liveLink="https://top-carteras-mock.vercel.app/"
-            cardGlass={cardGlass}
-            borderCol={borderCol}
-            isDarkMode={isDarkMode}
-          />
+          {cards.map((card) => (
+            <ProjectCard
+              key={card.id}
+              theme={theme}
+              card={card}
+              cardGlass={cardGlass}
+              borderCol={borderCol}
+              isDarkMode={isDarkMode}
+              labels={labels}
+            />
+          ))}
         </div>
       </section>
+
+      {/* image hover: grayscale -> color + slight zoom */}
+      <style>{`
+        .proj-card:hover .proj-thumb img {
+          filter: none !important;
+          transform: scale(1.03) !important;
+        }
+      `}</style>
     </div>
   );
 };

@@ -1,0 +1,119 @@
+{
+  "title": "Skills",
+  "subtitle": "Explore my expertise across development and design",
+  "aria": {
+    "categories": "Skill categories",
+    "skillProficiency": "{{name}} proficiency",
+    "gotoCategory": "Go to {{title}}"
+  },
+  "groups": [
+    {
+      "id": "frontend",
+      "title": "Web Development",
+      "skills": [
+        {
+          "name": "React.js",
+          "level": 85,
+          "description": "Component-based development"
+        },
+        {
+          "name": "Vue.js",
+          "level": 75,
+          "description": "Progressive JavaScript framework"
+        },
+        {
+          "name": "HTML5/CSS3",
+          "level": 90,
+          "description": "Responsive web layouts"
+        },
+        {
+          "name": "JavaScript",
+          "level": 80,
+          "description": "Interactive web experiences"
+        },
+        {
+          "name": "PWA Development",
+          "level": 80,
+          "description": "Progressive Web Apps"
+        },
+        {
+          "name": "WordPress",
+          "level": 75,
+          "description": "CMS customization & theming"
+        }
+      ]
+    },
+    {
+      "id": "backend",
+      "title": "Backend & APIs",
+      "skills": [
+        {
+          "name": "Node.js",
+          "level": 85,
+          "description": "Server-side JavaScript"
+        },
+        {
+          "name": "PHP Laravel",
+          "level": 80,
+          "description": "Web application framework"
+        },
+        {
+          "name": "MongoDB",
+          "level": 90,
+          "description": "NoSQL modeling & indexing"
+        },
+        {
+          "name": "MySQL",
+          "level": 75,
+          "description": "Relational schema & queries"
+        },
+        {
+          "name": "API Integration",
+          "level": 85,
+          "description": "OAuth, payments, 3rd-party APIs"
+        },
+        {
+          "name": "Firebase",
+          "level": 70,
+          "description": "Auth, Firestore, Functions"
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "title": "Design & Creative",
+      "skills": [
+        {
+          "name": "Figma",
+          "level": 90,
+          "description": "UI/UX design & prototyping"
+        },
+        {
+          "name": "Adobe Photoshop",
+          "level": 85,
+          "description": "Digital graphics & banners"
+        },
+        {
+          "name": "Adobe Illustrator",
+          "level": 80,
+          "description": "Vector graphics & logos"
+        },
+        {
+          "name": "Content Creation",
+          "level": 80,
+          "description": "Marketing & social assets"
+        },
+        {
+          "name": "Spline",
+          "level": 65,
+          "description": "3D scenes & animations"
+        },
+        {
+          "name": "Framer",
+          "level": 55,
+          "description": "Interactive prototyping (learning)"
+        }
+      ]
+    }
+  ]
+}

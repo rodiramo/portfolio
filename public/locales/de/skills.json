@@ -1,0 +1,119 @@
+{
+  "title": "Fähigkeiten",
+  "subtitle": "Ein Überblick über meine Erfahrung in Entwicklung und Design",
+  "aria": {
+    "categories": "Fähigkeitskategorien",
+    "skillProficiency": "Kompetenz in {{name}}",
+    "gotoCategory": "Gehe zu {{title}}"
+  },
+  "groups": [
+    {
+      "id": "frontend",
+      "title": "Webentwicklung",
+      "skills": [
+        {
+          "name": "React.js",
+          "level": 85,
+          "description": "Komponentenbasiertes Entwickeln"
+        },
+        {
+          "name": "Vue.js",
+          "level": 75,
+          "description": "Progressives JavaScript-Framework"
+        },
+        {
+          "name": "HTML5/CSS3",
+          "level": 90,
+          "description": "Responsives Layout für Websites"
+        },
+        {
+          "name": "JavaScript",
+          "level": 80,
+          "description": "Interaktive Web-Erlebnisse"
+        },
+        {
+          "name": "PWA Development",
+          "level": 80,
+          "description": "Progressive Web Apps"
+        },
+        {
+          "name": "WordPress",
+          "level": 75,
+          "description": "CMS-Anpassung & Theming"
+        }
+      ]
+    },
+    {
+      "id": "backend",
+      "title": "Backend & APIs",
+      "skills": [
+        {
+          "name": "Node.js",
+          "level": 85,
+          "description": "Serverseitiges JavaScript"
+        },
+        {
+          "name": "PHP Laravel",
+          "level": 80,
+          "description": "Framework für Webanwendungen"
+        },
+        {
+          "name": "MongoDB",
+          "level": 90,
+          "description": "NoSQL-Modellierung & Indexe"
+        },
+        {
+          "name": "MySQL",
+          "level": 75,
+          "description": "Relationale Schemata & Abfragen"
+        },
+        {
+          "name": "API Integration",
+          "level": 85,
+          "description": "OAuth, Payments, Drittanbieter-APIs"
+        },
+        {
+          "name": "Firebase",
+          "level": 70,
+          "description": "Auth, Firestore, Functions"
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "title": "Design & Kreatives",
+      "skills": [
+        {
+          "name": "Figma",
+          "level": 90,
+          "description": "UI/UX-Design & Prototyping"
+        },
+        {
+          "name": "Adobe Photoshop",
+          "level": 85,
+          "description": "Grafiken & Banner"
+        },
+        {
+          "name": "Adobe Illustrator",
+          "level": 80,
+          "description": "Vektorgrafiken & Logos"
+        },
+        {
+          "name": "Content Creation",
+          "level": 80,
+          "description": "Marketing- und Social-Assets"
+        },
+        {
+          "name": "Spline",
+          "level": 65,
+          "description": "3D-Szenen & Animationen"
+        },
+        {
+          "name": "Framer",
+          "level": 55,
+          "description": "Interaktives Prototyping (in Arbeit)"
+        }
+      ]
+    }
+  ]
+}

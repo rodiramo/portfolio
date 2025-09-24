@@ -1,0 +1,301 @@
+{
+  "sectionTitle": "Projekte",
+  "subtitle": "Ein Überblick über ausgewählte Arbeiten aus Design & Entwicklung",
+  "buttons": {
+    "details": "Details",
+    "live": "Live"
+  },
+  "labels": {
+    "preview": "Vorschau"
+  },
+  "aria": {
+    "viewDetailsFor": "Details anzeigen für",
+    "openLiveFor": "Live-Seite öffnen für",
+    "openRepoFor": "GitHub-Repo öffnen für"
+  },
+
+  "cards": [
+    {
+      "id": "navippon",
+      "title": "Navippon",
+      "description": "Reiseführer für Japan — Sehenswürdigkeiten entdecken, Routen planen und mit interaktiven Karten erkunden.",
+      "tech": ["React", "Node.js", "MongoDB", "Google Maps API"],
+      "coverText": "Navippon Vorschau",
+      "coverSrc": "/assets/navippon.png",
+      "coverAlt": "Navippon App Vorschau",
+      "slug": "navippon",
+      "liveLink": "https://navippon.com/",
+      "repoLink": "https://github.com/rodiramo/NavipponWeb-",
+      "grayscale": true
+    },
+    {
+      "id": "jumping",
+      "title": "Jumping (Ushuaia)",
+      "description": "Gestaltung von Website-Bereichen und einer markenkonformen Buchungsseite für ein lokales Vermietungsunternehmen. UI in Figma/Photoshop; responsive Styling in CSS; enge Zusammenarbeit mit Kunde und Entwickler.",
+      "tech": [
+        "Figma",
+        "Photoshop",
+        "CSS",
+        "UI/UX",
+        "Branding",
+        "Responsive Web"
+      ],
+      "coverSrc": "/assets/jumping.png",
+      "coverAlt": "Jumping Ushuaia Buchungsseite",
+      "coverText": "Buchungsseite • markenkonformes UI",
+      "slug": "jumping-ushuaia",
+      "liveLink": "https://jumpingushuaia.com/",
+      "grayscale": true
+    },
+    {
+      "id": "robol",
+      "title": "Robol Solutions",
+      "description": "Marketing-Website-Design in Figma und Entwickler-Handoff — responsive Layouts, tokenbasiertes Designsystem.",
+      "tech": ["Figma", "Designsystem", "Responsive", "Dev Handoff"],
+      "coverText": "Robol Solutions Landing",
+      "coverSrc": "/assets/robol.png",
+      "coverAlt": "Robol Vorschauseite",
+      "slug": "robol",
+      "liveLink": "https://robol-landing-rama-marco.vercel.app/",
+      "grayscale": true
+    },
+    {
+      "id": "topcarteras",
+      "title": "Top Carteras",
+      "description": "E-Commerce UI für argentinische Handtaschen — PLP, PDP, Warenkorb und Checkout optimiert für Conversion.",
+      "tech": ["Figma", "E-Commerce UX", "Designsystem", "Checkout Flow"],
+      "coverText": "Top Carteras Storefront",
+      "coverSrc": "/assets/top-carteras.png",
+      "coverAlt": "Top Carteras Vorschauseite",
+      "slug": "topcarteras",
+      "liveLink": "https://top-carteras-mock.vercel.app/",
+      "grayscale": true
+    }
+  ],
+
+  "case": {
+    "back": "Zurück",
+    "role": "Rolle",
+    "when": "Zeitraum",
+    "team": "Team",
+    "tools": "Tools",
+    "responsibilities": "Verantwortlichkeiten",
+    "gallery": "Galerie",
+    "outcome": "Ergebnis",
+    "links": "Links",
+    "problems": "Probleme",
+    "solutions": "Lösungen"
+  },
+
+  "cases": {
+    "jumping": {
+      "title": "Jumping",
+      "subtitle": "Springseil-Tracker mit Trends und Kalorien",
+      "coverImage": "https://images.unsplash.com/photo-1599050751776-0a0b0f5f0b1e?q=80&w=1600&auto=format&fit=crop",
+      "summary": "Ein minimalistischer Tracker für Springseil-Workouts: schnelles Logging, Serien und Fortschritt. Entwickelt, um Reibung zu reduzieren und Training lohnend zu machen.",
+      "role": "UI/UX & Frontend",
+      "timeframe": "2024",
+      "team": "Allein",
+      "tools": ["Figma", "React Native", "Firebase", "HealthKit"],
+      "responsibilities": [
+        "Low-Friction Logging-Flow mit Auto-Detection-Hooks",
+        "Sitzungstimeline, persönliche Bestwerte und Serien",
+        "Leichtes Dark Theme; Haptik für Feedback",
+        "Firebase-Speicherung und Basis-Auth"
+      ],
+      "problems": [
+        "Manuelles Logging war mühsam; Nutzer ließen Einträge aus",
+        "Inkonsistentes Feedback reduzierte Motivation im Laufe der Zeit"
+      ],
+      "solutions": [
+        "One-Tap-Logging mit Smart Defaults und Auto-Detection",
+        "Serien, Bestwerte und haptische Signale für sofortiges Feedback"
+      ],
+      "gallery": [
+        "https://images.unsplash.com/photo-1514996937319-344454492b37?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "outcomes": [
+        "Prototyp mit 6 Nutzern getestet; Logging <10s",
+        "Klares visuelles Feedback steigerte die Nutzung"
+      ],
+      "links": [
+        { "label": "Prototyp", "href": "#" },
+        { "label": "Figma", "href": "#" }
+      ]
+    },
+
+    "navippon": {
+      "title": "Navippon",
+      "subtitle": "Japan-Reiseführer — Entdeckung, Routen, Kultur",
+      "coverImage": "https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=1600&auto=format&fit=crop",
+      "summary": "Navippon unterstützt Reisende beim Planen und Entdecken in Japan: kuratierte Orte, kombinierte Karten- und Listenansicht sowie Tagespläne. Als Zweierteam haben wir Marke, Produkt und Launch Ende-zu-Ende aufgebaut.",
+      "role": "Product Design & Frontend",
+      "timeframe": "2023–2024",
+      "team": "2 Personen (Design + Entwicklung)",
+
+      "tools": [
+        "Figma",
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Google Maps API",
+        "Illustrator",
+        "Photoshop"
+      ],
+
+      "goals": [
+        "Einen leichten Reiseplaner schaffen, der Kultur, Essen und Logistik ausbalanciert.",
+        "Schnelle Entdeckung durch kombinierte Karten-/Listenansicht mit kuratierten POIs.",
+        "Realistische Tagesrouten mit Zeitabschätzungen ermöglichen.",
+        "Eine eigenständige, freundliche Markenidentität entwickeln."
+      ],
+
+      "process": [
+        {
+          "title": "Research",
+          "note": "12 Reisende interviewt; Hauptprobleme: verstreute Infos, fehlende Zeitangaben, Offline-Notizen."
+        },
+        {
+          "title": "Branding",
+          "note": "Logo, Farbsystem, Typografie; visuelle Sprache inspiriert von japanischer Wegweisung."
+        },
+        {
+          "title": "IA & Flows",
+          "note": "Suchen → Speichern → Itinerary; Schritte reduziert, Kartenkontext beibehalten."
+        },
+        {
+          "title": "Designsystem",
+          "note": "Tokens, Komponenten, Zustände; Responsive-Spezifikationen & Accessibility."
+        },
+        {
+          "title": "Entwicklung",
+          "note": "React UI + Maps, Routen & Zeiten, Sammlungen/Favoriten, Offline-Notizen."
+        },
+        {
+          "title": "Validierung",
+          "note": "MVP mit 12 Reisenden getestet; hohes Interesse am Routen-Flow."
+        },
+        {
+          "title": "Launch-Vorbereitung",
+          "note": "Landingpage, Content-Plan, Social-Snippets, Merch-Konzepte."
+        }
+      ],
+
+      "brand": {
+        "logo": "/assets/navippon-logo.svg",
+        "palette": [
+          { "name": "Primär", "value": "#8B5CF6" },
+          { "name": "Akzent", "value": "#BBFF5B" },
+          { "name": "Ink", "value": "#111827" },
+          { "name": "Paper", "value": "#F8FAFC" }
+        ],
+        "typefaces": ["Inter (UI)", "Noto Sans JP (Lokal)"],
+        "guideLink": "#"
+      },
+
+      "responsibilities": [
+        "Markenidentität — Logo, Palette, Typografie, Guidelines.",
+        "End-to-End Produktdesign (IA, Flows, Komponenten, Zustände).",
+        "React-UI mit responsiven, barrierearmen Komponenten.",
+        "Maps: POIs, Routing, Zeitabschätzungen, Sammlungen & Favoriten.",
+        "Offline-Notizen und gecachte Ortsdetails.",
+        "Content-Richtlinien und Tonalität.",
+        "Launch-Assets: Landing, Visuals und Merch-Konzepte."
+      ],
+
+      "problems": [
+        "Reiseinfos sind über viele Tabs verteilt; Kontextwechsel zwischen Karte und Listen ist mühsam.",
+        "Routenplanung ohne realistische Zeitabschätzung führt zu zu vollen Tagen.",
+        "Speichern von Orten und Notizen für die Offline-Nutzung ist unzuverlässig."
+      ],
+      "solutions": [
+        "Vereinte Karten-/Listen-UI mit kuratierten POIs und schnellen Filtern.",
+        "Tagespläne mit Wegzeiten und Hinweisen für realistisches Tempo.",
+        "Leichte Offline-Notizen und gecachte Details für gespeicherte Orte."
+      ],
+
+      "gallery": [
+        "https://images.unsplash.com/photo-1529336953121-adb2bcd0f5d6?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1569807351045-0b5ef7c6de8e?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1558981359-219d6364c9c8?q=80&w=1200&auto=format&fit=crop",
+        "/assets/navippon-map-ui.png",
+        "/assets/navippon-itinerary.png"
+      ],
+
+      "marketing": [
+        "Landingpage mit klaren Nutzenargumenten und Itinerary-Demo.",
+        "SEO-Content: Stadtteile-Guides und kuratierte Listen.",
+        "Social-Snippets zu Sammlungen & Offline-Notizen."
+      ],
+      "merchandising": [
+        "/assets/navippon-sticker-1.png",
+        "/assets/navippon-sticker-2.png",
+        "/assets/navippon-tote.png"
+      ],
+
+      "metrics": [
+        "Ø-Sitzung ~5 Min. in der Planungsphase.",
+        "Wiederkehrende Besuche bei mehrtägigen Routen.",
+        "Gespeicherte Sammlungen korrelieren mit Retention."
+      ],
+      "outcomes": [
+        "MVP mit 12 Reisenden validiert; starkes Interesse am Routen-Flow.",
+        "Klarer Fahrplan für Budgets, Rail-Pässe und teilbare Trips."
+      ],
+      "nextSteps": [
+        "Budgetplanung und PDF-Export.",
+        "JR-Pass- und Suica-Helfer.",
+        "Teilbare Itineraries und Kollaboration."
+      ],
+
+      "links": [
+        { "label": "Live", "href": "https://navippon.com/", "kind": "live" },
+        {
+          "label": "GitHub",
+          "href": "https://github.com/rodiramo/NavipponWeb-",
+          "kind": "repo"
+        },
+        { "label": "Brand Guide", "href": "#", "kind": "doc" }
+      ]
+    },
+
+    "robol": {
+      "title": "Robol Solutions",
+      "subtitle": "Marketing-Website — Designsystem + Entwickler-Handoff",
+      "coverImage": "https://images.unsplash.com/photo-1529336953121-adb2bcd0f5d6?q=80&w=1600&auto=format&fit=crop",
+      "summary": "Ich habe ein kompaktes Designsystem in Figma (Tokens, Komponenten, Varianten) entwickelt und eng mit Entwicklern zusammengearbeitet, um eine saubere, responsive Marketing-Website schnell umzusetzen.",
+      "role": "Produktdesignerin",
+      "timeframe": "2023–2024",
+      "team": "Ich (Design) + 2 Entwickler",
+      "tools": [
+        "Figma",
+        "Design Tokens",
+        "Auto-Layout",
+        "Komponenten-Varianten"
+      ],
+      "responsibilities": [
+        "Audit + Definition von Typografie, Farben und Abständen",
+        "Wiederverwendbare Komponenten gebaut (Nav, Hero, Feature Cards, CTA)",
+        "Responsive Specs erstellt; Zustände und Breakpoints annotiert",
+        "Asynchrone Zusammenarbeit: Kommentare, Versionierung, Handoff"
+      ],
+      "problems": [
+        "Inkonsistentes UI durch ad-hoc Komponenten",
+        "Handoff verlangsamt durch unklare Specs und Zustände"
+      ],
+      "solutions": [
+        "Token-basiertes Designsystem mit dokumentierten Komponenten",
+        "Klare responsive Specs + annotierte Zustände; enge asynchrone Reviews"
+      ],
+      "gallery": [
+        "https://images.unsplash.com/photo-1555421689-43cad7100751?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "outcomes": [
+        "Weniger Nacharbeit: Devs nutzten Komponenten auf 6 Seiten",
+        "Schnellere Iteration; konsistente Visuals + barrierefreie Kontraste"
+      ],
+      "links": [{ "label": "Figma", "href": "#" }]
+    }
+  }
+}

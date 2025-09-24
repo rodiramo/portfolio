@@ -1,8 +1,10 @@
+// src/components/Header.jsx
 import React from "react";
 import { useTheme } from "../../theme.js";
 import { MdOutlineWavingHand } from "react-icons/md";
 import Me from "../../components/Me.jsx";
 import { BriefcaseBusiness, MapPinHouse } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 /* Small chip + button helpers (inline styled) */
 const Chip = ({ theme, children, style }) => (
@@ -23,7 +25,7 @@ const Chip = ({ theme, children, style }) => (
         : "1px solid rgba(15,23,42,0.12)",
       color: theme.colors.text.primary,
       whiteSpace: "nowrap",
-      ...style, // <— merge custom styles
+      ...style,
     }}
   >
     {children}
@@ -77,30 +79,44 @@ const ActionBtn = ({ theme, kind = "primary", onClick, children }) => {
   );
 };
 
-/* -------- Refined Glass Header -------- */
+/* -------- Refined Glass Header (i18n-enabled) -------- */
 const Header = ({
-  name = "Rocio Diaz Ramos",
-  title = "Web Designer & Developer",
-  description = "",
+  // Props can override translations if passed
+  name, // falls back to t("hero.name") if omitted
+  title, // falls back to t("hero.role")
+  description, // falls back to t("hero.description")
   headerHeight = "70vh",
   isDarkMode,
   overflowHeight = "120px",
   blurPx = 1,
-  onPrimary = null, // optional: e.g., () => scrollToSection('projects')
-  onSecondary = null, // optional: e.g., () => scrollToSection('contact')
+  onPrimary = null, // e.g., () => scrollToSection('projects')
+  onSecondary = null, // e.g., () => scrollToSection('contact')
 }) => {
   const theme = useTheme(isDarkMode);
+  const { t } = useTranslation("home");
+  const who = t("hero.who", { defaultValue: "I'm " });
+  // Safe fallbacks to i18n
+  const greeting = t("hero.greeting", { defaultValue: "Hello" });
+  const personName =
+    name ?? t("hero.name", { defaultValue: "Rocio Diaz Ramos" });
+  const role =
+    title ?? t("hero.role", { defaultValue: "Web Designer & Developer" });
+  const desc = description ?? t("hero.description", { defaultValue: "" });
+
+  // Chips + CTAs
+  const chipLocation = t("chips.location", { defaultValue: "Hamburg, DE" });
+  const chipAvailable = t("chips.available", { defaultValue: "Available" });
+  const ctaProjects = t("cta.viewProjects", { defaultValue: "View Projects" });
+  const ctaContact = t("cta.contactMe", { defaultValue: "Contact Me" });
 
   // Very translucent glass colors (so it never looks like a solid block)
   const glassBg = theme.isDark
-    ? "rgba(17, 24, 39, 0.18)" // dark glass
-    : "rgba(255, 255, 255, 0.12)"; // light glass
-
+    ? "rgba(17, 24, 39, 0.18)"
+    : "rgba(255, 255, 255, 0.12)";
   // Subtle border for glass panel
   const glassBorder = theme.isDark
     ? "1px solid rgba(255,255,255,0.14)"
     : "1px solid rgba(15,23,42,0.12)";
-
   // Soft radial glow behind the card (kept *very* subtle)
   const glow = theme.isDark
     ? "radial-gradient(600px 280px at 50% 40%, rgba(124,58,237,0.18), transparent 60%)"
@@ -147,7 +163,7 @@ const Header = ({
           background: glassBg,
           border: glassBorder,
           backdropFilter: `blur(${blurPx}px) saturate(120%)`,
-          WebkitBackdropFilter: `blur(${blurPx}px) saturate(120%)`, // <- fixed extra parenthesis
+          WebkitBackdropFilter: `blur(${blurPx}px) saturate(120%)`,
           boxShadow: theme.isDark
             ? "inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 24px rgba(0,0,0,0.20)"
             : "inset 0 1px 0 rgba(255,255,255,0.35), 0 8px 20px rgba(0,0,0,0.06)",
@@ -161,7 +177,6 @@ const Header = ({
             padding: "16px",
             display: "grid",
             gap: 12,
-
             justifyItems: "center",
             textAlign: "center",
           }}
@@ -178,10 +193,10 @@ const Header = ({
             }}
           >
             <Chip theme={theme} style={{ background: "#875bff22" }}>
-              <MapPinHouse size={16} /> Hamburg, DE
+              <MapPinHouse size={16} /> {chipLocation}
             </Chip>
             <Chip theme={theme} style={{ background: "#bbff5b22" }}>
-              <BriefcaseBusiness size={16} /> Available
+              <BriefcaseBusiness size={16} /> {chipAvailable}
             </Chip>
           </div>
 
@@ -196,14 +211,14 @@ const Header = ({
               letterSpacing: "-0.02em",
             }}
           >
-            Hello{" "}
+            {greeting}{" "}
             <span style={{ display: "inline-block" }}>
               <span className="wave span-title">
                 <MdOutlineWavingHand size={42} color={theme.colors.custom} />
               </span>
             </span>
             <br />
-            I&apos;m {name}{" "}
+            {who} {personName}{" "}
             <span style={{ display: "inline-block" }}>
               <span
                 className="span-title-me"
@@ -215,13 +230,13 @@ const Header = ({
           </h1>
 
           {/* Role */}
-          <h2 style={{ color: theme.colors.text.primary }}>{title}</h2>
+          <h2 style={{ color: theme.colors.text.primary }}>{role}</h2>
 
           {/* Scroll indicator */}
           <div
             style={{
               position: "absolute",
-              zIndex: 4, // <-- was "index"
+              zIndex: 4,
               bottom: -28,
               left: "50%",
               transform: "translateX(-50%)",
@@ -239,15 +254,14 @@ const Header = ({
                 width: 26,
                 height: 40,
                 borderRadius: 13,
-                // use rgba so it's always valid
                 background: isDarkMode
                   ? "rgba(255,255,255,0.07)"
                   : "rgba(15,23,42,0.07)",
-                border: `2px solid ${theme.colors.primary}50`, // or convert this to rgba too
+                border: `2px solid ${theme.colors.primary}50`,
                 display: "grid",
                 placeItems: "center",
                 position: "relative",
-                backdropFilter: "blur(2px)", // subtle is better than 100px
+                backdropFilter: "blur(2px)",
                 WebkitBackdropFilter: "blur(2px)",
               }}
             >
@@ -282,7 +296,7 @@ const Header = ({
               paddingInline: 8,
             }}
           >
-            {description}
+            {desc}
           </p>
 
           {/* Actions (optional) */}
@@ -299,12 +313,12 @@ const Header = ({
             >
               {onPrimary && (
                 <ActionBtn theme={theme} kind="primary" onClick={onPrimary}>
-                  View Projects
+                  {ctaProjects}
                 </ActionBtn>
               )}
               {onSecondary && (
                 <ActionBtn theme={theme} kind="ghost" onClick={onSecondary}>
-                  Contact Me
+                  {ctaContact}
                 </ActionBtn>
               )}
             </div>
@@ -313,94 +327,17 @@ const Header = ({
       </header>
 
       {/* Micro CSS (animations + small responsive tweak) */}
-      <style>{`.scroll-chevron {z-index: 2; 
-  animation: floatDown 1.6s ease-in-out 1; 
-  cursor: inherit;
-}
-
-.scroll-indicator:hover .scroll-chevron {
-  animation: floatDown 1.6s ease-in-out 3; /* play 3 times on hover */
-}
-
-@keyframes floatDown {
-  0%   { transform: translateY(-6px); opacity: .85; }
-  60%  { transform: translateY(6px);  opacity: .25; }
-  100% { transform: translateY(-6px); opacity: .85; }
-}
-
-
-.span-title {
-  background-color: #bbff5b;
-  animation: floatDown 4s ease-in-out 1; 
-   transform-origin: 50% 10%;
-  align-items: center;
-  align-content: center;
-  justify-content: center;
-  height: 3rem;
-  border-radius: 30rem;
-  rotate: -10deg;
-  display: inline-block;
-  width: 6rem;
-}
-
-
-
-.span-title-me {
-  margin-left: 10px;
-  animation: me 3s ease-in-out infinite;
-  transform-origin: 20% 20%;
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  height: 3rem;
-  align-content: center;
-  border-radius: 30rem;
-  rotate: 10deg;
-  display: inline-block;
-  width: 6rem;
-}
-@keyframes me {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  10%,
-  30% {
-    transform: rotate(2deg);
-  }
-  20% {
-    transform: rotate(10deg);
-  }
-  40% {
-    transform: rotate(14deg);
-  }
-  50% {
-    transform: rotate(12deg);
-  }
-  60% {
-    transform: rotate(10deg);
-  }
-}
-        @keyframes wave {
-          0%, 100% { transform: rotate(0deg); }
-          10%, 30% { transform: rotate(14deg); }
-          20% { transform: rotate(-8deg); }
-          40% { transform: rotate(14deg); }
-          50% { transform: rotate(-4deg); }
-          60% { transform: rotate(10deg); }
-        }
-        .wave {
-          animation: wave 2s ease-in-out infinite;
-          transform-origin: 70% 70%;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .responsive-container { width: 100%; margin-inline: auto; }
-        @media (max-width: 768px) { .responsive-container { margin-bottom: -54px !important; } }
-        @media (max-width: 480px) { .responsive-container { margin-bottom: -34px !important; } }
-      `}</style>
+      <style>{`.scroll-chevron {z-index: 2; animation: floatDown 1.6s ease-in-out 1; cursor: inherit;}
+.scroll-indicator:hover .scroll-chevron { animation: floatDown 1.6s ease-in-out 3; }
+@keyframes floatDown { 0% { transform: translateY(-6px); opacity: .85; } 60% { transform: translateY(6px); opacity: .25; } 100% { transform: translateY(-6px); opacity: .85; } }
+.span-title { background-color: #bbff5b; animation: floatDown 4s ease-in-out 1; transform-origin: 50% 10%; align-items: center; align-content: center; justify-content: center; height: 3rem; border-radius: 30rem; rotate: -10deg; display: inline-block; width: 6rem; }
+.span-title-me { margin-left: 10px; animation: me 3s ease-in-out infinite; transform-origin: 20% 20%; display: flex !important; align-items: center; justify-content: center; height: 3rem; align-content: center; border-radius: 30rem; rotate: 10deg; display: inline-block; width: 6rem; }
+@keyframes me { 0%,100%{ transform: rotate(0deg);} 10%,30%{ transform: rotate(2deg);} 20%{ transform: rotate(10deg);} 40%{ transform: rotate(14deg);} 50%{ transform: rotate(12deg);} 60%{ transform: rotate(10deg);} }
+@keyframes wave { 0%,100%{ transform: rotate(0deg);} 10%,30%{ transform: rotate(14deg);} 20%{ transform: rotate(-8deg);} 40%{ transform: rotate(14deg);} 50%{ transform: rotate(-4deg);} 60%{ transform: rotate(10deg);} }
+.wave { animation: wave 2s ease-in-out infinite; transform-origin: 70% 70%; display: inline-flex; align-items: center; justify-content: center; }
+.responsive-container { width: 100%; margin-inline: auto; }
+@media (max-width: 768px) { .responsive-container { margin-bottom: -54px !important; } }
+@media (max-width: 480px) { .responsive-container { margin-bottom: -34px !important; } }`}</style>
     </div>
   );
 };

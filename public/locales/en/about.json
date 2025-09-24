@@ -1,0 +1,38 @@
+{
+  "title": "About Me",
+  "intro": "I'm a Hamburg-based web developer and designer who turns complex problems into simple, elegant digital solutions. I build modern interfaces and interactive experiences that blend creativity with clean, functional design. I’m always learning and love solving problems to create products that not only look beautiful but work seamlessly.",
+  "journeyTitle": "My Journey",
+  "journeyHint": "Click to explore my education & experience",
+  "sections": {
+    "education": "Education",
+    "experience": "Experience"
+  },
+  "studies": [
+    {
+      "degree": "Tertiary Education in Web Development and Web Design",
+      "institution": "Davinci Institute of Technology",
+      "period": "2021 - 2025",
+      "description": "Mastered full-stack web development, UX/UI design, and digital marketing strategies. Built multiple responsive web apps with modern tools and frameworks."
+    },
+    {
+      "degree": "Frontend Development Basics Bootcamp",
+      "institution": "SheCodes",
+      "period": "2021",
+      "description": "Intensive program covering HTML, CSS, and JavaScript."
+    }
+  ],
+  "experience": [
+    {
+      "position": "Freelance Web Designer",
+      "company": "Jumping",
+      "period": "2024",
+      "description": "Designed and developed a custom website focused on UX, accessibility, and modern visuals. Delivered a responsive, polished site that boosted brand presence."
+    },
+    {
+      "position": "Volunteer Web Designer",
+      "company": "Robol Solutions (Startup)",
+      "period": "2023 - 2024",
+      "description": "Created user-friendly interfaces and collaborated with developers to ship consistent, high-quality UI across pages and features."
+    }
+  ]
+}

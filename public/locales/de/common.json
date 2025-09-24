@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "home": "Start",
+    "about": "Über mich",
+    "skills": "Fähigkeiten",
+    "projects": "Projekte",
+    "settings": "Einstellungen",
+    "language": "Sprache",
+    "darkMode": "Dunkelmodus",
+    "curriculum": "Lebenslauf"
+  },
+  "profile": {
+    "name": "Rocío Díaz Ramos",
+    "location": "Europa/Hamburg",
+    "spanish": "Spanisch",
+    "english": "Englisch",
+    "german": "Deutsch",
+    "native": "Muttersprache",
+    "fluent": "Fließend",
+    "advanced": "Fortgeschritten"
+  }
+}

@@ -2,14 +2,27 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ArrowDownRight, GraduationCap, Briefcase, User } from "lucide-react";
 import { useTheme } from "../../theme.js";
+import { useTranslation } from "react-i18next";
 
-/* ---------- Timeline item (glass card + subtle line) ---------- */
 const TimelineItem = ({ item, index, type, isVisible, isDarkMode }) => {
   const theme = useTheme(isDarkMode);
+  const { t } = useTranslation("about");
+
+  // Helper: prefer explicit field on item; else use i18n with item.i18nKey
+  const resolve = (field) => {
+    if (item && item[field] != null) return item[field];
+    if (item && item.i18nKey) return t(`${item.i18nKey}.${field}`);
+    return "";
+  };
+
+  const degreeOrPosition = resolve("degree") || resolve("position");
+  const institutionOrCompany = resolve("institution") || resolve("company");
+  const period = resolve("period");
+  const description = resolve("description");
 
   const glassBg = isDarkMode
-    ? "rgba(17, 24, 39, 0.32)" // slate-900 @ 32%
-    : "rgba(255, 255, 255, 0.52)"; // white @ 52%
+    ? "rgba(17, 24, 39, 0.32)"
+    : "rgba(255, 255, 255, 0.52)";
 
   const borderCol = isDarkMode ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.08)";
 
@@ -105,57 +118,66 @@ const TimelineItem = ({ item, index, type, isVisible, isDarkMode }) => {
             ) : (
               <Briefcase size={18} color={theme.colors.primary} />
             )}
-            {item.degree || item.position}
+            {degreeOrPosition}
           </h4>
 
-          <span
-            style={{
-              fontSize: ".85rem",
-              color: theme.colors.primary,
-              fontWeight: 700,
-              background: `${theme.colors.primary}1A`,
-              border: `1px solid ${theme.colors.primary}40`,
-              padding: ".2rem .6rem",
-              borderRadius: 999,
-              whiteSpace: "nowrap",
-            }}
-          >
-            {item.period}
-          </span>
+          {period && (
+            <span
+              style={{
+                fontSize: ".85rem",
+                color: theme.colors.primary,
+                fontWeight: 700,
+                background: `${theme.colors.primary}1A`,
+                border: `1px solid ${theme.colors.primary}40`,
+                padding: ".2rem .6rem",
+                borderRadius: 999,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {period}
+            </span>
+          )}
         </div>
 
-        <p
-          style={{
-            fontSize: ".98rem",
-            color: theme.colors.primary,
-            fontWeight: 700,
-            margin: ".35rem 0 .25rem",
-          }}
-        >
-          {item.institution || item.company}
-        </p>
-        <p
-          style={{
-            fontSize: ".94rem",
-            color: theme.colors.text.secondary,
-            lineHeight: 1.6,
-            margin: 0,
-          }}
-        >
-          {item.description}
-        </p>
+        {institutionOrCompany && (
+          <p
+            style={{
+              fontSize: ".98rem",
+              color: theme.colors.primary,
+              fontWeight: 700,
+              margin: ".35rem 0 .25rem",
+            }}
+          >
+            {institutionOrCompany}
+          </p>
+        )}
+
+        {description && (
+          <p
+            style={{
+              fontSize: ".94rem",
+              color: theme.colors.text.secondary,
+              lineHeight: 1.6,
+              margin: 0,
+            }}
+          >
+            {description}
+          </p>
+        )}
       </div>
     </div>
   );
 };
 
-/* ---------- About (frosted section wrapper to match Home) ---------- */
 const About = ({ isDarkMode = false }) => {
   const theme = useTheme(isDarkMode);
+  const { t } = useTranslation("about");
+
   const [visibleItems, setVisibleItems] = useState(new Set());
   const [isOpen, setIsOpen] = useState(false);
   const [hover, setHover] = useState(false);
   const timelineRef = useRef(null);
+
   // Very translucent glass colors (so it never looks like a solid block)
   const glassBg = theme.isDark
     ? "rgba(17, 24, 39, 0.18)" // dark glass
@@ -171,44 +193,14 @@ const About = ({ isDarkMode = false }) => {
     ? "radial-gradient(600px 280px at 50% 40%, rgba(192, 237, 58, 0.2), transparent 60%)"
     : "radial-gradient(600px 280px at 50% 40%, rgba(172, 232, 135, 0.26), transparent 60%)";
 
-  // data
-  const studies = [
-    {
-      degree: "Tertiary Education in Web Development and Web Design",
-      institution: "Davinci Institute of Technology",
-      period: "2021 - 2025",
-      description:
-        "Mastered full-stack web development, UX/UI design, and digital marketing strategies. Built multiple responsive web apps with modern tools and frameworks.",
-    },
-    {
-      degree: "Frontend Development Basics Bootcamp",
-      institution: "SheCodes",
-      period: "2021",
-      description: "Intensive program covering HTML, CSS, and JavaScript.",
-    },
-  ];
-
-  const experience = [
-    {
-      position: "Freelance Web Designer",
-      company: "Jumping",
-      period: "2024",
-      description:
-        "Designed and developed a custom website focused on UX, accessibility, and modern visuals. Delivered a responsive, polished site that boosted brand presence.",
-    },
-    {
-      position: "Volunteer Web Designer",
-      company: "Robol Solutions (Startup)",
-      period: "2023 - 2024",
-      description:
-        "Created user-friendly interfaces and collaborated with developers to ship consistent, high-quality UI across pages and features.",
-    },
-  ];
+  // --- Localized data (from about.json) ---
+  const studies = t("studies", { returnObjects: true }) || [];
+  const experience = t("experience", { returnObjects: true }) || [];
 
   const timelineData = [
-    { type: "header", label: "Education" },
+    { type: "header", label: t("sections.education") },
     ...studies.map((s) => ({ ...s, category: "education" })),
-    { type: "header", label: "Experience" },
+    { type: "header", label: t("sections.experience") },
     ...experience.map((e) => ({ ...e, category: "experience" })),
   ];
 
@@ -241,7 +233,6 @@ const About = ({ isDarkMode = false }) => {
         margin: "0 auto",
       }}
     >
-      {" "}
       <div
         aria-hidden
         style={{
@@ -300,11 +291,11 @@ const About = ({ isDarkMode = false }) => {
               letterSpacing: ".02em",
             }}
           >
-            About Me
+            {t("title")}
           </span>
         </div>
 
-        {/* Intro */}
+        {/* Intro (from i18n) */}
         <p
           style={{
             fontSize: "clamp(1rem, 2vw, 1.05rem)",
@@ -314,21 +305,7 @@ const About = ({ isDarkMode = false }) => {
             marginBottom: "0.9rem",
           }}
         >
-          I'm a{" "}
-          <span style={{ color: theme.colors.primary, fontWeight: 700 }}>
-            Hamburg-based web developer and designer
-          </span>{" "}
-          who turns complex problems into simple, elegant digital solutions. I
-          build modern interfaces and interactive experiences that blend
-          creativity with{" "}
-          <span style={{ color: theme.colors.primary, fontWeight: 700 }}>
-            clean, functional design
-          </span>
-          . I’m always learning and love{" "}
-          <span style={{ color: theme.colors.primary, fontWeight: 700 }}>
-            solving problems
-          </span>{" "}
-          to create products that not only look beautiful but work seamlessly.
+          {t("intro")}
         </p>
 
         {/* Toggle */}
@@ -369,7 +346,7 @@ const About = ({ isDarkMode = false }) => {
               letterSpacing: ".01em",
             }}
           >
-            My Journey
+            {t("journeyTitle")}
           </span>
           <ArrowDownRight
             size={22}
@@ -399,7 +376,7 @@ const About = ({ isDarkMode = false }) => {
                 pointerEvents: "none",
               }}
             >
-              Click to explore my education & experience
+              {t("journeyHint")}
             </span>
           )}
         </div>
@@ -438,9 +415,9 @@ const About = ({ isDarkMode = false }) => {
               ) : (
                 <div key={index} data-role="tl-item" data-index={index}>
                   <TimelineItem
-                    item={item}
+                    item={item} // already localized object
                     index={index}
-                    type={item.category}
+                    type={item.category} // "education" | "experience"
                     isVisible={isOpen && visibleItems.has(index)}
                     isDarkMode={isDarkMode}
                   />
@@ -450,6 +427,7 @@ const About = ({ isDarkMode = false }) => {
           </div>
         </div>
       </section>
+
       {/* micro CSS */}
       <style>{`
         @media (max-width: 560px) {

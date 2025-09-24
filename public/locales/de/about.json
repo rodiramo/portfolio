@@ -1,0 +1,38 @@
+{
+  "title": "Über mich",
+  "intro": "Ich bin Webentwicklerin und -designerin aus Hamburg und mache aus komplexen Herausforderungen einfache, elegante digitale Lösungen. Ich bilde mich ständig weiter und liebe es, Probleme zu lösen, um Produkte zu schaffen, die nicht nur gut aussehen, sondern auch reibungslos funktionieren.",
+  "journeyTitle": "Mein Karriereweg",
+  "journeyHint": "Entdecke meine Ausbildung und Erfahrung",
+  "sections": {
+    "education": "Ausbildung",
+    "experience": "Erfahrung"
+  },
+  "studies": [
+    {
+      "degree": "Tertiäre Ausbildung in Webentwicklung und Webdesign",
+      "institution": "Davinci Institute of Technology",
+      "period": "2021 - 2025",
+      "description": "Umfassende Kenntnisse in Full-Stack-Webentwicklung, UX/UI-Design und digitalem Marketing. Entwicklung mehrerer responsiver Webanwendungen mit modernen Tools und Frameworks."
+    },
+    {
+      "degree": "Frontend Development Basics Bootcamp",
+      "institution": "SheCodes",
+      "period": "2021",
+      "description": "Praxisorientierter Intensivkurs in HTML, CSS und JavaScript."
+    }
+  ],
+  "experience": [
+    {
+      "position": "Freelance Webdesignerin",
+      "company": "Jumping",
+      "period": "2024",
+      "description": "CSS-Umsetzung und visuelle Gestaltung einer responsiven Website mit Fokus auf UX, Barrierefreiheit und ein modernes Erscheinungsbild."
+    },
+    {
+      "position": "Ehrenamtliche Webdesignerin",
+      "company": "Robol Solutions (Startup)",
+      "period": "2023 - 2024",
+      "description": "Benutzerfreundliche User Interfaces in Figma gestaltet und in Zusammenarbeit mit Entwickler:innen konsistente, hochwertige UI für verschiedene Seiten und Features geliefert."
+    }
+  ]
+}

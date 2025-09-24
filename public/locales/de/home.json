@@ -1,0 +1,19 @@
+{
+  "hero": {
+    "greeting": "Hallo",
+    "name": "Rocío Díaz Ramos",
+    "who": "Ich bin",
+    "role": "Full-Stack Entwicklerin",
+    "title": "Hi, ich bin Rocío",
+    "subtitle": "Ich entwerfe und entwickle moderne, nutzerfreundliche Websites.",
+    "description": "Ich baue klare, nutzerfreundliche Oberflächen und stabile Backends mit React, Node und MongoDB. Mir sind Performance, Accessibility und saubere Komponenten-Architekturen wichtig."
+  },
+  "chips": {
+    "location": "Hamburg, DE",
+    "available": "Verfügbar"
+  },
+  "cta": {
+    "viewProjects": "Projekte ansehen",
+    "contactMe": "Kontakt"
+  }
+}

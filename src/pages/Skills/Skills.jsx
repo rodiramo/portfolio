@@ -2,6 +2,7 @@
 import React, { useState, useMemo } from "react";
 import { useTheme } from "../../theme.js";
 import { Code2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 /* --- CDN logo sources (ordered; will try next if one fails) --- */
 const LOGO_SOURCES = {
@@ -121,120 +122,38 @@ function Logo({ name, size = 18, accent }) {
 
 const Skills = ({ isDarkMode = false }) => {
   const theme = useTheme(isDarkMode);
-  const [activeCategory, setActiveCategory] = useState(0);
-  const [hovered, setHovered] = useState(null);
+  const { t } = useTranslation("skills");
 
-  const categories = useMemo(
-    () => [
-      {
-        id: "frontend",
-        title: "Web Development",
-        accent: theme.colors.primary,
-        skills: [
-          {
-            name: "React.js",
-            level: 85,
-            description: "Component-based development",
-          },
-          {
-            name: "Vue.js",
-            level: 75,
-            description: "Progressive JavaScript framework",
-          },
-          {
-            name: "HTML5/CSS3",
-            level: 90,
-            description: "Responsive web layouts",
-          },
-          {
-            name: "JavaScript",
-            level: 80,
-            description: "Interactive web experiences",
-          },
-          {
-            name: "PWA Development",
-            level: 80,
-            description: "Progressive Web Apps",
-          },
-          {
-            name: "WordPress",
-            level: 75,
-            description: "CMS customization & theming",
-          },
-        ],
-      },
-      {
-        id: "backend",
-        title: "Backend & APIs",
-        accent: theme.colors.dark,
-        skills: [
-          { name: "Node.js", level: 85, description: "Server-side JavaScript" },
-          {
-            name: "PHP Laravel",
-            level: 80,
-            description: "Web application framework",
-          },
-          {
-            name: "MongoDB",
-            level: 90,
-            description: "NoSQL modeling & indexing",
-          },
-          {
-            name: "MySQL",
-            level: 75,
-            description: "Relational schema & queries",
-          },
-          {
-            name: "API Integration",
-            level: 85,
-            description: "OAuth, payments, 3rd-party APIs",
-          },
-          {
-            name: "Firebase",
-            level: 70,
-            description: "Auth, Firestore, Functions",
-          },
-        ],
-      },
-      {
-        id: "design",
-        title: "Design & Creative",
-        accent: theme.colors.grey,
-        titleColor: "#000",
-        skills: [
-          {
-            name: "Figma",
-            level: 90,
-            description: "UI/UX design & prototyping",
-          },
-          {
-            name: "Adobe Photoshop",
-            level: 85,
-            description: "Digital graphics & banners",
-          },
-          {
-            name: "Adobe Illustrator",
-            level: 80,
-            description: "Vector graphics & logos",
-          },
-          {
-            name: "Content Creation",
-            level: 80,
-            description: "Marketing & social assets",
-          },
-          { name: "Spline", level: 65, description: "3D scenes & animations" },
-          {
-            name: "Framer",
-            level: 55,
-            description: "Interactive prototyping (learning)",
-          },
-        ],
-      },
-    ],
+  // Pull groups from i18n (levels & names live in JSON so you control them there)
+  const groups = t("groups", { returnObjects: true }) || [];
+
+  // Accent colors per category id (kept in code so theme can drive it)
+  const accentById = useMemo(
+    () => ({
+      frontend: theme.colors.primary,
+      backend: theme.colors.dark,
+      design: theme.colors.grey,
+    }),
     [theme]
   );
 
-  const active = categories[activeCategory];
+  // Merge accents into groups
+  const categories = useMemo(
+    () =>
+      (groups || []).map((g) => ({
+        ...g,
+        accent: accentById[g.id] || theme.colors.primary,
+      })),
+    [groups, accentById, theme.colors.primary]
+  );
+
+  const [activeCategory, setActiveCategory] = useState(0);
+  const [hovered, setHovered] = useState(null);
+  const active = categories[activeCategory] || {
+    title: "",
+    skills: [],
+    accent: theme.colors.primary,
+  };
 
   // frosted section wrapper (to match Home/About)
   const glassBg = isDarkMode ? "rgba(17,24,39,0.28)" : "rgba(255,255,255,0.42)";
@@ -385,20 +304,24 @@ const Skills = ({ isDarkMode = false }) => {
               letterSpacing: ".02em",
             }}
           >
-            Skills
+            {t("title", { defaultValue: "Skills" })}
           </span>
         </div>
 
-        {/* Title + subtitle */}
+        {/* Subtitle */}
         <p style={subtitleStyle}>
-          Explore my expertise across development and design
+          {t("subtitle", {
+            defaultValue: "Explore my expertise across development and design",
+          })}
         </p>
 
         {/* Tabs */}
         <nav
           className="skills-tabs"
           style={tabsWrapStyle}
-          aria-label="Skill categories"
+          aria-label={t("aria.categories", {
+            defaultValue: "Skill categories",
+          })}
         >
           {categories.map((cat, i) => {
             const isActive = i === activeCategory;
@@ -416,10 +339,11 @@ const Skills = ({ isDarkMode = false }) => {
                   (e.currentTarget.style.transform = "translateY(0)")
                 }
                 onMouseDown={(e) => {
-                  // kill press effects
                   e.currentTarget.style.transform = "none";
                   e.currentTarget.style.boxShadow = "none";
                 }}
+                aria-pressed={isActive}
+                aria-label={cat.title}
               >
                 {cat.title}
               </button>
@@ -438,7 +362,7 @@ const Skills = ({ isDarkMode = false }) => {
           }}
         >
           <Logo
-            name={active.skills[0]?.name || "React.js"}
+            name={active.skills?.[0]?.name || "React.js"}
             size={20}
             accent={active.accent}
           />
@@ -447,7 +371,7 @@ const Skills = ({ isDarkMode = false }) => {
               margin: 0,
               fontSize: "1.12rem",
               fontWeight: 800,
-              color: active.titleColor || theme.colors.text.primary,
+              color: theme.colors.text.primary,
             }}
           >
             {active.title}
@@ -456,7 +380,7 @@ const Skills = ({ isDarkMode = false }) => {
 
         {/* Skills Grid */}
         <div style={gridStyle}>
-          {active.skills.map((s) => (
+          {(active.skills || []).map((s) => (
             <div
               key={s.name}
               style={cardStyle}
@@ -496,7 +420,10 @@ const Skills = ({ isDarkMode = false }) => {
                 aria-valuenow={s.level}
                 aria-valuemin={0}
                 aria-valuemax={100}
-                aria-label={`${s.name} proficiency`}
+                aria-label={t("aria.skillProficiency", {
+                  name: s.name,
+                  defaultValue: "{{name}} proficiency",
+                })}
                 style={progressTrackStyle}
               >
                 <div
@@ -527,10 +454,13 @@ const Skills = ({ isDarkMode = false }) => {
 
         {/* Pager Dots */}
         <div className="skills-dots" style={dotRowStyle}>
-          {categories.map((_, i) => (
+          {categories.map((cat, i) => (
             <button
-              key={i}
-              aria-label={`Go to ${categories[i].title}`}
+              key={cat.id}
+              aria-label={t("aria.gotoCategory", {
+                title: cat.title,
+                defaultValue: "Go to {{title}}",
+              })}
               onClick={() => setActiveCategory(i)}
               style={dotStyle(i === activeCategory)}
               onMouseDown={(e) => {
@@ -544,26 +474,19 @@ const Skills = ({ isDarkMode = false }) => {
 
       {/* micro CSS */}
       <style>{`
-        /* Remove focus rings and press effects on tabs & dots */
         .skills-tabs button,
-        .skills-dots button {
-          outline: none;
-        }
+        .skills-dots button { outline: none; }
         .skills-tabs button:focus,
         .skills-tabs button:focus-visible,
         .skills-dots button:focus,
         .skills-dots button:focus-visible {
-          outline: none !important;
-          box-shadow: none !important;
+          outline: none !important; box-shadow: none !important;
         }
         .skills-tabs button:active,
         .skills-dots button:active {
-          transform: none !important;
-          box-shadow: none !important;
+          transform: none !important; box-shadow: none !important;
         }
-
         @media (max-width: 560px) {
-          /* tighten grid on phones */
           section > div[style*="grid"] { gap: .75rem !important; }
         }
       `}</style>

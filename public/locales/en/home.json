@@ -1,0 +1,19 @@
+{
+  "hero": {
+    "greeting": "Hello",
+    "name": "Rocío Díaz Ramos",
+    "who": "I'm",
+    "role": "Web Designer & Developer",
+    "title": "Hi, I'm Rocío",
+    "subtitle": "I design and code modern and accessible websites.",
+    "description": "I craft clean, user-friendly interfaces and robust backends using React, Node, and MongoDB. I care about performance, accessibility, and tidy component architectures. "
+  },
+  "chips": {
+    "location": "Hamburg, DE",
+    "available": "Available"
+  },
+  "cta": {
+    "viewProjects": "View Projects",
+    "contactMe": "Contact Me"
+  }
+}

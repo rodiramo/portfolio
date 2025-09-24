@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DottedBg from "./components/DottedBg.jsx";
+import "./i18n";
 import { useTheme } from "./theme.js";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import NavBar from "./components/NavBar.jsx";
@@ -61,9 +62,12 @@ const App = () => {
             element={<NavBar isDarkMode={isDark} setIsDarkMode={setIsDark} />}
           />
           <Route path="/projects" element={<Projects isDarkMode={isDark} />} />
+          // App.jsx (routes)
           <Route
             path="/projects/:slug"
-            element={<ProjectDetail isDarkMode={isDark} />}
+            element={
+              <ProjectDetail isDarkMode={isDark} setIsDarkMode={setIsDark} />
+            }
           />
           <Route path="*" element={<Projects isDarkMode={isDark} />} />
         </Routes>
