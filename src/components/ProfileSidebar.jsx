@@ -45,6 +45,7 @@ const CircleProgress = ({
 /** Left column: avatar, name, location, languages + socials */
 const ProfileSidebar = ({
   isDarkMode = false,
+  role,
   name = "Rocio Diaz Ramos",
   locationText = "Europe/Hamburg",
   avatarSrc = "/assets/pfp.jpeg",
@@ -89,7 +90,7 @@ const ProfileSidebar = ({
         background: glassBg,
         border: glassBorder,
         backdropFilter: "blur(1.7px)",
-        glow,
+
         flexDirection: "column",
         alignItems: "center",
         gap: "0.75rem",
@@ -142,7 +143,7 @@ const ProfileSidebar = ({
             color: theme.colors.text.secondary,
           }}
         >
-          Web Designer and Developer
+          {role}
         </div>
       </div>
       {/* Location */}

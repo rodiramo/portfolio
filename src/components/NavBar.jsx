@@ -149,7 +149,6 @@ const NavBar = (props) => {
     { title: t("nav.about"), icon: User, id: "about" },
     { title: t("nav.skills"), icon: Code2, id: "skills" },
     { title: t("nav.projects"), icon: FolderOpen, id: "projects" },
-    { title: t("nav.settings"), icon: Settings, id: "config", isConfig: true },
   ];
 
   const isActive = (id) => activeSection === id;
@@ -748,80 +747,6 @@ const NavBar = (props) => {
             </div>
           </div>
         )}
-
-        {/* Mobile Config Menu */}
-        {isConfigMenuOpen && (
-          <div
-            className="absolute bottom-full left-0 right-0 mb-1 min-w-max rounded-lg shadow-lg config-menu"
-            style={{
-              backgroundColor: theme.colors.surface,
-              border: `1px solid ${theme.colors.border}`,
-              minWidth: "220px",
-            }}
-          >
-            <div className="px-4 py-3">
-              <h3
-                className="text-sm font-semibold mb-3"
-                style={{ color: theme.colors.text.primary }}
-              >
-                {t("nav.settings")}
-              </h3>
-
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span
-                    className="text-sm"
-                    style={{ color: theme.colors.text.primary }}
-                  >
-                    {t("nav.darkMode")}
-                  </span>
-                  <button
-                    onClick={toggleDark}
-                    className="flex items-center px-3 py-1.5 rounded-lg text-sm transition-colors"
-                    style={{
-                      backgroundColor: dark
-                        ? theme.colors.primary
-                        : theme.colors.border,
-                      color: dark
-                        ? theme.colors.text.inverse
-                        : theme.colors.text.primary,
-                      border: "none",
-                      outline: "none",
-                    }}
-                    aria-label={t("nav.darkMode")}
-                    title={t("nav.darkMode")}
-                  >
-                    {dark ? <Moon size={16} /> : <Sun size={16} />}
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span
-                    className="text-sm"
-                    style={{ color: theme.colors.text.primary }}
-                  >
-                    {t("nav.language")}
-                  </span>
-                  <select
-                    value={selectedLanguage}
-                    onChange={(e) => changeLanguage(e.target.value)}
-                    className="text-sm rounded-lg px-3 py-1.5"
-                    style={{
-                      backgroundColor: theme.colors.border,
-                      color: theme.colors.text.primary,
-                      border: "none",
-                      outline: "none",
-                    }}
-                    aria-label={t("nav.language")}
-                  >
-                    <option value="en">EN</option>
-                    <option value="de">DE</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </nav>
 
       {/* ==== Main Content (full mode only) ==== */}
@@ -835,6 +760,7 @@ const NavBar = (props) => {
           ["--nav-h"]: "72px",
           maxWidth: "1500px",
           margin: "0 auto",
+          padding: "1rem",
           display: "grid",
           gap: "2rem",
         }}
@@ -851,6 +777,7 @@ const NavBar = (props) => {
             isDarkMode={dark}
             name={t("profile.name")}
             locationText={t("profile.location")}
+            role={t("profile.role")}
             avatarSrc="/assets/pfp.jpeg"
             languages={[
               {
@@ -948,7 +875,7 @@ const NavBar = (props) => {
         @media (min-width: 1025px) {
           .sidebar {
             position: sticky;
-            top: calc(var(--nav-h) + 2rem);
+            top: calc(var(--nav-h) + 1rem);
             align-self: start;
           }
         }

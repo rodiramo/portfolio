@@ -293,54 +293,67 @@ export default function CaseStudyLayout({
   return (
     <div
       style={{
-        maxWidth: 1500, // wider content
+        maxWidth: 1500,
         margin: "0 auto",
-        marginTop: "5REM",
+        marginTop: "5rem",
         padding: "16px 16px 28px",
         color: theme.colors.text.primary,
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100dvh",
       }}
     >
-      {/* Sticky back pill */}
+      {" "}
+      {/* Bottom Back Bar */}
+      {/* Back button — fixed overlay at bottom */}
       <div
         style={{
-          position: "sticky",
-          top: 12,
-          zIndex: 30,
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          width: "fit-content",
-          padding: 6,
-          backdropFilter: "blur(8px) saturate(120%)",
-          WebkitBackdropFilter: "blur(8px) saturate(120%)",
-          background: `${theme.colors.surface}AA`,
-          border: `1px solid ${borderCol}`,
-          borderRadius: 999,
-          marginBottom: 12,
+          position: "fixed",
+          left: "4rem",
+          bottom: "max(12px, env(safe-area-inset-bottom))",
+          transform: "translateX(-50%)",
+          zIndex: 9999,
+          pointerEvents: "none", // lets page interactions pass through, except the button
         }}
       >
         <button
           onClick={onBack || (() => window.history.back())}
           style={{
+            pointerEvents: "auto",
             display: "inline-flex",
             alignItems: "center",
             gap: 8,
-            padding: "8px 12px",
+            padding: "10px 14px",
             borderRadius: 999,
             border: `1px solid ${theme.colors.border}`,
-            background: cardGlass,
+            background: `${theme.colors.surface}CC`, // overlay feel, slightly translucent
+            backdropFilter: "blur(8px) saturate(120%)",
+            WebkitBackdropFilter: "blur(8px) saturate(120%)",
             color: theme.colors.text.primary,
             cursor: "pointer",
             fontWeight: 800,
+            boxShadow: isDarkMode
+              ? "0 12px 22px rgba(0,0,0,.28)"
+              : "0 12px 22px rgba(0,0,0,.12)",
+            transition: "transform .15s ease, box-shadow .15s ease",
           }}
           aria-label={L.back}
           title={L.back}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-1px)";
+            e.currentTarget.style.boxShadow = "0 14px 26px rgba(0,0,0,.28)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = isDarkMode
+              ? "0 12px 22px rgba(0,0,0,.28)"
+              : "0 12px 22px rgba(0,0,0,.12)";
+          }}
         >
           <ArrowLeft size={16} />
           {L.back}
         </button>
       </div>
-
       {/* HERO */}
       <section
         style={{
@@ -565,7 +578,6 @@ export default function CaseStudyLayout({
           </div>
         )}
       </section>
-
       {/* CONTENT (single column, full width) */}
       <section
         style={{

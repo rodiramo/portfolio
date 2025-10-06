@@ -336,7 +336,7 @@ const Header = ({
 @keyframes wave { 0%,100%{ transform: rotate(0deg);} 10%,30%{ transform: rotate(14deg);} 20%{ transform: rotate(-8deg);} 40%{ transform: rotate(14deg);} 50%{ transform: rotate(-4deg);} 60%{ transform: rotate(10deg);} }
 .wave { animation: wave 2s ease-in-out infinite; transform-origin: 70% 70%; display: inline-flex; align-items: center; justify-content: center; }
 .responsive-container { width: 100%; margin-inline: auto; }
-@media (max-width: 768px) { .responsive-container { margin-bottom: -54px !important; } }
+@media (max-width: 768px) { .responsive-container { margin-bottom: -54px !important;     height: 60vh !important;} }
 @media (max-width: 480px) { .responsive-container { margin-bottom: -34px !important; } }`}</style>
     </div>
   );
