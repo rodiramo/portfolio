@@ -1,3 +1,4 @@
+// src/components/ProfileSidebar.jsx
 import React from "react";
 import { Earth, Github, Linkedin, Figma, Mail } from "lucide-react";
 import { useTheme } from "../theme.js";
@@ -5,12 +6,12 @@ import { useTheme } from "../theme.js";
 /** Small, self-contained progress ring */
 const CircleProgress = ({
   percentage,
-  size = 20,
-  stroke = 2,
+  size = 40,
+  stroke = 3.5,
   color,
   track,
 }) => {
-  const radius = (size - stroke * 5) / 2;
+  const radius = (size - stroke * 1) / 2.5;
   const C = 2 * Math.PI * radius;
   const offset = C - (percentage / 100) * C;
 
@@ -67,51 +68,39 @@ const ProfileSidebar = ({
 }) => {
   const theme = useTheme(isDarkMode);
 
-  // Very translucent glass colors (so it never looks like a solid block)
-  const glassBg = theme.isDark
-    ? "rgba(17, 24, 39, 0.18)" // dark glass
-    : "rgba(255, 255, 255, 0.12)"; // light glass
-
-  // Subtle border for glass panel
-  const glassBorder = theme.isDark
-    ? "1px solid rgba(255,255,255,0.14)"
-    : "1px solid rgba(15,23,42,0.12)";
-
-  // Soft radial glow behind the card (kept *very* subtle)
-  const glow = theme.isDark
-    ? "radial-gradient(600px 280px at 50% 40%, rgba(192, 237, 58, 0.2), transparent 60%)"
-    : "radial-gradient(600px 280px at 50% 40%, rgba(172, 232, 135, 0.26), transparent 60%)";
+  // --- bring over the Skills glass variables ---
+  const glassBg = isDarkMode ? "rgba(17,24,39,0.28)" : "rgba(255,255,255,0.42)";
+  const borderCol = isDarkMode ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.08)";
+  const cardGlass = isDarkMode
+    ? "rgba(17,24,39,0.32)"
+    : "rgba(255,255,255,0.56)";
+  const cardShadow = isDarkMode
+    ? "0 12px 28px rgba(0,0,0,0.28)"
+    : "0 14px 28px rgba(0,0,0,0.10)";
 
   return (
     <div
       className="left-column"
       style={{
-        display: "flex",
+        // match Skills container styling
+        position: "relative",
         background: glassBg,
-        border: glassBorder,
-        backdropFilter: "blur(1.7px)",
-
+        border: `1px solid ${borderCol}`,
+        borderRadius: 16,
+        backdropFilter: "blur(1px) saturate(120%)",
+        WebkitBackdropFilter: "blur(1px) saturate(120%)",
+        boxShadow: cardShadow,
+        overflow: "hidden",
+        // component specifics
+        display: "flex",
         flexDirection: "column",
         alignItems: "center",
         gap: "0.75rem",
-        borderRadius: 10,
-        padding: "3rem",
+        padding: "clamp(20px, 3vw, 32px)",
         flexShrink: 0,
+        color: theme.colors.text.primary,
       }}
     >
-      {" "}
-      {/* Background glow */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          inset: 0,
-          borderRadius: 16,
-          background: glow,
-          filter: "blur(6px)",
-          zIndex: -10,
-        }}
-      />
       {/* Profile Image */}
       <div
         className="profile-image"
@@ -126,7 +115,8 @@ const ProfileSidebar = ({
           backgroundPosition: "left",
         }}
       />
-      {/* Name */}
+
+      {/* Name + Role */}
       <div style={{ textAlign: "center" }}>
         <div
           style={{
@@ -137,15 +127,10 @@ const ProfileSidebar = ({
           }}
         >
           {name}
-        </div>{" "}
-        <div
-          style={{
-            color: theme.colors.text.secondary,
-          }}
-        >
-          {role}
         </div>
+        <div style={{ color: theme.colors.text.secondary }}>{role}</div>
       </div>
+
       {/* Location */}
       <div style={{ textAlign: "center" }}>
         <div
@@ -162,6 +147,7 @@ const ProfileSidebar = ({
           </span>
         </div>
       </div>
+
       {/* Languages */}
       <div
         className="languages-section"
@@ -172,6 +158,11 @@ const ProfileSidebar = ({
           display: "flex",
           flexDirection: "column",
           gap: "1rem",
+          // optional inner card feel like Skills cards
+          background: cardGlass,
+          border: `1px solid ${borderCol}`,
+          borderRadius: 14,
+          padding: "0.75rem",
         }}
       >
         <div
@@ -194,14 +185,15 @@ const ProfileSidebar = ({
                 display: "flex",
                 alignItems: "center",
                 borderRadius: 30,
-                padding: "0.25rem 0.5rem 0.25rem 0.5rem",
+                padding: "0.5rem 0.75rem",
+                border: `1px solid ${theme.colors.primary}33`,
               }}
             >
               <CircleProgress
                 percentage={lang.proficiency}
-                size={20}
+                size={25}
                 color={theme.colors.primary}
-                track={theme.colors.border}
+                track={borderCol}
               />
               <div style={{ textAlign: "left", marginLeft: "0.5rem" }}>
                 <div
@@ -218,13 +210,12 @@ const ProfileSidebar = ({
           ))}
         </div>
       </div>
+
       {/* Social icons */}
       <div
         className="socials"
         style={{
           marginTop: "1rem",
-          paddingTop: "1rem",
-          borderTop: `1px solid ${theme.colors.border}`,
           display: "flex",
           gap: "0.6rem",
           flexWrap: "wrap",
@@ -274,6 +265,7 @@ const ProfileSidebar = ({
           </a>
         ))}
       </div>
+
       {/* Responsive tweaks */}
       <style>{`
         @media (max-width: 480px) {

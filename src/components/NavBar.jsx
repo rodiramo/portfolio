@@ -29,6 +29,10 @@ import ProfileSidebar from "../components/ProfileSidebar.jsx";
 import { useTranslation } from "react-i18next";
 
 const LANGS = ["en", "de"];
+const CV_BY_LANG = {
+  en: "/cv_en.pdf",
+  de: "/cv_de.pdf",
+};
 
 // ✅ NavBar with compact mode
 const NavBar = (props) => {
@@ -66,6 +70,7 @@ const NavBar = (props) => {
     const next = LANGS[(idx + 1) % LANGS.length];
     changeLanguage(next);
   };
+  const cvHref = CV_BY_LANG[selectedLanguage] ?? CV_BY_LANG.en;
 
   // State used only for full mode
   const [activeSection, setActiveSection] = useState("home");
@@ -153,14 +158,13 @@ const NavBar = (props) => {
 
   const isActive = (id) => activeSection === id;
 
-  /* ---------- COMPACT MODE: only top bars (desktop + mobile) ---------- */
   if (compact) {
     return (
       <div>
         {/* Desktop Top Bar (compact) */}
         <nav
-          className="fixed top-0 left-0 right-0 z-50 hidden lg:flex items-center justify-between p-1 m-auto"
-          style={{ maxWidth: "1800px" }}
+          className="fixed top-0 left-0 right-0 z-50 hidden lg:flex items-center justify-between m-auto"
+          style={{ maxWidth: "1800px", padding: "0 1rem" }}
         >
           <Logo isDarkMode={dark} />
 
@@ -225,7 +229,8 @@ const NavBar = (props) => {
             </button>
 
             <a
-              href="/cv.pdf"
+              href={cvHref}
+              download
               className="flex items-center rounded-full transition-all duration-200"
               style={{
                 background: theme.colors.light,
@@ -307,7 +312,8 @@ const NavBar = (props) => {
 
             {/* CV */}
             <a
-              href="/cv.pdf"
+              href={cvHref}
+              download
               className="flex items-center rounded-full transition-all duration-200"
               style={{
                 background: theme.colors.light,
@@ -339,13 +345,12 @@ const NavBar = (props) => {
     );
   }
 
-  /* ---------- FULL MODE: original homepage layout ---------- */
   return (
     <div className="min-h-screen">
       {/* Desktop Top Navbar */}
       <nav
-        className="fixed top-0 left-0 right-0 z-50 hidden lg:flex items-center justify-between p-1 m-auto"
-        style={{ maxWidth: "1800px" }}
+        className="fixed top-0 left-0 right-0 z-50 hidden lg:flex items-center justify-between m-auto"
+        style={{ maxWidth: "1800px", padding: "0 1rem" }}
       >
         <Logo isDarkMode={dark} />
 
@@ -597,7 +602,8 @@ const NavBar = (props) => {
 
           {/* Curriculum */}
           <a
-            href="/cv.pdf"
+            href={cvHref}
+            download
             className="flex items-center rounded-full transition-all duration-200"
             style={{
               background: theme.colors.light,

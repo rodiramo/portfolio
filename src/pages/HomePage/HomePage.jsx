@@ -85,10 +85,9 @@ const Header = ({
   name, // falls back to t("hero.name") if omitted
   title, // falls back to t("hero.role")
   description, // falls back to t("hero.description")
-  headerHeight = "70vh",
+  headerHeight = "65vh",
   isDarkMode,
   overflowHeight = "120px",
-  blurPx = 1,
   onPrimary = null, // e.g., () => scrollToSection('projects')
   onSecondary = null, // e.g., () => scrollToSection('contact')
 }) => {
@@ -108,19 +107,17 @@ const Header = ({
   const chipAvailable = t("chips.available", { defaultValue: "Available" });
   const ctaProjects = t("cta.viewProjects", { defaultValue: "View Projects" });
   const ctaContact = t("cta.contactMe", { defaultValue: "Contact Me" });
+  // --- bring over the Skills glass variables ---
+  const borderCol = isDarkMode ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.08)";
 
+  const cardShadow = isDarkMode
+    ? "0 12px 28px rgba(0,0,0,0.28)"
+    : "0 14px 28px rgba(0,0,0,0.10)";
   // Very translucent glass colors (so it never looks like a solid block)
-  const glassBg = theme.isDark
-    ? "rgba(17, 24, 39, 0.18)"
-    : "rgba(255, 255, 255, 0.12)";
-  // Subtle border for glass panel
-  const glassBorder = theme.isDark
-    ? "1px solid rgba(255,255,255,0.14)"
-    : "1px solid rgba(15,23,42,0.12)";
-  // Soft radial glow behind the card (kept *very* subtle)
+
   const glow = theme.isDark
-    ? "radial-gradient(600px 280px at 50% 40%, rgba(124,58,237,0.18), transparent 60%)"
-    : "radial-gradient(600px 280px at 50% 40%, rgba(139,92,246,0.15), transparent 60%)";
+    ? "radial-gradient(1000px 300px at 50% 40%, rgba(124,58,237,0.18), transparent 60%)"
+    : "radial-gradient(1000px 280px at 50% 40%, rgba(139,92,246,0.15), transparent 60%)";
 
   return (
     <div
@@ -129,10 +126,11 @@ const Header = ({
         position: "relative",
         maxWidth: 1500,
         width: "100%",
+
         height: headerHeight,
         margin: "0 auto",
+        marginTop: 16,
         padding: "0 12px",
-        borderRadius: 12,
         overflow: "visible",
         marginBottom: `-${overflowHeight}`,
       }}
@@ -157,16 +155,13 @@ const Header = ({
           height: "50vh",
           minHeight: 360,
           display: "flex",
+          border: `1px solid ${borderCol}`,
+          borderRadius: 16,
+          backdropFilter: "blur(1px) saturate(120%)",
+          WebkitBackdropFilter: "blur(1px) saturate(120%)",
+          boxShadow: cardShadow,
           alignItems: "center",
           justifyContent: "center",
-          borderRadius: 16,
-          background: glassBg,
-          border: glassBorder,
-          backdropFilter: `blur(${blurPx}px) saturate(120%)`,
-          WebkitBackdropFilter: `blur(${blurPx}px) saturate(120%)`,
-          boxShadow: theme.isDark
-            ? "inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 24px rgba(0,0,0,0.20)"
-            : "inset 0 1px 0 rgba(255,255,255,0.35), 0 8px 20px rgba(0,0,0,0.06)",
           zIndex: 1,
         }}
       >
@@ -245,7 +240,6 @@ const Header = ({
               display: "grid",
               placeItems: "center",
               gap: 6,
-              cursor: "pointer",
             }}
             className="scroll-indicator"
           >
@@ -254,9 +248,6 @@ const Header = ({
                 width: 26,
                 height: 40,
                 borderRadius: 13,
-                background: isDarkMode
-                  ? "rgba(255,255,255,0.07)"
-                  : "rgba(15,23,42,0.07)",
                 border: `2px solid ${theme.colors.primary}50`,
                 display: "grid",
                 placeItems: "center",

@@ -20,12 +20,9 @@ const TimelineItem = ({ item, index, type, isVisible, isDarkMode }) => {
   const period = resolve("period");
   const description = resolve("description");
 
-  const glassBg = isDarkMode
-    ? "rgba(17, 24, 39, 0.32)"
-    : "rgba(255, 255, 255, 0.52)";
-
-  const borderCol = isDarkMode ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.08)";
-
+  // --- bring over the Skills glass variables ---
+  const glassBg = isDarkMode ? "rgba(17,24,39,0.28)" : "rgba(255,255,255,0.42)";
+  const borderCol = isDarkMode ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.08)";
   return (
     <div
       style={{
@@ -179,19 +176,16 @@ const About = ({ isDarkMode = false }) => {
   const timelineRef = useRef(null);
 
   // Very translucent glass colors (so it never looks like a solid block)
-  const glassBg = theme.isDark
-    ? "rgba(17, 24, 39, 0.18)" // dark glass
-    : "rgba(255, 255, 255, 0.12)"; // light glass
-
-  // Subtle border for glass panel
-  const glassBorder = theme.isDark
-    ? "1px solid rgba(255,255,255,0.14)"
-    : "1px solid rgba(15,23,42,0.12)";
+  const glassBg = isDarkMode ? "rgba(17,24,39,0.28)" : "rgba(255,255,255,0.42)";
+  const borderCol = isDarkMode ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.08)";
+  const cardShadow = isDarkMode
+    ? "0 12px 28px rgba(0,0,0,0.28)"
+    : "0 14px 28px rgba(0,0,0,0.10)";
 
   // Soft radial glow behind the card (kept *very* subtle)
   const glow = theme.isDark
-    ? "radial-gradient(600px 280px at 50% 40%, rgba(192, 237, 58, 0.2), transparent 60%)"
-    : "radial-gradient(600px 280px at 50% 40%, rgba(172, 232, 135, 0.26), transparent 60%)";
+    ? "radial-gradient(600px 280px at 50% 40%, rgba(192, 237, 58, 0.09), transparent 60%)"
+    : "radial-gradient(600px 280px at 50% 40%, rgba(172, 232, 135, 0.14), transparent 60%)";
 
   // --- Localized data (from about.json) ---
   const studies = t("studies", { returnObjects: true }) || [];
@@ -247,13 +241,11 @@ const About = ({ isDarkMode = false }) => {
       <section
         style={{
           background: glassBg,
-          border: glassBorder,
+          border: `1px solid ${borderCol}`,
           backdropFilter: "blur(1.7px)",
+          boxShadow: cardShadow,
           borderRadius: 16,
           WebkitBackdropFilter: "blur(1px) saturate(120%)",
-          boxShadow: isDarkMode
-            ? "0 20px 44px rgba(0,0,0,0.28)"
-            : "0 20px 44px rgba(0,0,0,0.08)",
           padding: "clamp(16px, 2.2vw, 2rem)",
         }}
       >
