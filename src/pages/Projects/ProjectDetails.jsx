@@ -18,7 +18,10 @@ export default function ProjectDetail({ isDarkMode = false, setIsDarkMode }) {
   // Base fields
   const title = t(`${ns}.title`, { defaultValue: "" });
   const subtitle = t(`${ns}.subtitle`, { defaultValue: "" });
-  const coverImage = t(`${ns}.coverImage`, { defaultValue: "" });
+  const coverImage = t(`${ns}.coverImage`, {
+    returnObjects: true,
+    defaultValue: [],
+  });
   const summary = t(`${ns}.summary`, { defaultValue: "" });
   const role = t(`${ns}.role`, { defaultValue: "" });
   const timeframe = t(`${ns}.timeframe`, { defaultValue: "" });
@@ -71,6 +74,11 @@ export default function ProjectDetail({ isDarkMode = false, setIsDarkMode }) {
   });
 
   const hasCase = Boolean(title);
+  console.log("coverImage:", coverImage);
+  console.log(
+    "keys under cases.navippon =",
+    t("cases.navippon", { returnObjects: true })
+  );
 
   // Fallback from cards[]
   const rawCards = t("cards", { returnObjects: true });

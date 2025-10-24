@@ -128,10 +128,15 @@
     "navippon": {
       "title": "Navippon",
       "subtitle": "Japan-Reiseführer — Entdeckung, Routen, Kultur",
-      "coverImage": "https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=1600&auto=format&fit=crop",
+      "coverImage": [
+        "/assets/navippon/cover1.png",
+        "/assets/navippon/cover2.png",
+        "/assets/navippon/cover3.png",
+        "/assets/navippon/cover4.png"
+      ],
       "summary": "Navippon unterstützt Reisende beim Planen und Entdecken in Japan: kuratierte Orte, kombinierte Karten- und Listenansicht sowie Tagespläne. Als Zweierteam haben wir Marke, Produkt und Launch Ende-zu-Ende aufgebaut.",
       "role": "Product Design & Frontend",
-      "timeframe": "2023–2024",
+      "timeframe": "2023–2025",
       "team": "2 Personen (Design + Entwicklung)",
 
       "tools": [

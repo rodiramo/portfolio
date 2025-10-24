@@ -1,5 +1,5 @@
 // src/pages/Projects/case-study/CaseStudyLayout.jsx
-import React from "react";
+import React, { useState } from "react";
 import { useTheme } from "../../../theme.js";
 import { useTranslation } from "react-i18next";
 import {
@@ -132,7 +132,7 @@ const PillLink = ({ theme, href, label, icon, ariaLabel }) => (
   </a>
 );
 
-/* ------------ numbered “steps” list (Problems/Solutions) ------------ */
+/* ------------ numbered steps list ------------ */
 const StepList = ({ items = [], theme, tone = "neutral" }) => {
   const toneCol =
     tone === "danger"
@@ -224,20 +224,20 @@ export default function CaseStudyLayout({
   timeframe,
   team,
   tools = [],
-  teamMembers = [], // [{name, role}]
+  teamMembers = [],
   /* CORE */
   responsibilities = [],
   problems = [],
   solutions = [],
   gallery = [],
   outcomes = [],
-  links = [], // [{label, href, kind?: "live"|"repo"|"doc"}]
+  links = [],
   /* FULL STORY (optional) */
   goals = [],
-  process = [], // [{title, note}]
-  brand = {}, // {logo, palette:[{name,value}], typefaces:[...], guideLink}
+  process = [],
+  brand = {},
   marketing = [],
-  merchandising = [], // image urls
+  merchandising = [],
   metrics = [],
   nextSteps = [],
   /* UX */
@@ -245,6 +245,24 @@ export default function CaseStudyLayout({
 }) {
   const theme = useTheme(isDarkMode);
   const { t } = useTranslation("projects");
+  const [lightbox, setLightbox] = useState(null);
+  // handle keyboard navigation for lightbox
+  React.useEffect(() => {
+    if (lightbox === null) return;
+    const handleKey = (e) => {
+      if (e.key === "Escape") setLightbox(null);
+      if (typeof lightbox === "number") {
+        if (e.key === "ArrowRight")
+          setLightbox((prev) => (prev + 1 >= coverImage.length ? 0 : prev + 1));
+        if (e.key === "ArrowLeft")
+          setLightbox((prev) =>
+            prev - 1 < 0 ? coverImage.length - 1 : prev - 1
+          );
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [lightbox, coverImage.length]);
 
   const L = {
     back: t("case.back", { defaultValue: "Back" }),
@@ -260,7 +278,6 @@ export default function CaseStudyLayout({
     links: t("case.links", { defaultValue: "Links" }),
     problems: t("case.problems", { defaultValue: "Problems" }),
     solutions: t("case.solutions", { defaultValue: "Solutions" }),
-    /* full story */
     goals: t("case.goals", { defaultValue: "Goals" }),
     process: t("case.process", { defaultValue: "Process" }),
     brandSys: t("case.brand", { defaultValue: "Brand System" }),
@@ -280,7 +297,6 @@ export default function CaseStudyLayout({
     ? "rgba(17,24,39,0.32)"
     : "rgba(255,255,255,0.56)";
 
-  /* choose icon for link kind */
   const linkIcon = (kind) =>
     kind === "repo" ? (
       <Github size={16} />
@@ -303,9 +319,7 @@ export default function CaseStudyLayout({
         minHeight: "100dvh",
       }}
     >
-      {" "}
-      {/* Bottom Back Bar */}
-      {/* Back button — fixed overlay at bottom */}
+      {/* Back button */}
       <div
         style={{
           position: "fixed",
@@ -313,7 +327,7 @@ export default function CaseStudyLayout({
           bottom: "max(12px, env(safe-area-inset-bottom))",
           transform: "translateX(-50%)",
           zIndex: 9999,
-          pointerEvents: "none", // lets page interactions pass through, except the button
+          pointerEvents: "none",
         }}
       >
         <button
@@ -326,7 +340,7 @@ export default function CaseStudyLayout({
             padding: "10px 14px",
             borderRadius: 999,
             border: `1px solid ${theme.colors.border}`,
-            background: `${theme.colors.surface}CC`, // overlay feel, slightly translucent
+            background: `${theme.colors.surface}CC`,
             backdropFilter: "blur(8px) saturate(120%)",
             WebkitBackdropFilter: "blur(8px) saturate(120%)",
             color: theme.colors.text.primary,
@@ -354,6 +368,7 @@ export default function CaseStudyLayout({
           {L.back}
         </button>
       </div>
+
       {/* HERO */}
       <section
         style={{
@@ -368,7 +383,6 @@ export default function CaseStudyLayout({
             : "0 16px 34px rgba(0,0,0,.10)",
         }}
       >
-        {/* soft gradient glow */}
         <div
           aria-hidden
           style={{
@@ -406,8 +420,107 @@ export default function CaseStudyLayout({
           )}
         </div>
 
-        {/* Cover with overlay links */}
-        {coverImage && (
+        {/* Cover: big main + right column thumbnails, with lightbox */}
+        {Array.isArray(coverImage) && coverImage.length > 0 ? (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "2fr 1fr",
+              gap: 10,
+              marginTop: 14,
+              borderRadius: 14,
+              overflow: "hidden",
+            }}
+          >
+            {/* Left main */}
+            <div
+              style={{
+                position: "relative",
+                borderRadius: 14,
+                overflow: "hidden",
+                border: `1px solid ${theme.colors.border}`,
+                aspectRatio: "16/9",
+              }}
+              onClick={() => setLightbox(0)}
+            >
+              <img
+                src={coverImage[0]}
+                alt="cover-main"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  cursor: "zoom-in",
+                  display: "block",
+                }}
+                loading="lazy"
+                decoding="async"
+              />
+
+              {links?.length > 0 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 10,
+                    right: 10,
+                    display: "flex",
+                    gap: 8,
+                    flexWrap: "wrap",
+                    pointerEvents: "auto",
+                  }}
+                >
+                  {links.map((l) => (
+                    <PillLink
+                      key={l.href}
+                      theme={theme}
+                      href={l.href}
+                      label={l.label}
+                      ariaLabel={`${l.label} – ${title}`}
+                      icon={linkIcon(l.kind)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Right thumbs */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateRows: "repeat(3, 1fr)",
+                gap: 10,
+              }}
+            >
+              {coverImage.slice(1, 4).map((src, i) => (
+                <div
+                  key={i}
+                  style={{
+                    position: "relative",
+                    borderRadius: 14,
+                    overflow: "hidden",
+                    border: `1px solid ${theme.colors.border}`,
+                    aspectRatio: "4/3",
+                  }}
+                  onClick={() => setLightbox(i + 1)}
+                >
+                  <img
+                    src={src}
+                    alt={`cover-thumb-${i}`}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      cursor: "zoom-in",
+                      display: "block",
+                    }}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : coverImage ? (
           <div
             style={{
               position: "relative",
@@ -432,7 +545,6 @@ export default function CaseStudyLayout({
               loading="lazy"
               decoding="async"
             />
-
             {links?.length > 0 && (
               <div
                 style={{
@@ -457,9 +569,9 @@ export default function CaseStudyLayout({
               </div>
             )}
           </div>
-        )}
+        ) : null}
 
-        {/* Summary + meta (single column, full width) */}
+        {/* Summary + meta */}
         {(summary ||
           role ||
           timeframe ||
@@ -467,7 +579,6 @@ export default function CaseStudyLayout({
           tools.length > 0 ||
           teamMembers.length > 0) && (
           <div style={{ marginTop: 16 }}>
-            {/* Summary */}
             {summary && (
               <p
                 style={{
@@ -486,7 +597,6 @@ export default function CaseStudyLayout({
               </p>
             )}
 
-            {/* meta chips in a soft container */}
             {(role || timeframe || team) && (
               <div
                 style={{
@@ -520,15 +630,8 @@ export default function CaseStudyLayout({
               </div>
             )}
 
-            {/* tools & teamMembers */}
             {(tools.length > 0 || teamMembers.length > 0) && (
-              <div
-                style={{
-                  marginTop: 10,
-                  display: "grid",
-                  gap: 10,
-                }}
-              >
+              <div style={{ marginTop: 10, display: "grid", gap: 10 }}>
                 {tools.length > 0 && (
                   <div
                     style={{
@@ -578,7 +681,8 @@ export default function CaseStudyLayout({
           </div>
         )}
       </section>
-      {/* CONTENT (single column, full width) */}
+
+      {/* CONTENT */}
       <section
         style={{
           marginTop: 18,
@@ -594,7 +698,6 @@ export default function CaseStudyLayout({
             : "0 16px 34px rgba(0,0,0,.08)",
         }}
       >
-        {/* Goals */}
         {goals.length > 0 && (
           <>
             <SectionTitle theme={theme} icon={Target}>
@@ -614,7 +717,6 @@ export default function CaseStudyLayout({
           </>
         )}
 
-        {/* Process */}
         {process.length > 0 && (
           <>
             <SectionTitle
@@ -648,7 +750,6 @@ export default function CaseStudyLayout({
           </>
         )}
 
-        {/* Brand */}
         {(brand.logo || brand.palette?.length || brand.typefaces?.length) && (
           <>
             <SectionTitle theme={theme} icon={Palette}>
@@ -737,7 +838,6 @@ export default function CaseStudyLayout({
           </>
         )}
 
-        {/* Responsibilities */}
         {responsibilities.length > 0 && (
           <>
             <SectionTitle
@@ -763,7 +863,6 @@ export default function CaseStudyLayout({
           </>
         )}
 
-        {/* Problems & Solutions (steps) */}
         {(problems.length > 0 || solutions.length > 0) && (
           <div style={{ display: "grid", gap: 16, marginTop: 8 }}>
             {problems.length > 0 && (
@@ -795,7 +894,6 @@ export default function CaseStudyLayout({
           </div>
         )}
 
-        {/* Marketing & Merch */}
         {(marketing.length > 0 || merchandising.length > 0) && (
           <>
             {marketing.length > 0 && (
@@ -870,7 +968,6 @@ export default function CaseStudyLayout({
           </>
         )}
 
-        {/* Gallery — varied widths */}
         {gallery.length > 0 && (
           <>
             <SectionTitle
@@ -892,7 +989,7 @@ export default function CaseStudyLayout({
               }}
             >
               {gallery.map((src, i) => {
-                const span2 = i % 4 === 0; // 1st, 5th, 9th...
+                const span2 = i % 4 === 0;
                 return (
                   <div
                     key={i}
@@ -928,6 +1025,7 @@ export default function CaseStudyLayout({
                       }}
                       loading="lazy"
                       decoding="async"
+                      onClick={() => setLightbox({ src })}
                     />
                   </div>
                 );
@@ -942,7 +1040,6 @@ export default function CaseStudyLayout({
           </>
         )}
 
-        {/* Results */}
         {outcomes.length > 0 && (
           <>
             <SectionTitle
@@ -968,7 +1065,6 @@ export default function CaseStudyLayout({
           </>
         )}
 
-        {/* Metrics + Next Steps */}
         {metrics.length > 0 && (
           <>
             <SectionTitle theme={theme} icon={BarChart3}>
@@ -1007,6 +1103,36 @@ export default function CaseStudyLayout({
           </>
         )}
       </section>
+
+      {/* Lightbox for cover + gallery */}
+      {lightbox !== null && (
+        <div
+          onClick={() => setLightbox(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.9)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 99999,
+            cursor: "zoom-out",
+          }}
+        >
+          <img
+            src={
+              typeof lightbox === "number" ? coverImage[lightbox] : lightbox.src
+            }
+            alt="preview"
+            style={{
+              maxWidth: "90%",
+              maxHeight: "90%",
+              objectFit: "contain",
+              borderRadius: 12,
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
