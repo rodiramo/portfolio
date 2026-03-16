@@ -28,17 +28,17 @@
         },
         {
           "name": "JavaScript",
-          "level": 60,
+          "level": 50,
           "description": "Interactive web experiences"
         },
         {
           "name": "PWA Development",
-          "level": 40,
+          "level": 50,
           "description": "Progressive Web Apps"
         },
         {
           "name": "WordPress",
-          "level": 40,
+          "level": 85,
           "description": "CMS customization & theming"
         }
       ]
@@ -49,7 +49,7 @@
       "skills": [
         {
           "name": "Node.js",
-          "level": 65,
+          "level": 75,
           "description": "Server-side JavaScript"
         },
         {
@@ -59,7 +59,7 @@
         },
         {
           "name": "MongoDB",
-          "level": 40,
+          "level": 70,
           "description": "NoSQL modeling & indexing"
         },
         {
@@ -74,7 +74,7 @@
         },
         {
           "name": "Firebase",
-          "level": 40,
+          "level": 30,
           "description": "Auth, Firestore, Functions"
         }
       ]
@@ -85,7 +85,7 @@
       "skills": [
         {
           "name": "Figma",
-          "level": 85,
+          "level": 90,
           "description": "UI/UX design & prototyping"
         },
         {
