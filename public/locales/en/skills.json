@@ -13,12 +13,12 @@
       "skills": [
         {
           "name": "React.js",
-          "level": 85,
+          "level": 75,
           "description": "Component-based development"
         },
         {
           "name": "Vue.js",
-          "level": 75,
+          "level": 40,
           "description": "Progressive JavaScript framework"
         },
         {
@@ -28,17 +28,17 @@
         },
         {
           "name": "JavaScript",
-          "level": 80,
+          "level": 60,
           "description": "Interactive web experiences"
         },
         {
           "name": "PWA Development",
-          "level": 80,
+          "level": 40,
           "description": "Progressive Web Apps"
         },
         {
           "name": "WordPress",
-          "level": 75,
+          "level": 40,
           "description": "CMS customization & theming"
         }
       ]
@@ -49,32 +49,32 @@
       "skills": [
         {
           "name": "Node.js",
-          "level": 85,
+          "level": 65,
           "description": "Server-side JavaScript"
         },
         {
           "name": "PHP Laravel",
-          "level": 80,
+          "level": 40,
           "description": "Web application framework"
         },
         {
           "name": "MongoDB",
-          "level": 90,
+          "level": 40,
           "description": "NoSQL modeling & indexing"
         },
         {
           "name": "MySQL",
-          "level": 75,
+          "level": 55,
           "description": "Relational schema & queries"
         },
         {
           "name": "API Integration",
-          "level": 85,
+          "level": 60,
           "description": "OAuth, payments, 3rd-party APIs"
         },
         {
           "name": "Firebase",
-          "level": 70,
+          "level": 40,
           "description": "Auth, Firestore, Functions"
         }
       ]
@@ -85,32 +85,32 @@
       "skills": [
         {
           "name": "Figma",
-          "level": 90,
+          "level": 85,
           "description": "UI/UX design & prototyping"
         },
         {
           "name": "Adobe Photoshop",
-          "level": 85,
+          "level": 80,
           "description": "Digital graphics & banners"
         },
         {
           "name": "Adobe Illustrator",
-          "level": 80,
+          "level": 75,
           "description": "Vector graphics & logos"
         },
         {
           "name": "Content Creation",
-          "level": 80,
+          "level": 75,
           "description": "Marketing & social assets"
         },
         {
           "name": "Spline",
-          "level": 65,
+          "level": 45,
           "description": "3D scenes & animations"
         },
         {
           "name": "Framer",
-          "level": 55,
+          "level": 35,
           "description": "Interactive prototyping (learning)"
         }
       ]
