@@ -1,11 +1,8 @@
-// src/pages/Projects/Projects.jsx
-import React from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../theme.js";
 import { FolderOpen, BookOpen, ArrowUpRight, GitBranch } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-/* --- tiny chip/tag --- */
 const Tag = ({ theme, children }) => (
   <span
     style={{

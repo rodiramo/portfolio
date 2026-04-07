@@ -202,7 +202,7 @@
           { "name": "Paper", "value": "#F8FAFC" }
         ],
         "typefaces": ["Inter (UI)", "Noto Sans JP (Locale)"],
-        "guideLink": "#"
+        "guideLink": "/assets/navippon/guide.pdf"
       },
 
       "responsibilities": [
@@ -273,7 +273,7 @@
     "robol": {
       "title": "Robol Solutions",
       "subtitle": "Marketing site — design system + developer handoff",
-      "coverImage": "https://images.unsplash.com/photo-1529336953121-adb2bcd0f5d6?q=80&w=1600&auto=format&fit=crop",
+      "coverImage": "/assets/robol.png",
       "summary": "I designed a compact design system in Figma (tokens, components, variants) and worked closely with developers to ship a clean, responsive marketing site fast.",
       "role": "Product Designer",
       "timeframe": "2023–2024",

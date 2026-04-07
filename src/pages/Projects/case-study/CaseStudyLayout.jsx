@@ -1,4 +1,3 @@
-// src/pages/Projects/case-study/CaseStudyLayout.jsx
 import React, { useState } from "react";
 import { useTheme } from "../../../theme.js";
 import { useTranslation } from "react-i18next";
@@ -12,16 +11,13 @@ import {
   ListOrdered,
   Wrench,
   ListChecks,
-  Images,
-  Megaphone,
-  ShoppingBag,
   BarChart3,
   Route,
   Users,
   Calendar,
 } from "lucide-react";
+import Footer from "../../../components/Footer.jsx";
 
-/* ------------ tiny layout helpers ------------ */
 const Row = ({ style = {}, children }) => (
   <div style={{ display: "flex", gap: 12, flexWrap: "wrap", ...style }}>
     {children}
@@ -48,7 +44,6 @@ const Chip = ({ children, theme }) => (
   </span>
 );
 
-/* ------------ headings with small subtitle ------------ */
 const SectionTitle = ({ theme, icon: Icon, children, sub }) => (
   <div style={{ margin: "22px 0 12px 0" }}>
     <div
@@ -96,7 +91,6 @@ const SectionTitle = ({ theme, icon: Icon, children, sub }) => (
   </div>
 );
 
-/* ------------ pills for external links (matches Projects) ------------ */
 const PillLink = ({ theme, href, label, icon, ariaLabel }) => (
   <a
     href={href}
@@ -131,15 +125,13 @@ const PillLink = ({ theme, href, label, icon, ariaLabel }) => (
     {label}
   </a>
 );
-
-/* ------------ numbered steps list ------------ */
 const StepList = ({ items = [], theme, tone = "neutral" }) => {
   const toneCol =
     tone === "danger"
       ? "#ef4444"
       : tone === "success"
-      ? "#22c55e"
-      : theme.colors.primary;
+        ? "#22c55e"
+        : theme.colors.primary;
 
   const chipBg = `${toneCol}1A`;
   const chipBr = `${toneCol}40`;
@@ -194,7 +186,6 @@ const StepList = ({ items = [], theme, tone = "neutral" }) => {
   );
 };
 
-/* ------------ brand palette swatches ------------ */
 const ColorSwatch = ({ token }) => (
   <div style={{ display: "grid", gap: 6, placeItems: "center" }}>
     <div
@@ -211,42 +202,33 @@ const ColorSwatch = ({ token }) => (
   </div>
 );
 
-/* =================================================================== */
 export default function CaseStudyLayout({
   isDarkMode = false,
-  /* HERO */
+
   title,
   subtitle,
   coverImage,
   summary,
-  /* META */
   role,
   timeframe,
   team,
   tools = [],
   teamMembers = [],
-  /* CORE */
   responsibilities = [],
   problems = [],
   solutions = [],
-  gallery = [],
   outcomes = [],
   links = [],
-  /* FULL STORY (optional) */
   goals = [],
   process = [],
   brand = {},
-  marketing = [],
-  merchandising = [],
   metrics = [],
   nextSteps = [],
-  /* UX */
   onBack,
 }) {
   const theme = useTheme(isDarkMode);
   const { t } = useTranslation("projects");
   const [lightbox, setLightbox] = useState(null);
-  // handle keyboard navigation for lightbox
   React.useEffect(() => {
     if (lightbox === null) return;
     const handleKey = (e) => {
@@ -256,7 +238,7 @@ export default function CaseStudyLayout({
           setLightbox((prev) => (prev + 1 >= coverImage.length ? 0 : prev + 1));
         if (e.key === "ArrowLeft")
           setLightbox((prev) =>
-            prev - 1 < 0 ? coverImage.length - 1 : prev - 1
+            prev - 1 < 0 ? coverImage.length - 1 : prev - 1,
           );
       }
     };
@@ -273,7 +255,6 @@ export default function CaseStudyLayout({
     responsibilities: t("case.responsibilities", {
       defaultValue: "Responsibilities",
     }),
-    gallery: t("case.gallery", { defaultValue: "Gallery" }),
     outcome: t("case.outcome", { defaultValue: "Outcome" }),
     links: t("case.links", { defaultValue: "Links" }),
     problems: t("case.problems", { defaultValue: "Problems" }),
@@ -282,7 +263,6 @@ export default function CaseStudyLayout({
     process: t("case.process", { defaultValue: "Process" }),
     brandSys: t("case.brand", { defaultValue: "Brand System" }),
     marketing: t("case.marketing", { defaultValue: "Marketing" }),
-    merchandising: t("case.merchandising", { defaultValue: "Merchandising" }),
     metrics: t("case.metrics", { defaultValue: "Results" }),
     next: t("case.next", { defaultValue: "Next Steps" }),
     teamMembersLabel: t("case.teamMembers", { defaultValue: "Team" }),
@@ -768,11 +748,6 @@ export default function CaseStudyLayout({
                     padding: 12,
                   }}
                 >
-                  <img
-                    src={brand.logo}
-                    alt="Brand logo"
-                    style={{ width: 64, height: 64, objectFit: "contain" }}
-                  />
                   <div style={{ opacity: 0.9 }}>
                     <div style={{ fontWeight: 800 }}>Logo</div>
                     {brand.guideLink && (
@@ -781,7 +756,7 @@ export default function CaseStudyLayout({
                         target="_blank"
                         rel="noreferrer"
                       >
-                        Brand Guidelines
+                        Brand Guidelines (Spanish)
                       </a>
                     )}
                   </div>
@@ -894,152 +869,6 @@ export default function CaseStudyLayout({
           </div>
         )}
 
-        {(marketing.length > 0 || merchandising.length > 0) && (
-          <>
-            {marketing.length > 0 && (
-              <>
-                <SectionTitle theme={theme} icon={Megaphone}>
-                  {L.marketing}
-                </SectionTitle>
-                <ul
-                  style={{
-                    margin: "6px 0 16px 18px",
-                    lineHeight: 1.8,
-                    fontSize: "clamp(14px,1.6vw,16px)",
-                  }}
-                >
-                  {marketing.map((m, i) => (
-                    <li key={i}>{m}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-
-            {merchandising.length > 0 && (
-              <>
-                <SectionTitle theme={theme} icon={ShoppingBag}>
-                  {L.merchandising}
-                </SectionTitle>
-                <div
-                  className="cs-merch"
-                  style={{
-                    display: "grid",
-                    gap: 10,
-                    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                  }}
-                >
-                  {merchandising.map((src, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        aspectRatio: "1/1",
-                        borderRadius: 14,
-                        overflow: "hidden",
-                        border: `1px solid ${theme.colors.border}`,
-                        background: theme.colors.secondary,
-                        transition: "transform .15s ease, box-shadow .15s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-2px)";
-                        e.currentTarget.style.boxShadow =
-                          "0 12px 22px rgba(0,0,0,.18)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow = "none";
-                      }}
-                    >
-                      <img
-                        src={src}
-                        alt=""
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </>
-        )}
-
-        {gallery.length > 0 && (
-          <>
-            <SectionTitle
-              theme={theme}
-              icon={Images}
-              sub={t("case.gallerySub", {
-                defaultValue: "Screens and work samples",
-              })}
-            >
-              {L.gallery}
-            </SectionTitle>
-
-            <div
-              className="cs-gallery"
-              style={{
-                display: "grid",
-                gap: 12,
-                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              }}
-            >
-              {gallery.map((src, i) => {
-                const span2 = i % 4 === 0;
-                return (
-                  <div
-                    key={i}
-                    className={`cs-gallery-item${span2 ? " span-2" : ""}`}
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      aspectRatio: span2 ? "16/9" : "4/3",
-                      borderRadius: 14,
-                      overflow: "hidden",
-                      border: `1px solid ${theme.colors.border}`,
-                      background: theme.colors.secondary,
-                      transition: "transform .15s ease, box-shadow .15s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 12px 22px rgba(0,0,0,.18)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow = "none";
-                    }}
-                  >
-                    <img
-                      src={src}
-                      alt=""
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        display: "block",
-                      }}
-                      loading="lazy"
-                      decoding="async"
-                      onClick={() => setLightbox({ src })}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
-            <style>{`
-              @media (min-width: 900px) {
-                .cs-gallery .span-2 { grid-column: span 2; }
-              }
-            `}</style>
-          </>
-        )}
-
         {outcomes.length > 0 && (
           <>
             <SectionTitle
@@ -1104,7 +933,7 @@ export default function CaseStudyLayout({
         )}
       </section>
 
-      {/* Lightbox for cover + gallery */}
+      {/* Lightbox for cover */}
       {lightbox !== null && (
         <div
           onClick={() => setLightbox(null)}
@@ -1133,6 +962,7 @@ export default function CaseStudyLayout({
           />
         </div>
       )}
+      <Footer isDarkMode={isDarkMode} />
     </div>
   );
 }

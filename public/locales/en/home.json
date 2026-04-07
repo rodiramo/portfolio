@@ -15,5 +15,8 @@
   "cta": {
     "viewProjects": "View Projects",
     "contactMe": "Contact Me"
+  },
+  "footer": {
+    "tagline": "Designed & built with care. Contact me to collaborate or say hi!"
   }
 }

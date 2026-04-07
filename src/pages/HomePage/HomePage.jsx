@@ -1,12 +1,9 @@
-// src/components/Header.jsx
-import React from "react";
 import { useTheme } from "../../theme.js";
 import { MdOutlineWavingHand } from "react-icons/md";
 import Me from "../../components/Me.jsx";
-import { BriefcaseBusiness, MapPinHouse } from "lucide-react";
+import { BriefcaseBusiness, MapPinHouse, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-/* Small chip + button helpers (inline styled) */
 const Chip = ({ theme, children, style }) => (
   <span
     style={{
@@ -32,88 +29,33 @@ const Chip = ({ theme, children, style }) => (
   </span>
 );
 
-const ActionBtn = ({ theme, kind = "primary", onClick, children }) => {
-  const base = {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: 8,
-    padding: "8px 12px",
-    borderRadius: 10,
-    fontSize: "0.95rem",
-    lineHeight: 1,
-    fontWeight: 700,
-    cursor: "pointer",
-    userSelect: "none",
-    transition: "transform .15s ease, box-shadow .15s ease, opacity .2s",
-    textDecoration: "none",
-  };
-  const styles =
-    kind === "primary"
-      ? {
-          ...base,
-          background: theme.colors.primary,
-          color: theme.colors.text.inverse,
-          border: "1px solid transparent",
-        }
-      : {
-          ...base,
-          background: "transparent",
-          color: theme.colors.text.primary,
-          border: `1px solid ${theme.colors.border}`,
-        };
-  return (
-    <button
-      onClick={onClick}
-      style={styles}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-1px)";
-        e.currentTarget.style.boxShadow = "0 8px 18px rgba(0,0,0,.10)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.boxShadow = "none";
-      }}
-    >
-      {children}
-    </button>
-  );
-};
-
-/* -------- Refined Glass Header (i18n-enabled) -------- */
 const Header = ({
-  // Props can override translations if passed
-  name, // falls back to t("hero.name") if omitted
-  title, // falls back to t("hero.role")
-  description, // falls back to t("hero.description")
+  name,
+  title,
+  description,
   headerHeight = "65vh",
   isDarkMode,
   overflowHeight = "120px",
-  onPrimary = null, // e.g., () => scrollToSection('projects')
-  onSecondary = null, // e.g., () => scrollToSection('contact')
 }) => {
   const theme = useTheme(isDarkMode);
   const { t } = useTranslation("home");
-  const who = t("hero.who", { defaultValue: "I'm " });
-  // Safe fallbacks to i18n
+
   const greeting = t("hero.greeting", { defaultValue: "Hello" });
+  const who = t("hero.who", { defaultValue: "I'm " });
   const personName =
     name ?? t("hero.name", { defaultValue: "Rocio Diaz Ramos" });
   const role =
     title ?? t("hero.role", { defaultValue: "Web Designer & Developer" });
   const desc = description ?? t("hero.description", { defaultValue: "" });
 
-  // Chips + CTAs
   const chipLocation = t("chips.location", { defaultValue: "Hamburg, DE" });
   const chipAvailable = t("chips.available", { defaultValue: "Available" });
-  const ctaProjects = t("cta.viewProjects", { defaultValue: "View Projects" });
-  const ctaContact = t("cta.contactMe", { defaultValue: "Contact Me" });
-  // --- bring over the Skills glass variables ---
+
   const borderCol = isDarkMode ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.08)";
 
   const cardShadow = isDarkMode
     ? "0 12px 28px rgba(0,0,0,0.28)"
     : "0 14px 28px rgba(0,0,0,0.10)";
-  // Very translucent glass colors (so it never looks like a solid block)
 
   const glow = theme.isDark
     ? "radial-gradient(1000px 300px at 50% 40%, rgba(124,58,237,0.18), transparent 60%)"
@@ -126,7 +68,6 @@ const Header = ({
         position: "relative",
         maxWidth: 1500,
         width: "100%",
-
         height: headerHeight,
         margin: "0 auto",
         marginTop: 16,
@@ -135,7 +76,7 @@ const Header = ({
         marginBottom: `-${overflowHeight}`,
       }}
     >
-      {/* Background glow */}
+      {/* Glow */}
       <div
         aria-hidden
         style={{
@@ -148,7 +89,7 @@ const Header = ({
         }}
       />
 
-      {/* Glass panel */}
+      {/* Glass */}
       <header
         style={{
           position: "relative",
@@ -256,22 +197,13 @@ const Header = ({
                 WebkitBackdropFilter: "blur(2px)",
               }}
             >
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
+              <ChevronDown
+                size={15}
+                strokeWidth={3}
+                color={theme.colors.primary}
                 className="scroll-chevron"
-              >
-                <polyline
-                  points="6 9 12 15 18 9"
-                  stroke={theme.colors.primary}
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.9"
-                />
-              </svg>
+                style={{ opacity: 0.9 }}
+              />
             </div>
           </div>
 
@@ -289,46 +221,61 @@ const Header = ({
           >
             {desc}
           </p>
-
-          {/* Actions (optional) */}
-          {(onPrimary || onSecondary) && (
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-                flexWrap: "wrap",
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: 8,
-              }}
-            >
-              {onPrimary && (
-                <ActionBtn theme={theme} kind="primary" onClick={onPrimary}>
-                  {ctaProjects}
-                </ActionBtn>
-              )}
-              {onSecondary && (
-                <ActionBtn theme={theme} kind="ghost" onClick={onSecondary}>
-                  {ctaContact}
-                </ActionBtn>
-              )}
-            </div>
-          )}
         </div>
       </header>
 
-      {/* Micro CSS (animations + small responsive tweak) */}
-      <style>{`.scroll-chevron {z-index: 2; animation: floatDown 1.6s ease-in-out 1; cursor: inherit;}
-.scroll-indicator:hover .scroll-chevron { animation: floatDown 1.6s ease-in-out 3; }
-@keyframes floatDown { 0% { transform: translateY(-6px); opacity: .85; } 60% { transform: translateY(6px); opacity: .25; } 100% { transform: translateY(-6px); opacity: .85; } }
-.span-title { background-color: #bbff5b; animation: floatDown 4s ease-in-out 1; transform-origin: 50% 10%; align-items: center; align-content: center; justify-content: center; height: 3rem; border-radius: 30rem; rotate: -10deg; display: inline-block; width: 6rem; }
-.span-title-me { margin-left: 10px; animation: me 3s ease-in-out infinite; transform-origin: 20% 20%; display: flex !important; align-items: center; justify-content: center; height: 3rem; align-content: center; border-radius: 30rem; rotate: 10deg; display: inline-block; width: 6rem; }
-@keyframes me { 0%,100%{ transform: rotate(0deg);} 10%,30%{ transform: rotate(2deg);} 20%{ transform: rotate(10deg);} 40%{ transform: rotate(14deg);} 50%{ transform: rotate(12deg);} 60%{ transform: rotate(10deg);} }
-@keyframes wave { 0%,100%{ transform: rotate(0deg);} 10%,30%{ transform: rotate(14deg);} 20%{ transform: rotate(-8deg);} 40%{ transform: rotate(14deg);} 50%{ transform: rotate(-4deg);} 60%{ transform: rotate(10deg);} }
-.wave { animation: wave 2s ease-in-out infinite; transform-origin: 70% 70%; display: inline-flex; align-items: center; justify-content: center; }
-.responsive-container { width: 100%; margin-inline: auto; }
-@media (max-width: 768px) { .responsive-container { margin-bottom: -54px !important;     height: 60vh !important;} }
-@media (max-width: 480px) { .responsive-container { margin-bottom: -34px !important; } }`}</style>
+      {/* Micro CSS (animations) */}
+
+      <style>{` 
+      
+@keyframes floatDown {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(6px); }
+}
+.scroll-chevron {
+  animation: floatDown 1.6s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(12deg); }
+}
+
+.wave { 
+  animation: wave 2s ease-in-out infinite; 
+  transform-origin: 70% 70%; 
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+
+@keyframes tilt {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(8deg); }
+}
+
+.span-title-me {
+  animation: tilt 3s ease-in-out infinite;
+  transform-origin: 20% 20%;
+}
+.responsive-container {
+  width: 100%;
+  margin-inline: auto;
+}
+
+@media (max-width: 768px) {
+  .responsive-container {
+    margin-bottom: -54px !important;
+    height: 60vh !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-container {
+    margin-bottom: -34px !important;
+  }
+}
+`}</style>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DottedBg from "./components/DottedBg.jsx";
@@ -28,14 +27,11 @@ const App = () => {
       window.localStorage.setItem("theme.dark", isDark ? "1" : "0");
     } catch (err) {
       console.warn("Failed to read theme from localStorage:", err);
-      // Non-fatal: ignore write failures (private mode / quota / SSR)
-      // console.debug("Skipping localStorage write:", err);
     }
   }, [isDark]);
 
   const theme = useTheme(isDark);
 
-  // colors for the dotted bg
   const dotBase = isDark ? "#080b0062" : "#e0e2c7ff";
   const dotDark = isDark ? "#e8eaf2" : "#000000ff";
   const bgColor = theme.colors.surface;
@@ -45,7 +41,7 @@ const App = () => {
       {" "}
       <SpeedInsights />
       <DottedBg
-        key={isDark ? "dark" : "light"} // force remount on toggle
+        key={isDark ? "dark" : "light"}
         dotSize={2}
         spacing={18}
         radius={300}
@@ -62,7 +58,7 @@ const App = () => {
             element={<NavBar isDarkMode={isDark} setIsDarkMode={setIsDark} />}
           />
           <Route path="/projects" element={<Projects isDarkMode={isDark} />} />
-          // App.jsx (routes)
+
           <Route
             path="/projects/:slug"
             element={

@@ -15,5 +15,8 @@
   "cta": {
     "viewProjects": "Projekte ansehen",
     "contactMe": "Kontakt"
+  },
+  "footer": {
+    "tagline": "Mit Sorgfalt entworfen und entwickelt!"
   }
 }

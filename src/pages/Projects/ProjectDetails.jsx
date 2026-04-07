@@ -1,5 +1,4 @@
-// src/pages/Projects/ProjectDetails.jsx
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import CaseStudyLayout from "./case-study/CaseStudyLayout.jsx";
@@ -56,14 +55,7 @@ export default function ProjectDetail({ isDarkMode = false, setIsDarkMode }) {
     returnObjects: true,
     defaultValue: [],
   });
-  const marketing = t(`${ns}.marketing`, {
-    returnObjects: true,
-    defaultValue: [],
-  });
-  const merchandising = t(`${ns}.merchandising`, {
-    returnObjects: true,
-    defaultValue: [],
-  });
+
   const metrics = t(`${ns}.metrics`, {
     returnObjects: true,
     defaultValue: [],
@@ -74,22 +66,17 @@ export default function ProjectDetail({ isDarkMode = false, setIsDarkMode }) {
   });
 
   const hasCase = Boolean(title);
-  console.log("coverImage:", coverImage);
-  console.log(
-    "keys under cases.navippon =",
-    t("cases.navippon", { returnObjects: true })
-  );
 
   // Fallback from cards[]
   const rawCards = t("cards", { returnObjects: true });
   const cards = Array.isArray(rawCards)
     ? rawCards
     : rawCards && typeof rawCards === "object"
-    ? Object.values(rawCards)
-    : [];
+      ? Object.values(rawCards)
+      : [];
   const card = useMemo(
     () => (!hasCase ? cards.find((c) => c.slug === slug) : null),
-    [hasCase, cards, slug]
+    [hasCase, cards, slug],
   );
 
   if (!hasCase && !card) {
@@ -120,13 +107,10 @@ export default function ProjectDetail({ isDarkMode = false, setIsDarkMode }) {
         gallery,
         outcomes,
         links,
-        // extended
         goals,
         process,
         brand,
         teamMembers,
-        marketing,
-        merchandising,
         metrics,
         nextSteps,
       }
@@ -152,13 +136,10 @@ export default function ProjectDetail({ isDarkMode = false, setIsDarkMode }) {
             ? [{ label: "GitHub", href: card.repoLink, kind: "repo" }]
             : []),
         ],
-        // empty extended
         goals: [],
         process: [],
         brand: {},
         teamMembers: [],
-        marketing: [],
-        merchandising: [],
         metrics: [],
         nextSteps: [],
       };

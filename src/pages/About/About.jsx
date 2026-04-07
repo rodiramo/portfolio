@@ -1,5 +1,4 @@
-// src/pages/About/About.jsx
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ArrowDownRight, GraduationCap, Briefcase, User } from "lucide-react";
 import { useTheme } from "../../theme.js";
 import { useTranslation } from "react-i18next";
@@ -8,7 +7,6 @@ const TimelineItem = ({ item, index, type, isVisible, isDarkMode }) => {
   const theme = useTheme(isDarkMode);
   const { t } = useTranslation("about");
 
-  // Helper: prefer explicit field on item; else use i18n with item.i18nKey
   const resolve = (field) => {
     if (item && item[field] != null) return item[field];
     if (item && item.i18nKey) return t(`${item.i18nKey}.${field}`);
@@ -20,7 +18,6 @@ const TimelineItem = ({ item, index, type, isVisible, isDarkMode }) => {
   const period = resolve("period");
   const description = resolve("description");
 
-  // --- bring over the Skills glass variables ---
   const glassBg = isDarkMode ? "rgba(17,24,39,0.28)" : "rgba(255,255,255,0.42)";
   const borderCol = isDarkMode ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.08)";
   return (
@@ -174,20 +171,16 @@ const About = ({ isDarkMode = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hover, setHover] = useState(false);
   const timelineRef = useRef(null);
-
-  // Very translucent glass colors (so it never looks like a solid block)
   const glassBg = isDarkMode ? "rgba(17,24,39,0.28)" : "rgba(255,255,255,0.42)";
   const borderCol = isDarkMode ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.08)";
   const cardShadow = isDarkMode
     ? "0 12px 28px rgba(0,0,0,0.28)"
     : "0 14px 28px rgba(0,0,0,0.10)";
 
-  // Soft radial glow behind the card (kept *very* subtle)
   const glow = theme.isDark
     ? "radial-gradient(600px 280px at 50% 40%, rgba(192, 237, 58, 0.09), transparent 60%)"
     : "radial-gradient(600px 280px at 50% 40%, rgba(172, 232, 135, 0.14), transparent 60%)";
 
-  // --- Localized data (from about.json) ---
   const studies = t("studies", { returnObjects: true }) || [];
   const experience = t("experience", { returnObjects: true }) || [];
 
@@ -209,11 +202,11 @@ const About = ({ isDarkMode = false }) => {
           }
         });
       },
-      { threshold: 0.16, rootMargin: "0px 0px -60px 0px" }
+      { threshold: 0.16, rootMargin: "0px 0px -60px 0px" },
     );
 
     const nodes = timelineRef.current?.querySelectorAll(
-      '[data-role="tl-item"]'
+      '[data-role="tl-item"]',
     );
     nodes?.forEach((n) => obs.observe(n));
     return () => obs.disconnect();
@@ -287,7 +280,7 @@ const About = ({ isDarkMode = false }) => {
           </span>
         </div>
 
-        {/* Intro (from i18n) */}
+        {/* Intro */}
         <p
           style={{
             fontSize: "clamp(1rem, 2vw, 1.05rem)",
@@ -324,8 +317,8 @@ const About = ({ isDarkMode = false }) => {
             backgroundColor: isOpen
               ? `${theme.colors.primary}22`
               : hover
-              ? `${theme.colors.primary}1A`
-              : "transparent",
+                ? `${theme.colors.primary}1A`
+                : "transparent",
             transition: "background-color .2s ease",
           }}
         >
@@ -414,7 +407,7 @@ const About = ({ isDarkMode = false }) => {
                     isDarkMode={isDarkMode}
                   />
                 </div>
-              )
+              ),
             )}
           </div>
         </div>

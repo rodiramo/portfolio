@@ -1,5 +1,4 @@
-// src/components/NavBar.jsx
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Download,
   User,
@@ -18,14 +17,12 @@ import {
 
 import HomePage from "../pages/HomePage/HomePage.jsx";
 import About from "../pages/About/About.jsx";
-import Contact from "../pages/Contact/Contact.jsx";
 import Projects from "../pages/Projects/Projects.jsx";
 import Skills from "../pages/Skills/Skills.jsx";
 import { useTheme } from "../theme.js";
 import Logo from "./Logo.jsx";
 import ProfileSidebar from "../components/ProfileSidebar.jsx";
-
-// i18n
+import Footer from "../components/Footer.jsx";
 import { useTranslation } from "react-i18next";
 
 const LANGS = ["en", "de"];
@@ -34,11 +31,9 @@ const CV_BY_LANG = {
   de: "/cv_de.pdf",
 };
 
-// ✅ NavBar with compact mode
 const NavBar = (props) => {
   const compact = props.mode === "compact";
 
-  // robust controlled detection
   const controlled =
     props.isDarkMode != null && typeof props.setIsDarkMode === "function";
 
@@ -53,7 +48,7 @@ const NavBar = (props) => {
   const { t, i18n } = useTranslation(["common"]);
 
   const [selectedLanguage, setSelectedLanguage] = useState(
-    i18n.language?.slice(0, 2) || "en"
+    i18n.language?.slice(0, 2) || "en",
   );
   useEffect(() => {
     const handler = (lng) => setSelectedLanguage(lng.slice(0, 2));
@@ -72,7 +67,6 @@ const NavBar = (props) => {
   };
   const cvHref = CV_BY_LANG[selectedLanguage] ?? CV_BY_LANG.en;
 
-  // State used only for full mode
   const [activeSection, setActiveSection] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isConfigMenuOpen, setIsConfigMenuOpen] = useState(false);
@@ -85,7 +79,6 @@ const NavBar = (props) => {
     projects: useRef(null),
     navippon: useRef(null),
     jumping: useRef(null),
-    contact: useRef(null),
   };
 
   const toggleExpanded = (itemId) => {
@@ -103,7 +96,6 @@ const NavBar = (props) => {
     setExpandedItems(new Set());
   };
 
-  // Only attach scroll and click-outside handlers in full mode
   useEffect(() => {
     if (compact) return;
     const handleScroll = () => {
@@ -161,14 +153,14 @@ const NavBar = (props) => {
   if (compact) {
     return (
       <div>
-        {/* Desktop Top Bar (compact) */}
+        {/* Desktop Top Bar  */}
         <nav
           className="fixed top-0 left-0 right-0 z-50 hidden lg:flex items-center justify-between m-auto"
           style={{ maxWidth: "1800px", padding: "0 1rem" }}
         >
           <Logo isDarkMode={dark} />
 
-          {/* Language pill (no section pills) */}
+          {/* Language pill */}
           <div
             className="backdrop-blur-md"
             style={{
@@ -204,7 +196,7 @@ const NavBar = (props) => {
             </div>
           </div>
 
-          {/* Right: Dark mode + CV */}
+          {/* Dark mode + CV */}
           <div className="flex items-center justify-between">
             <button
               onClick={toggleDark}
@@ -261,14 +253,12 @@ const NavBar = (props) => {
           </div>
         </nav>
 
-        {/* Mobile/Tablet Top Bar (compact) */}
+        {/* Mobile/Tablet Top Bar  */}
         <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3">
-          <div className="flex items-center">
-            <Logo isDarkMode={dark} />
-          </div>
+          <div className="flex items-center"></div>
 
           <div className="flex items-center gap-2">
-            {/* Language toggle */}
+            {/* Language  */}
             <button
               onClick={cycleLanguage}
               className="flex items-center rounded-full transition-all duration-200"
@@ -288,7 +278,7 @@ const NavBar = (props) => {
               {selectedLanguage.toUpperCase()}
             </button>
 
-            {/* Dark toggle */}
+            {/* Dark */}
             <button
               onClick={toggleDark}
               aria-label={t("nav.darkMode")}
@@ -347,7 +337,7 @@ const NavBar = (props) => {
 
   return (
     <div className="min-h-screen">
-      {/* Desktop Top Navbar */}
+      {/* Desktop Top */}
       <nav
         className="fixed top-0 left-0 right-0 z-50 hidden lg:flex items-center justify-between m-auto"
         style={{ maxWidth: "1800px", padding: "0 1rem" }}
@@ -499,7 +489,7 @@ const NavBar = (props) => {
           </div>
         </div>
 
-        {/* Right: Dark mode + CV */}
+        {/*  Dark mode + CV */}
         <div className="flex items-center justify-between">
           <button
             onClick={toggleDark}
@@ -600,7 +590,7 @@ const NavBar = (props) => {
             {dark ? <Moon size={16} /> : <Sun size={16} />}
           </button>
 
-          {/* Curriculum */}
+          {/* CV */}
           <a
             href={cvHref}
             download
@@ -755,7 +745,7 @@ const NavBar = (props) => {
         )}
       </nav>
 
-      {/* ==== Main Content (full mode only) ==== */}
+      {/*Main Content full mode */}
       <section ref={sectionRefs.home} id="home" style={{ paddingTop: "5rem" }}>
         <HomePage isDarkMode={dark} />
       </section>
@@ -866,10 +856,9 @@ const NavBar = (props) => {
           </section>
         </div>
       </main>
-
+      <Footer isDarkMode={dark} />
       {/* Layout CSS */}
       <style>{`
-        /* Desktop: two columns */
         .page-grid {
           display: grid;
           grid-template-columns: minmax(260px, 340px) 1fr;
@@ -877,7 +866,6 @@ const NavBar = (props) => {
           gap: 2rem;
         }
 
-        /* Sticky sidebar only on desktop/wide screens */
         @media (min-width: 1025px) {
           .sidebar {
             position: sticky;
@@ -886,7 +874,6 @@ const NavBar = (props) => {
           }
         }
 
-        /* Mobile/tablet: stack with SIDEBAR FIRST after Home; sticky OFF */
         @media (max-width: 1024px) {
           .page-grid {
             grid-template-columns: 1fr;

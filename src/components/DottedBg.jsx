@@ -1,5 +1,4 @@
-// src/components/DottedBg.jsx
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 function hexToRgb(hex) {
   const h = hex.replace("#", "");
@@ -10,7 +9,7 @@ function hexToRgb(hex) {
           .map((c) => c + c)
           .join("")
       : h,
-    16
+    16,
   );
   return { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
 }
@@ -69,7 +68,6 @@ export default function DottedBg({
     background,
   });
 
-  // keep latest props in a ref so RAF loop always sees updates
   useEffect(() => {
     propsRef.current = {
       dotSize,
@@ -148,7 +146,6 @@ export default function DottedBg({
         background,
       } = propsRef.current;
 
-      // smooth the cursor
       mouseRef.current.sx += (mouseRef.current.x - mouseRef.current.sx) * ease;
       mouseRef.current.sy += (mouseRef.current.y - mouseRef.current.sy) * ease;
 

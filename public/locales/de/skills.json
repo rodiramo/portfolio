@@ -13,12 +13,12 @@
       "skills": [
         {
           "name": "React.js",
-          "level": 85,
+          "level": 75,
           "description": "Komponentenbasiertes Entwickeln"
         },
         {
           "name": "Vue.js",
-          "level": 75,
+          "level": 40,
           "description": "Progressives JavaScript-Framework"
         },
         {
@@ -28,17 +28,17 @@
         },
         {
           "name": "JavaScript",
-          "level": 80,
+          "level": 50,
           "description": "Interaktive Web-Erlebnisse"
         },
         {
           "name": "PWA Development",
-          "level": 80,
+          "level": 50,
           "description": "Progressive Web Apps"
         },
         {
           "name": "WordPress",
-          "level": 75,
+          "level": 85,
           "description": "CMS-Anpassung & Theming"
         }
       ]
@@ -49,32 +49,32 @@
       "skills": [
         {
           "name": "Node.js",
-          "level": 85,
+          "level": 75,
           "description": "Serverseitiges JavaScript"
         },
         {
           "name": "PHP Laravel",
-          "level": 80,
+          "level": 40,
           "description": "Framework für Webanwendungen"
         },
         {
           "name": "MongoDB",
-          "level": 90,
+          "level": 80,
           "description": "NoSQL-Modellierung & Indexe"
         },
         {
           "name": "MySQL",
-          "level": 75,
+          "level": 55,
           "description": "Relationale Schemata & Abfragen"
         },
         {
           "name": "API Integration",
-          "level": 85,
+          "level": 60,
           "description": "OAuth, Payments, Drittanbieter-APIs"
         },
         {
           "name": "Firebase",
-          "level": 70,
+          "level": 30,
           "description": "Auth, Firestore, Functions"
         }
       ]

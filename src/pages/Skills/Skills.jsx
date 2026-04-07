@@ -1,10 +1,8 @@
-// src/pages/Skills/Skills.jsx
 import React, { useState, useMemo } from "react";
 import { useTheme } from "../../theme.js";
 import { Code2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-/* --- CDN logo sources (ordered; will try next if one fails) --- */
 const LOGO_SOURCES = {
   "React.js": [
     "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
@@ -97,7 +95,7 @@ function Logo({ name, size = 18, accent }) {
           border: `1.5px solid ${accent || "#999"}`,
           fontSize: size * 0.55,
           lineHeight: 1,
-          color: accent || "#999",
+          color: accent || "#9effa6ff",
         }}
       >
         {name?.[0] || "?"}
@@ -124,27 +122,24 @@ const Skills = ({ isDarkMode = false }) => {
   const theme = useTheme(isDarkMode);
   const { t } = useTranslation("skills");
 
-  // Pull groups from i18n (levels & names live in JSON so you control them there)
-  const groups = t("groups", { returnObjects: true }) || [];
+  const groups = useMemo(() => t("groups", { returnObjects: true }) || [], [t]);
 
-  // Accent colors per category id (kept in code so theme can drive it)
   const accentById = useMemo(
     () => ({
       frontend: theme.colors.primary,
       backend: theme.colors.dark,
       design: theme.colors.grey,
     }),
-    [theme]
+    [theme],
   );
 
-  // Merge accents into groups
   const categories = useMemo(
     () =>
       (groups || []).map((g) => ({
         ...g,
         accent: accentById[g.id] || theme.colors.primary,
       })),
-    [groups, accentById, theme.colors.primary]
+    [groups, accentById, theme.colors.primary],
   );
 
   const [activeCategory, setActiveCategory] = useState(0);
@@ -155,7 +150,6 @@ const Skills = ({ isDarkMode = false }) => {
     accent: theme.colors.primary,
   };
 
-  // frosted section wrapper (to match Home/About)
   const glassBg = isDarkMode ? "rgba(17,24,39,0.28)" : "rgba(255,255,255,0.42)";
   const borderCol = isDarkMode ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.08)";
   const cardGlass = isDarkMode
@@ -351,7 +345,7 @@ const Skills = ({ isDarkMode = false }) => {
           })}
         </nav>
 
-        {/* Panel header (mini icon + title) */}
+        {/* Panel header ( */}
         <header
           style={{
             display: "flex",

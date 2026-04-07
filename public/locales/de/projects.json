@@ -190,13 +190,13 @@
       "brand": {
         "logo": "/assets/navippon-logo.svg",
         "palette": [
-          { "name": "Primär", "value": "#8B5CF6" },
-          { "name": "Akzent", "value": "#BBFF5B" },
+          { "name": "Primär", "value": "#13223E" },
+          { "name": "Akzent", "value": "#FF3F82" },
           { "name": "Ink", "value": "#111827" },
-          { "name": "Paper", "value": "#F8FAFC" }
+          { "name": "Paper", "value": "#FFE0E9" }
         ],
         "typefaces": ["Inter (UI)", "Noto Sans JP (Lokal)"],
-        "guideLink": "#"
+        "guideLink": "/assets/navippon/guide.pdf"
       },
 
       "responsibilities": [
@@ -218,25 +218,6 @@
         "Vereinte Karten-/Listen-UI mit kuratierten POIs und schnellen Filtern.",
         "Tagespläne mit Wegzeiten und Hinweisen für realistisches Tempo.",
         "Leichte Offline-Notizen und gecachte Details für gespeicherte Orte."
-      ],
-
-      "gallery": [
-        "https://images.unsplash.com/photo-1529336953121-adb2bcd0f5d6?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1569807351045-0b5ef7c6de8e?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1558981359-219d6364c9c8?q=80&w=1200&auto=format&fit=crop",
-        "/assets/navippon-map-ui.png",
-        "/assets/navippon-itinerary.png"
-      ],
-
-      "marketing": [
-        "Landingpage mit klaren Nutzenargumenten und Itinerary-Demo.",
-        "SEO-Content: Stadtteile-Guides und kuratierte Listen.",
-        "Social-Snippets zu Sammlungen & Offline-Notizen."
-      ],
-      "merchandising": [
-        "/assets/navippon-sticker-1.png",
-        "/assets/navippon-sticker-2.png",
-        "/assets/navippon-tote.png"
       ],
 
       "metrics": [
@@ -261,14 +242,18 @@
           "href": "https://github.com/rodiramo/NavipponWeb-",
           "kind": "repo"
         },
-        { "label": "Brand Guide", "href": "#", "kind": "doc" }
+        {
+          "label": "Brand Guide",
+          "href": "/assets/navippon/guide.pdf",
+          "kind": "doc"
+        }
       ]
     },
 
     "robol": {
       "title": "Robol Solutions",
       "subtitle": "Marketing-Website — Designsystem + Entwickler-Handoff",
-      "coverImage": "https://images.unsplash.com/photo-1529336953121-adb2bcd0f5d6?q=80&w=1600&auto=format&fit=crop",
+      "coverImage": "/assets/robol.png",
       "summary": "Ich habe ein kompaktes Designsystem in Figma (Tokens, Komponenten, Varianten) entwickelt und eng mit Entwicklern zusammengearbeitet, um eine saubere, responsive Marketing-Website schnell umzusetzen.",
       "role": "Produktdesignerin",
       "timeframe": "2023–2024",
