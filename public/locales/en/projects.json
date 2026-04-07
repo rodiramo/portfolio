@@ -196,12 +196,12 @@
       "brand": {
         "logo": "/assets/navippon-logo.svg",
         "palette": [
-          { "name": "Primary", "value": "#8B5CF6" },
-          { "name": "Accent", "value": "#BBFF5B" },
+          { "name": "Primary", "value": "#13223E" },
+          { "name": "Accent", "value": "#FF3F82" },
           { "name": "Ink", "value": "#111827" },
-          { "name": "Paper", "value": "#F8FAFC" }
+          { "name": "Paper", "value": "#FFE0E9" }
         ],
-        "typefaces": ["Inter (UI)", "Noto Sans JP (Locale)"],
+        "typefaces": ["Poppins", "Siffon"],
         "guideLink": "/assets/navippon/guide.pdf"
       },
 

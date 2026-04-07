@@ -195,7 +195,7 @@
           { "name": "Ink", "value": "#111827" },
           { "name": "Paper", "value": "#FFE0E9" }
         ],
-        "typefaces": ["Inter (UI)", "Noto Sans JP (Lokal)"],
+        "typefaces": ["Poppins", "Siffon"],
         "guideLink": "/assets/navippon/guide.pdf"
       },
 

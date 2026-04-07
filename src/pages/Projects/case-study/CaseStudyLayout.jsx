@@ -16,7 +16,6 @@ import {
   Users,
   Calendar,
 } from "lucide-react";
-import Footer from "../../../components/Footer.jsx";
 
 const Row = ({ style = {}, children }) => (
   <div style={{ display: "flex", gap: 12, flexWrap: "wrap", ...style }}>
@@ -962,7 +961,6 @@ export default function CaseStudyLayout({
           />
         </div>
       )}
-      <Footer isDarkMode={isDarkMode} />
     </div>
   );
 }

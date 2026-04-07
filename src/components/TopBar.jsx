@@ -1,4 +1,3 @@
-// src/components/TopBar.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../theme.js";
@@ -17,7 +16,6 @@ export default function TopBar({ isDarkMode = false, setIsDarkMode }) {
   const langLabel = i18n.language?.toLowerCase().startsWith("de") ? "DE" : "EN";
 
   const toggleDark = () => {
-    // ensure we call the setter from App so DottedBg + theme update
     if (typeof setIsDarkMode === "function") setIsDarkMode((v) => !v);
   };
 
@@ -30,10 +28,8 @@ export default function TopBar({ isDarkMode = false, setIsDarkMode }) {
         alignItems: "center",
         justifyContent: "space-between",
         padding: 8,
-        // match NavBar translucent look:
       }}
     >
-      {/* Left: Logo + Home */}
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <Link
           to="/"
@@ -68,9 +64,6 @@ export default function TopBar({ isDarkMode = false, setIsDarkMode }) {
         </Link>
       </div>
 
-      {/* Middle: language pill (styled like your nav’s pill) */}
-
-      {/* Right: Dark mode + CV (same look as main nav) */}
       <div className="flex items-center justify-between">
         {" "}
         <div

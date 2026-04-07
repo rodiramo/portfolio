@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import CaseStudyLayout from "./case-study/CaseStudyLayout.jsx";
 import TopBar from "../../components/TopBar.jsx";
+import Footer from "../../components/Footer.jsx";
 
 export default function ProjectDetail({ isDarkMode = false, setIsDarkMode }) {
   const { slug } = useParams();
@@ -152,6 +153,7 @@ export default function ProjectDetail({ isDarkMode = false, setIsDarkMode }) {
         onBack={() => navigate(-1)}
         {...data}
       />
+      <Footer isDarkMode={isDarkMode} />
     </>
   );
 }
